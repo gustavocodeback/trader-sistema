@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'default';
+$active_group = 'umbler';
 $query_builder = TRUE;
 
 $db['default'] = array(
@@ -105,7 +105,6 @@ $db['umbler'] = array(
 	'database' => 'trader',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
-	'port'	   => '41890',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
