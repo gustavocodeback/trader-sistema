@@ -1,0 +1,131 @@
+.departamento-label {
+    display: block;
+    width: 100%;
+    padding: 2px;    
+    padding-left: 0px;
+    font-size: 10px;
+    margin-top: 5px;
+    color: #ccc;
+    border-bottom: 2px solid;
+}
+.interacao {
+    padding: 5px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* FILES WRAPPER */
+.file-wrapper {
+    width: 100px;
+    height: 85px;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    margin: 5px;
+    display: inline-block;
+    text-align: center;
+}
+.file-wrapper.has-error {
+    border-color: #BF6A42 !important;
+    background: #F2DEDE;
+}
+.file-wrapper.loading .progress-wrapper {
+    display: inline-block;
+}
+.file-wrapper.loading .action {
+    display: none;
+}
+.file-wrapper .file-icon {
+    font-size: 30px;
+    margin-top: 10px;
+}
+.file-wrapper .file-name {
+    width: 93px;
+    display: block;
+    padding: 0px 5px;
+    font-size: 10px;
+    height: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.file-wrapper .progress-wrapper {
+    width: 100px;
+    display: none;
+}
+.file-wrapper .progress-wrapper progress {
+    width: 94px;
+}
+.file-wrapper .action {
+    padding-left: 5px;
+    color: #2499FF;
+}
+.file-wrapper .action span {
+    font-size: 11px;
+}
+.file-wrapper .action .glyphicon {
+    font-size: 9px;
+}
+
+/* MENSAGENS WRAPPER */
+.mensagens-wrapper {
+    padding-bottom: 200px;
+    margin-top: 5px;
+    height: calc( 100vh - 350px );
+    overflow-y: scroll;
+}
+.mensagens-wrapper .chat-bubble {
+    width: 70%;
+    background: #f1f1f1;
+    border-radius: 5px;    
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    color: #555;
+}
+.mensagens-wrapper .chat-bubble.sent {
+    float: right;
+    background: #DCF8C7;
+}
+.mensagens-wrapper .chat-bubble .anexo {
+    padding: 5px;
+    display: block;
+    color: #2499FF;
+}
+.mensagens-wrapper .chat-bubble .anexo span {
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+/* FOOTER */
+.mensagem-footer {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    height: 140px;
+    background: white;
+    border-top: 1px solid #e6e6e6;
+    width: calc( 100vw - 250px );
+    display: table;
+}
+.mensagem-footer .tools {
+    width: 100%;
+    height: 55px;
+    border-top: 1px solid #e6e6e6;
+    padding: 5px;
+    display: table;
+}
+.mensagem-footer .text-content {
+    padding: 5px;
+    padding-top: 10px;
+}
+.mensagem-footer .text-content textarea {
+    border:  0px;
+    outline: none;
+    resize: none;
+    box-shadow: 0px;
+    height: 80px;
+    transition: .25s;
+}
+.mensagem-footer .text-content textarea:focus {
+    height: 400px;
+    box-shadow: 0px;
+    outline: none;
+}

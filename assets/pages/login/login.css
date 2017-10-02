@@ -1,0 +1,37 @@
+body {
+    background: #EDEDED;
+    padding-bottom: 100px;
+}
+
+#login-form {
+    background: #fff;
+    border-radius: 5px;
+
+    color: #EB0019;
+}
+
+.teste {
+    padding-top: 75px;
+}
+
+#login-form a {
+    color: #EB0019;
+}
+
+.logo-content {
+    text-align: center;
+    padding: 15px;
+}
+
+.logo-content img {
+    display: inline-block;
+}
+
+.logo {
+    height: 40px;
+}
+
+.logo-2 {
+    height: 60px;
+    padding-left: 15px;
+}

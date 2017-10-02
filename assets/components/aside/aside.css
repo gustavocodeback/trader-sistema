@@ -1,0 +1,13 @@
+.aside {
+    padding-top: 30px;
+    color: #999;
+}
+
+.aside .perfil {
+    width: 100%;
+}
+
+.aside .list-group-item.active {
+    background: #494A48;
+    border-color: #494A48;
+}
