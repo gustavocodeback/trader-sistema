@@ -159,6 +159,21 @@ class Cliente extends ClientesFinder {
         // verifica as senha
         return ( crypt( $senha, $this->senha ) === $this->senha );
     }
+
+   /**
+    * gerarToken
+    *
+    * gera o token de login
+    * 
+    */
+    public function gerarToken() {
+
+        // gera o token
+        $this->token = md5( uniqid( time() * rand() ) );
+
+        // retorna a instancia
+        return $this;
+    }
 }
 
 /* end of file */

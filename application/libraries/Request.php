@@ -5,6 +5,9 @@ class Request {
     // instancia do codeigniter
     public $ci;
 
+    // guarda o usuario que fez a requisicao
+    public $cliente;
+
    /**
     * __construct
     *
@@ -66,6 +69,41 @@ class Request {
 
         // pega pelo ci
         return $this->ci->input->get_request_header( $name ) ? $this->ci->input->get_request_header( $name ) : $val;
+    }
+
+   /**
+    * logged
+    *
+    * verifica se o usuário esta logado
+    *
+    */
+    public function logged() {
+
+        // carrega a library de resonse
+        $this->ci->load->library( 'Response' );
+
+        // pega os itens do header
+        $email = $this->header( 'auth_email' );
+        $token = $this->header( 'auth_token' );
+
+        // carrega o usuario com o email
+        $this->ci->load->model( 'Clientes/Cliente' );
+
+        // carrega o email
+        $cliente = $this->ci->Cliente->clean()->email( $email )->get( true );
+        if ( !$cliente ) {
+            $this->ci->response->denied();
+            exit();
+        }
+
+        // verifica se os tokens são iguais
+        if ( $token != $cliente->token ) {
+            $this->ci->response->denied();
+            exit();
+        }
+
+        // seta o cliente
+        $this->cliente = $cliente;
     }
 }
 

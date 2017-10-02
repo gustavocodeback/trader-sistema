@@ -394,7 +394,6 @@ class Clientes extends MY_Controller {
         
         // pega as tags selecionadas
         $tagsSelected = $this->input->post('tagsCliente');
-        var_dump($tagsSelected);
 
         // instancia um novo objeto funcionario
         if( $this->input->post( 'cod' ) ) {
