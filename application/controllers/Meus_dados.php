@@ -125,6 +125,8 @@ class Meus_dados extends MY_Controller {
             if ( $usuario->foto ) $this->picture->delete( $usuario->foto );
             $usuario->set( 'foto', $file_name );
             $usuario->save();
+        } else {
+            $this->view->set( 'errors', $this->picture->errors );
         }
         
         // salva o nome do colaborador
@@ -149,7 +151,7 @@ class Meus_dados extends MY_Controller {
         $usuario->save();
 
         // redireciona
-        return redirect( site_url('meus_dados') );
+        return $this->index();
     }
 }
 

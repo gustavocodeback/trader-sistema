@@ -32,7 +32,7 @@
             <?php endif; ?>
             <hr>
             <div class="row">
-                <div class="col-md-6 text-right">
+                <div class="col-md-6">
                     <a href="<?php echo site_url( 'login/forgot_password' ); ?>">Esqueci minha senha</a>                   
                 </div>
             </div><!-- esqueci minha senha -->

@@ -2,10 +2,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="text-center col-md-6 col-md-offset-3 logo-content">
-            <img    src="<?php echo site_url( 'images/logo_equipe_trader.png' ); ?>" 
-            alt="Logo Equipe Trader">
-            <img    src="<?php echo site_url( 'images/logo_xp.png' ); ?>" 
-                    alt="Logo XP">
+        <img    src="<?php echo site_url( 'images/logo_equipe_trader.png' ); ?>" 
+                alt="Logo Equipe Trader" class="logo">
+        <img    src="<?php echo site_url( 'images/logo_xp.png' ); ?>" 
+                alt="Logo XP" class="logo-2">
         </div><!-- logo -->
     </div>
     <div class="row">

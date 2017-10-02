@@ -23,7 +23,7 @@ $index = $view->item( 'aside-index' );
 <div class="aside row fade-in">
     <div class="col-md-12">
 
-        <img src="<?php echo $user->foto ? base_url( 'uploads/'.$user->foto ) : 'http://u.o0bc.com/avatars/no-user-image.gif'; ?>"  class="img thumbnail perfil">
+        <img src="<?php echo $user->avatar() ?>"  class="img thumbnail perfil">
 
     </div>
     <div class="col-md-12" style="margin-top: -20px;">

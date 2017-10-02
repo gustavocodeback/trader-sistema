@@ -37,7 +37,7 @@ $index = $view->item( 'navbar-index' );
 
         <div class="dropdown pull-right">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            <img src="<?php echo $user->foto ? base_url( 'uploads/'.$user->foto ) : base_url( 'images/no-user-image.gif' ); ?>" width="30px">
+            <img src="<?php echo $user->avatar(); ?>" width="30px">
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
             <li>

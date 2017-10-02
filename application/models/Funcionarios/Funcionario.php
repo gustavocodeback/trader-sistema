@@ -208,6 +208,18 @@ class Funcionario extends FuncionariosFinder {
         // retorna true por padrao
         return true;
     }
+
+    public function avatar() {
+
+        // verifica se existe uma foto
+        if ( $this->foto ) {
+
+            // verifica se o arquivo existe
+            if ( file_exists( 'uploads/'.$this->foto ) ) {
+                return base_url( 'uploads/'.$this->foto );
+            } else return base_url( 'images/no-user-image.gif' );
+        } else return base_url( 'images/no-user-image.gif' );
+    }
 }
 
 /* end of file */

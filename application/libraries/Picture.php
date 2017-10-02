@@ -39,8 +39,10 @@ class Picture {
 
         // faz o resize
         $this->ci->load->library( 'image_lib', $config_resize );
-        $this->ci->image_lib->resize();
-        $errors = $this->ci->image_lib->display_errors();
+        if ( !$this->ci->image_lib->resize() ) {
+            $this->errors = $this->ci->image_lib->display_errors();        
+            return false;
+        }
 
         // configurações do crop
         $config['image_library']  = 'gd2';
@@ -95,7 +97,6 @@ class Picture {
                 if ( $this->square( $this->data['file_name'], $params['square'] ) ) {
                     return $this->data['file_name'];
                 } else {
-                    $this->errors = '<p>Não foi possivel fazer o upload dessa foto</p>';
                     $this->delete( $this->data['file_name'] );
                     return false;
                 }
