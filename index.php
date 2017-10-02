@@ -1,8 +1,5 @@
 <?php
 
-// adiciona o vendor
-require __DIR__.'/vendor/autoload.php';
-
 /**
  * CodeIgniter
  *
