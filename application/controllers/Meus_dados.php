@@ -103,7 +103,7 @@ class Meus_dados extends MY_Controller {
     public function salvar_meus_dados() {
 
         // faz o upload da imagem
-        $file_name = $this->picture->upload( 'foto', [ 'square' => 200 ] );
+        $file_name = $this->picture->upload( 'foto' );
 
         // valida o formulario
         if ( !$this->__validarFormulario() ) {
