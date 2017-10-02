@@ -38,6 +38,13 @@ class TemplatesFinder extends MY_Model {
         ->select( 'CodTemplate as Código, nome, corpo, CodTemplate as Ações' );
         return $this;
     }
+
+    public function template( $template ) {
+        
+        // pesquisa o email
+        $this->where( " nome = '$template' " );
+        return $this;
+    }
 }
 
 /* end of file */

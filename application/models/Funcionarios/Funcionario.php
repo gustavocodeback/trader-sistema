@@ -49,6 +49,9 @@ class Funcionario extends FuncionariosFinder {
     // foto
     public $foto;
 
+    // tokenEmail
+    public $tokenRecovey;
+
    /**
     * __construct
     *

@@ -91,7 +91,7 @@ class Meus_dados extends MY_Controller {
     public function index() {
 
         // carrega a view
-        $this->view->setTitle( 'Conta Ágil - meus dados' )->render( 'forms/meus_dados' );
+        $this->view->setTitle( 'Meus Dados' )->render( 'forms/meus_dados' );
     }
 
    /**

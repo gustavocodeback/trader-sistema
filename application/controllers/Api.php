@@ -13,6 +13,10 @@ class Api extends MY_Controller {
     */
     public function __construct() {
         parent::__construct();
+        
+        // adiciona o json ao post
+        $data = json_decode(file_get_contents('php://input'), true);
+        if ( $data ) $_POST = $data; 
     
         // carrega as libraries
         $this->load->library( [ 'Request', 'Response' ] );

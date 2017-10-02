@@ -116,6 +116,91 @@ class Login extends MY_Controller {
             return $this->index();
         }
     }
+    
+   /**
+    * resetar
+    *
+    * resetar a senha
+    *
+    */
+    public function resetar() {
+
+        // carrega o model
+        $this->load->model( [ 'Funcionarios/Funcionario' ] );
+        $user = $this->Funcionario->clean()->email( $this->input->post( 'email' ) )->get( true );
+
+        if ( !$user ) {
+            
+            // seta os erros
+            $this->view->set( 'errors', 'Email não consta no sistema' );
+            
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Conta Ágil - Recuperar Senha' )->render( 'recovery' );
+            return;
+        }
+        $user->set( 'tokenEmail', md5( uniqid( time() * rand() ) ) );
+        $user->save();
+
+        // verifica se o dado foi salvo
+        if ( $this->enviarEmailVerificacao( $user->email, $user->tokenEmail ) ) {
+            
+            // seta os erros
+            $this->view->set( 'success', 'Formulário enviado com sucesso' );
+
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Conta Ágil - Recuperar Senha' )->render( 'recovery' );
+            return;
+        } else {
+
+            // seta os erros
+            $this->view->set( 'errors', 'Erro ao recuperar a senha' );
+
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Conta Ágil - Recuperar Senha' )->render( 'recovery' );
+            return;
+        }
+    }
+    
+   /**
+    * enviarEmailVerificacao
+    *
+    * envia o email de verificacao
+    *
+    */
+    private function enviarEmailVerificacao( $email, $token ) {
+
+        // carrega o template
+        $this->load->model( 'Templates/Template' );
+        $template = $this->Template->template( 'TEMPLATE_RECOVERY' )->get( true );
+        
+        // adiciona os parametros customizaveis
+        $template->corpo = str_replace( '%_TOKEN_%', site_url('verifica_email/recovery/'.$token), $template->corpo );
+
+        // configuracoes do email
+        $config = [
+            'mailtype' => 'html',
+            'charset'  => 'iso-8859-1'
+        ];
+
+        // carrega a library
+        $this->load->library( 'email', $config );
+
+        // seta os emails
+        $this->email->from( 'vihh.fernando@gmail.com', "Suporte" )
+        ->to( $email )
+
+        // seta o corpo
+        ->subject( 'Recuperação de Senha Equipe Trader' )
+        ->message( $template->corpo )
+        ->set_mailtype( 'html' );
+        
+        // envia o email
+        if( $this->email->send() ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 /* end of file */
