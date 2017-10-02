@@ -35,11 +35,6 @@ class Funcionarios extends MY_Controller {
         // verifica se eh um edicao
         if ( $this->input->post( 'cod' ) ) {
 
-<<<<<<< HEAD
-            // carrega o cliente
-=======
-            // carrega o funcionario
->>>>>>> 6cfe9b2c6f4a521a7558a6d686e35eb035ba8b37
             $funcionario = $this->Funcionario->clean()->key( $this->input->post( 'cod' ) )->get( true );
 
             // verifica se o email foi alterado
@@ -122,11 +117,7 @@ class Funcionarios extends MY_Controller {
 
         // verifica o acesso
         // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 6cfe9b2c6f4a521a7558a6d686e35eb035ba8b37
         // carrega a model de grupos
         $this->load->model( 'Segmentos/Segmento' );
         $segmentos = $this->Segmento->filtro();
@@ -160,15 +151,12 @@ class Funcionarios extends MY_Controller {
 		$this->view->setTitle( 'Funcionarios - listagem' )->render( 'grid' );
     }
 
-<<<<<<< HEAD
     /**
     * obter_funcionarios_segmento
     *
     * obtem os funcionarios do segmento
     *
     */
-=======
->>>>>>> 6cfe9b2c6f4a521a7558a6d686e35eb035ba8b37
     public function obter_funcionarios_segmento( $CodSegmento ) {
         $funcionarios = $this->Funcionario->clean()->segmento( $CodSegmento )->get();
 

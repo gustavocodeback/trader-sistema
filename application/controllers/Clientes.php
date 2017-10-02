@@ -143,18 +143,9 @@ class Clientes extends MY_Controller {
 			echo '<a href="'.site_url( 'clientes/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 		->onApply( 'AtributoSegmento', function( $row, $key ) {
-<<<<<<< HEAD
-            if( $row[ $key ] == 'P' ) echo 'PRIME';
-            elseif( $row[ $key ] == 'PT' ) echo 'PRIME Trader';
-            elseif( $row[ $key ] == 'PI' ) echo 'PRIME Inativo';
-            elseif( $row[ $key ] == 'E' ) echo 'EXPRESS';
-            elseif( $row[ $key ] == 'ET' ) echo 'EXPRESS Trader';
-            elseif( $row[ $key ] == 'EI' ) echo 'EXPRESS Inativo';
-=======
             if( $row[ $key ] == '' ) echo '';
             elseif( $row[ $key ] == 'T' ) echo 'Trader';
             elseif( $row[ $key ] == 'I' ) echo 'Inativo';
->>>>>>> 6cfe9b2c6f4a521a7558a6d686e35eb035ba8b37
             else echo '';
 		})
 
@@ -199,18 +190,9 @@ class Clientes extends MY_Controller {
 			// echo '<a href="'.site_url( 'clientes/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 		->onApply( 'AtributoSegmento', function( $row, $key ) {
-<<<<<<< HEAD
-            if( $row[ $key ] == 'P' ) echo 'PRIME';
-            elseif( $row[ $key ] == 'PT' ) echo 'PRIME Trader';
-            elseif( $row[ $key ] == 'PI' ) echo 'PRIME Inativo';
-            elseif( $row[ $key ] == 'E' ) echo 'EXPRESS';
-            elseif( $row[ $key ] == 'ET' ) echo 'EXPRESS Trader';
-            elseif( $row[ $key ] == 'EI' ) echo 'EXPRESS Inativo';
-=======
             if( $row[ $key ] == '' ) echo '';
             elseif( $row[ $key ] == 'T' ) echo 'Trader';
             elseif( $row[ $key ] == 'I' ) echo 'Inativo';
->>>>>>> 6cfe9b2c6f4a521a7558a6d686e35eb035ba8b37
             else echo '';
 		})
 
