@@ -86,7 +86,7 @@ class Picture {
         // se fizer o upload
         if ( !$this->ci->upload->do_upload( $field ) ) {
             $this->errors = $this->ci->upload->display_errors();
-            return false;
+            return $this->errors;
         } else {
             $this->data = $this->ci->upload->data();
             
