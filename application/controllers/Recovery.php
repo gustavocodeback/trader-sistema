@@ -186,6 +186,96 @@ class Recovery extends MY_Controller {
             return false;
         }
     }
+    
+
+    /**
+    * recovery
+    *
+    * faz a confirmacao de um email
+    *
+    */
+    public function recovery_cliente( $token ) {
+
+        // carrega o finder
+        $this->load->model( [ 'Clientes/Cliente' ] );
+
+        // carrega o lead
+        $user = $this->Cliente->clean()->tokenEmail( $token )->get( true );
+        if ( !$user ) {
+            redirect( site_url() );
+            exit();
+        }
+
+        // salva o lead
+        if( $user ) {
+
+            $this->view->set( 'cliente', $user->CodCliente );
+
+            // carrega a view de email confirmado
+            $this->view->setTitle( 'Equipe Trader - Resetar Senha' )->render( 'nova_senha' );
+            return;
+        } die( 'Erro ao validar o e-mail' );
+    }
+    
+   /**
+    * salvar
+    *
+    * salva os dados
+    *
+    */
+    public function salvar_recovery_cliente() {
+
+        // carrega o finder
+        $this->load->model( [ 'Clientes/Cliente' ] );
+        $senha   = $this->input->post( 'novaSenha' );
+        $c_senha = $this->input->post( 'confirmaSenha' );
+        
+        // carrega o usuario
+        $user = $this->Cliente->clean()->key( $this->input->post( 'cliente' ) )->get( true );
+        if ( !$user ) {
+            
+            // seta os erros
+            $this->view->set( 'errors', 'Usuario não consta no sistema' );
+            
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            return;
+        }
+
+        // verifica se o email digitado é o mesmo
+        if ( $user->email != $this->input->post( 'email' ) ) {
+            // seta os erros
+            $this->view->set( 'errors', 'E-mail incorreto' );
+            
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            return;
+        }
+
+        // verifica se sao iguais
+        if ( $senha != $c_senha ) {
+
+            // seta os erros
+            $this->view->set( 'errors', 'As senhas sao diferentes' );
+            
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            return;
+        } else {
+
+            // seta a nova senha
+            $user->set( 'senha', $senha )->save( true );
+
+            // seta os erros
+            $this->view->set( 'success', 'Senha alterada com sucesso.' );
+            
+            // carrega a view de adicionar
+            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            return;
+        }        
+        return;
+    }
+
 }
 
 /* end of file */

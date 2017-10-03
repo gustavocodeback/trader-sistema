@@ -5,9 +5,6 @@ class Api extends MY_Controller {
     // somente para usuários logados
     public $isFreeToEveryOne = true;
     
-    // somente para usuários não logados
-    public $unloggedUsersOnly = true;
-    
    /**
     * __construct
     *
@@ -83,94 +80,6 @@ class Api extends MY_Controller {
         }
     }
 
-    /**
-    * recovery
-    *
-    * faz a confirmacao de um email
-    *
-    */
-    public function recovery( $token ) {
-
-        // carrega o finder
-        $this->load->model( [ 'Clientes/Cliente' ] );
-
-        // carrega o lead
-        $user = $this->Cliente->clean()->tokenEmail( $token )->get( true );
-        if ( !$user ) {
-            redirect( site_url() );
-            exit();
-        }
-
-        // salva o lead
-        if( $user ) {
-
-            $this->view->set( 'cliente', $user->CodCliente );
-
-            // carrega a view de email confirmado
-            $this->view->setTitle( 'Equipe Trader - Resetar Senha' )->render( 'nova_senha' );
-            return;
-        } die( 'Erro ao validar o e-mail' );
-    }
-    
-   /**
-    * salvar
-    *
-    * salva os dados
-    *
-    */
-    public function salvar_recovery() {
-
-        // carrega o finder
-        $this->load->model( [ 'Clientes/Cliente' ] );
-        $senha   = $this->input->post( 'novaSenha' );
-        $c_senha = $this->input->post( 'confirmaSenha' );
-        
-        // carrega o usuario
-        $user = $this->Cliente->clean()->key( $this->input->post( 'cliente' ) )->get( true );
-        if ( !$user ) {
-            
-            // seta os erros
-            $this->view->set( 'errors', 'Usuario não consta no sistema' );
-            
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
-            return;
-        }
-
-        // verifica se o email digitado é o mesmo
-        if ( $user->email != $this->input->post( 'email' ) ) {
-            // seta os erros
-            $this->view->set( 'errors', 'E-mail incorreto' );
-            
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
-            return;
-        }
-
-        // verifica se sao iguais
-        if ( $senha != $c_senha ) {
-
-            // seta os erros
-            $this->view->set( 'errors', 'As senhas sao diferentes' );
-            
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
-            return;
-        } else {
-
-            // seta a nova senha
-            $user->set( 'senha', $senha )->save( true );
-
-            // seta os erros
-            $this->view->set( 'success', 'Senha alterada com sucesso.' );
-            
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
-            return;
-        }        
-        return;
-    }
-
    /**
     * enviarEmailVerificacao
     *
@@ -184,7 +93,7 @@ class Api extends MY_Controller {
         $template = $this->Template->template( 'TEMPLATE_RECOVERY_CLIENTE' )->get( true );
         
         // adiciona os parametros customizaveis
-        $template->corpo = str_replace( '%_TOKEN_%', site_url( 'api/recovery/'.$token ), $template->corpo );
+        $template->corpo = str_replace( '%_TOKEN_%', site_url( 'recovery/recovery_cliente/'.$token ), $template->corpo );
 
         // configuracoes do email
         $config = [
