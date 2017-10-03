@@ -27,7 +27,7 @@ class Home extends MY_Controller {
     public function index() {
 
         // carrega a pagina
-        $this->view->module( 'login' )->setTitle( 'Entrar' )->render( 'home/home' );
+        $this->view->module( 'login' )->setTitle( 'Home' )->render( 'home/home' );
     }
 
    /**

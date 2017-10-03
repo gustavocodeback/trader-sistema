@@ -1,12 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Propostas extends MY_Controller {
+class Propostas_func extends MY_Controller {
 
     // indica se o controller é publico
 	protected $loggedUsersOnly = true;
 
     // seta a proposta
-    protected $routine = 'Propostas';
+    protected $routine = 'Minhas Propostas';
 
    /**
     * __construct
@@ -58,7 +58,7 @@ class Propostas extends MY_Controller {
         return $this->form_validation->run();
     }
 
-   /**
+    /**
     * index
     *
     * mostra o grid de propostas
@@ -69,8 +69,11 @@ class Propostas extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
+
         // faz a paginacao
-		$this->Proposta->clean()->grid()
+		$this->Proposta->clean()->grid_assessor( $user->CodFuncionario )
 
 		// seta os filtros
 		->order()
@@ -79,14 +82,20 @@ class Propostas extends MY_Controller {
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
 			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			echo '<a href="'.site_url( 'propostas/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
 			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'propostas/excluir/'.$row[$key] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
 		// renderiza o grid
-		->render( site_url( 'propostas/index' ) );
-		 
+		->render( site_url( 'propostas_func/index' ) );
+		
+        // seta a url para adiciona
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar' ) );
+        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas/disparo' ) );
+        $this->view->set( 'hist_url', site_url( 'propostas/historico' ) );        
+        
         // seta o titulo
-        $this->view->set( 'entity', 'Propostas' );
+        $this->view->set( 'entity', 'Minhas Propostas' );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Propostas - listagem' )->render( 'grid' );
@@ -98,15 +107,16 @@ class Propostas extends MY_Controller {
     * mostra o grid de propostas
     *
     */
-	public function historico( $key ) {
+	public function historico() {
 
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
-        $funcionario = $this->Funcionario->clean()->key( $key )->get( true );
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
 
         // faz a paginacao
-		$this->PropostaCliente->clean()->grid_assessor( $funcionario->CodFuncionario )
+		$this->PropostaCliente->clean()->grid_assessor( $user->CodFuncionario )
 
 		// seta os filtros
 		->order()
@@ -125,7 +135,7 @@ class Propostas extends MY_Controller {
         })
 
 		// renderiza o grid
-		->render( site_url( 'propostas/index' ) );
+		->render( site_url( 'propostas_func/index' ) );
         
         // seta o titulo
         $this->view->set( 'entity', 'Histórico' );
@@ -143,7 +153,7 @@ class Propostas extends MY_Controller {
     public function disparar_proposta( $CodProposta ) {
 
         // checa a permissao
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // carrega o finder
         $this->load->model( [ 'Clientes/Cliente', 'PropostasClientes/PropostaCliente' ] );
@@ -157,11 +167,11 @@ class Propostas extends MY_Controller {
         // verifica se o mesmo existe
         if ( !$proposta ) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas_func/index' );
             exit();
         } elseif ( $proposta->funcionario != $user->CodFuncionario) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas_func/index' );
             exit();
         } else {
 
@@ -170,7 +180,7 @@ class Propostas extends MY_Controller {
 
             // verifica se existe cliente
             if( !$clientes ) {
-                redirect( 'propostas/index_func' );
+                redirect( 'propostas_func/index' );
                 exit();
             }
 
@@ -191,7 +201,7 @@ class Propostas extends MY_Controller {
         }
         
         // redireciona para o grid
-        redirect( site_url( 'propostas/index_func' ) );
+        redirect( site_url( 'propostas_func/index' ) );
     }
 
    /**
@@ -203,7 +213,7 @@ class Propostas extends MY_Controller {
     public function disparo() {
 
         // checa a permissao
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
         
         // Pega o id do funcionario logado
         $user = $this->guard->currentUser();
@@ -234,7 +244,7 @@ class Propostas extends MY_Controller {
     public function adicionar() {
 
         // checa a permissao
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Trader - Adicionar proposta' )->render( 'forms/proposta' );
@@ -249,7 +259,7 @@ class Propostas extends MY_Controller {
     public function alterar( $key ) {
 
         // checa a permissao
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // Pega o id do funcionario logado
         $user = $this->guard->currentUser();
@@ -259,7 +269,7 @@ class Propostas extends MY_Controller {
 
         // verifica se o mesmo existe
         if ( !$proposta ) {
-            redirect( 'propostas/index' );
+            redirect( 'propostas_func/index' );
             exit();
         }
 
@@ -279,7 +289,7 @@ class Propostas extends MY_Controller {
     public function excluir( $key ) {
 
         // checa a permissao
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // carrega a instancia
         $proposta = $this->Proposta->key( $key )->get( true );
@@ -318,7 +328,8 @@ class Propostas extends MY_Controller {
         $proposta->post( 'proposta' )
                  ->post( 'descricao' )
                  ->post( 'nome' )
-                 ->post( 'dias' );
+                 ->post( 'dias' )
+                 ->set( 'funcionario', $user->CodFuncionario );
 
         // verifica se o formulario é valido
         if ( !$this->_formularioPropostas() ) {
@@ -334,7 +345,7 @@ class Propostas extends MY_Controller {
 
         // verifica se o dado foi salvo
         if ( $proposta->save() ) {
-            redirect( site_url( 'propostas/index' ) );
+            redirect( site_url( 'propostas_func/index' ) );
         }
     }
 
@@ -346,6 +357,9 @@ class Propostas extends MY_Controller {
     *
     */
     public function salvar_disparo() {
+
+        // checa a permissao
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o finder
         $this->load->model( [ 'Clientes/Cliente' ] );
@@ -371,7 +385,7 @@ class Propostas extends MY_Controller {
         // verifica se o mesmo existe
         if ( !$proposta || !$cliente ) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas_func/index' );
             exit();
         } elseif( !$proposta->funcionario == $user->CodFuncionario 
             || !$cliente->funcionario == $user->CodFuncionario ) {
@@ -403,7 +417,7 @@ class Propostas extends MY_Controller {
             $propostaCliente->save();
 
             // redireciona para o grid
-            redirect( site_url( 'propostas/index_func' ) );
+            redirect( site_url( 'propostas_func/index' ) );
         }
         
     }

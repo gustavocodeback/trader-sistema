@@ -55,7 +55,7 @@ class Grupos extends MY_Controller {
 	public function index() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // faz a paginacao
 		$this->Grupo->grid()
@@ -66,8 +66,8 @@ class Grupos extends MY_Controller {
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			echo '<a href="'.site_url( 'grupos/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'grupos/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'grupos/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'grupos/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
 		// renderiza o grid
@@ -77,7 +77,7 @@ class Grupos extends MY_Controller {
         $this->view->set( 'add_url', site_url( 'grupos/adicionar' ) );
         
         // seta o titulo
-        $this->view->set( 'entity', 'Grupos' );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'entity', 'Grupos' );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Grupos - listagem' )->render( 'grid' );
@@ -92,7 +92,7 @@ class Grupos extends MY_Controller {
     public function adicionar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Conta Ágil - Adicionar grupo' )->render( 'forms/grupo' );
@@ -107,7 +107,7 @@ class Grupos extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o cargo
         $grupo = $this->Grupo->clean()->key( $key )->get( true );
@@ -134,7 +134,7 @@ class Grupos extends MY_Controller {
     public function excluir( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // pega o grupo
         $grupo = $this->Grupo->clean()->key( $key )->get( true );

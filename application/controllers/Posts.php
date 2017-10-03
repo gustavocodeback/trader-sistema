@@ -68,7 +68,7 @@ class Posts extends MY_Controller {
 	public function index() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // faz a paginacao
 		$this->Post->clean()->grid()
@@ -79,15 +79,15 @@ class Posts extends MY_Controller {
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			echo '<a href="'.site_url( 'posts/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'posts/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'posts/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'posts/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
 		// renderiza o grid
 		->render( site_url( 'posts/index' ) );
 		
         // seta a url para adiciona
-        $this->view->set( 'add_url', site_url( 'posts/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'posts/adicionar' ) );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Templates - listagem' )->render( 'grid' );
@@ -102,7 +102,7 @@ class Posts extends MY_Controller {
     public function adicionar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Trader - Adicionar post' )->render( 'forms/post' );
@@ -117,7 +117,7 @@ class Posts extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o cargo
         $post = $this->Post->clean()->key( $key )->get( true );
@@ -144,7 +144,7 @@ class Posts extends MY_Controller {
     public function excluir( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // pega o tag
         $post = $this->Post->clean()->key( $key )->get( true );

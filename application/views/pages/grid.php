@@ -17,11 +17,13 @@
                         <?php $view->component( 'filters' ); ?>
                     </div>
                 </div>
-                <?php if ( $view->item( 'add_url' ) ): ?>
+                <?php if ( $view->item( 'add_url' ) || $view->item( 'send_url' ) || $view->item( 'hist_url' ) ): ?>
                 <div class="row margin fade-in">
+                    <?php if( $view->item( 'add_url' ) ) : ?>
                     <div class="col-md-2">
                         <a href="<?php echo $view->item( 'add_url' ); ?>" class="btn btn-primary z-depth-2">Adicionar</a> 
                     </div>
+                    <?php endif; ?>
                     <?php if ( $view->item( 'send_url' ) ): ?>
                     <div class="col-md-2">
                         <a href="<?php echo $view->item( 'send_url' ); ?>" class="btn btn-primary z-depth-2">Disparar</a> 

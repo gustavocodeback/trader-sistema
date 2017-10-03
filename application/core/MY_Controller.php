@@ -194,11 +194,11 @@ class MY_Controller extends CI_Controller {
     * verifica se o usuário atual pode acessar um item
     *
     */
-    protected function checkAccess( $actions = [] ) {
+    protected function checkAccess( $actions = [], $msg = true ) {
 
         // verifica se existe uma rotina
         if ( !$this->routine ) {
-            $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
+            if( $msg ) $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
             return false;
         }
 
@@ -206,9 +206,9 @@ class MY_Controller extends CI_Controller {
         $this->load->model( 'Rotinas/Rotina' );
 
         // carrega a rotina
-        $rotina = $this->Rotinas->clean()->nome( $this->routine )->get( true );
+        $rotina = $this->Rotina->clean()->nome( $this->routine )->get( true );
         if ( !$rotina )  {
-            $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
+            if( $msg ) $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
             return false;
         }
 
@@ -222,12 +222,12 @@ class MY_Controller extends CI_Controller {
         foreach( $actions as $acao ) {
             
             // verifica se o usuário pode executar a acao
-            if ( !$this->view->$acao( $rotina->rid, $user->data['gid'] ) ) $canActive = false;
+            if ( !$this->view->$acao( $rotina->rid, $user->gid ) ) $canActive = false;
         }
 
         // verifica se pode acessar
         if ( !$canActive ) {
-            $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
+            if( $msg ) $this->view->setTitle( 'Acesso negado' )->render( 'denied' );
             return false;
         } else return true;
     }

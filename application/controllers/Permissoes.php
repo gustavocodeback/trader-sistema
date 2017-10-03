@@ -53,7 +53,7 @@ class Permissoes extends MY_Controller {
 	public function index() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // pega os cargos e as rotinas
         $cargos  = $this->Grupo->clean()->get();
@@ -86,7 +86,7 @@ class Permissoes extends MY_Controller {
     public function salvar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate', 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate', 'canUpdate' ] ) ) return;
 
         // pega os checkbox
         $check = $this->input->post( 'permissoes' );

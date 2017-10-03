@@ -1,12 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Clientes extends MY_Controller {
+class Clientes_func extends MY_Controller {
 
     // indica se o controller é publico
 	protected $loggedUsersOnly = true;
 
     // seta a rotina
-    protected $routine = 'Clientes';
+    protected $routine = 'Meus Clientes';
 
    /**
     * __construct
@@ -119,28 +119,24 @@ class Clientes extends MY_Controller {
 
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
-
-        // carrega a model de funcionarios
-        $this->load->model( [ 'Funcionarios/Funcionario', 'Segmentos/Segmento' ] );
-
-        // carrega os categorias
-        $funcionarios = $this->Funcionario->filtro();
-        $segmentos = $this->Segmento->filtro();
+        
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
 
         // faz a paginacao
-		$this->Cliente->grid()
+		$this->Cliente->grid_func( $user->CodFuncionario )
 
 		// seta os filtros
 		->order()
-        ->addFilter( 'CodFuncionario', 'select', $funcionarios, 'c' )
-        ->addFilter( 'CodSegmento', 'select', $segmentos, 'f' )
+        ->addFilter( 'Nome', 'text' )
         ->filter()
 		->paginate( 0, 20 )
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'clientes/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'clientes/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'clientes_func/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			echo '<a href="'.site_url( 'mensagens/index/'.$row['Código'] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-envelope"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'clientes_func/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 		->onApply( 'AtributoSegmento', function( $row, $key ) {
             if( $row[ $key ] == '' ) echo '';
@@ -151,10 +147,8 @@ class Clientes extends MY_Controller {
 
 		// renderiza o grid
 		->render( site_url( 'clientes/index' ) );
-        $this->view->set( 'entity', 'Clientes' );        
-
-        // seta a url para adiciona
-        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'clientes/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'clientes_func/adicionar' ) );
+        $this->view->set( 'entity', 'Meus Clientes' );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Clientes - listagem' )->render( 'grid' );
@@ -169,17 +163,28 @@ class Clientes extends MY_Controller {
     public function adicionar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
 
         // carrega a model de grupos
         $this->load->model( 'Segmentos/Segmento' );
-        $segmentos = $this->Segmento->clean()->get();
+        $segmentos = $this->Segmento->clean()->key( $user->segmento )->get();
         $this->view->set( 'segmentos', $segmentos );
 
         // carrega a model de funcionarios
         $this->load->model( 'Tags/Tag' );
         $tags = $this->Tag->clean()->get();
         $this->view->set( 'tags', $tags );
+        
+        // carrega a model de funcionarios
+        $this->load->model( 'Funcionarios/Funcionario' );
+        $funcionario = $this->Funcionario->clean()->key( $user->CodFuncionario )->get(true);
+        $funcionarios = $this->Funcionario->clean()->key( $user->CodFuncionario )->get();
+        $this->view->set( 'assessores', $funcionarios );
+        $this->view->set( 'assessor', $funcionario );
+        $this->view->set( 'edit_func', true );
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Trader - Adicionar cliente' )->render( 'forms/cliente' );
@@ -194,22 +199,22 @@ class Clientes extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o cargo
         $cliente = $this->Cliente->clean()->key( $key )->get( true );
 
-        // carrega a model de grupos
-        $this->load->model( 'Segmentos/Segmento' );
-        $segmentos = $this->Segmento->clean()->get();
-        $this->view->set( 'segmentos', $segmentos );
-
         // carrega a model de funcionarios
         $this->load->model( 'Funcionarios/Funcionario' );
-        $funcionario = $this->Funcionario->clean()->key( $cliente->funcionario )->get( true );
-        $funcionarios = $this->Funcionario->clean()->segmento( $funcionario->segmento )->get();
+        $funcionario = $this->Funcionario->clean()->key( $cliente->funcionario )->get(true);
+        $funcionarios = $this->Funcionario->clean()->key( $funcionario->CodFuncionario )->get();
         $this->view->set( 'assessores', $funcionarios );
         $this->view->set( 'assessor', $funcionario );
+
+        // carrega a model de grupos
+        $this->load->model( 'Segmentos/Segmento' );
+        $segmentos = $this->Segmento->clean()->key( $funcionario->segmento )->get();
+        $this->view->set( 'segmentos', $segmentos );
 
         // carrega a model de funcionarios
         $this->load->model( 'Tags/Tag' );
@@ -225,6 +230,7 @@ class Clientes extends MY_Controller {
 
         // salva na view
         $this->view->set( 'cliente', $cliente );
+        $this->view->set( 'edit_func', true );
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Trader - Adicionar cliente' )->render( 'forms/cliente' );
@@ -239,7 +245,7 @@ class Clientes extends MY_Controller {
     public function excluir( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // pega o funcionario
         $cliente = $this->Cliente->clean()->key( $key )->get( true );
@@ -375,7 +381,7 @@ class Clientes extends MY_Controller {
             }
 
             // redireciona 
-            redirect( site_url( 'clientes/index' ) );
+            redirect( site_url( 'clientes_func/index' ) );
         }
     }
 }

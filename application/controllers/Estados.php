@@ -59,7 +59,7 @@ class Estados extends MY_Controller {
 	public function index() {
 
         // verifica a permissao
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // faz a paginacao
 		$this->Estado->grid()
@@ -72,15 +72,15 @@ class Estados extends MY_Controller {
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			echo '<a href="'.site_url( 'estados/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'estados/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'estados/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'estados/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
 		// renderiza o grid
 		->render( site_url( 'estados/index' ) );
 		
         // seta a url para adiciona
-        $this->view->set( 'add_url', site_url( 'estados/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'estados/adicionar' ) );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Estados - listagem' )->render( 'grid' );

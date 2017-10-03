@@ -63,7 +63,7 @@ class Classificacoes extends MY_Controller {
 	public function index() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // faz a paginacao
 		$this->Classificacao->clean()->grid()
@@ -74,8 +74,8 @@ class Classificacoes extends MY_Controller {
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			echo '<a href="'.site_url( 'classificacoes/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'classificacoes/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'classificacoes/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'classificacoes/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
         ->onApply( 'Icone', function( $row, $key ) {
             echo '<span class="glyphicon glyphicon-'.$row['Icone'].'"></span>';
@@ -85,7 +85,7 @@ class Classificacoes extends MY_Controller {
 		->render( site_url( 'classificacoes/index' ) );
 		
         // seta a url para adiciona
-        $this->view->set( 'add_url', site_url( 'classificacoes/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'classificacoes/adicionar' ) );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'classificacoes - listagem' )->render( 'grid' );
@@ -100,7 +100,7 @@ class Classificacoes extends MY_Controller {
     public function adicionar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega a view de adicionar
         $this->view->setTitle( 'Conta Ágil - Adicionar classificacao' )->render( 'forms/classificacao' );
@@ -115,7 +115,7 @@ class Classificacoes extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o classificacao
         $classificacao = $this->Classificacao->clean()->key( $key )->get( true );

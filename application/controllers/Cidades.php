@@ -59,7 +59,7 @@ class Cidades extends MY_Controller {
 	public function index() {
 
         // verifica a permissao
-        // if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
         // faz a paginacao
 		$this->Cidade->grid()
@@ -72,15 +72,15 @@ class Cidades extends MY_Controller {
 
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
-			echo '<a href="'.site_url( 'cidades/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'cidades/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'cidades/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'cidades/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
 		// renderiza o grid
 		->render( site_url( 'cidades/index' ) );
 		
         // seta a url para adiciona
-        $this->view->set( 'add_url', site_url( 'cidades/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'cidades/adicionar' ) );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Cidades - listagem' )->render( 'grid' );
@@ -126,7 +126,7 @@ class Cidades extends MY_Controller {
     public function adicionar() {
 
         // verifica a permissao
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega os estados
         $estados = $this->Estado->get();
@@ -145,7 +145,7 @@ class Cidades extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica a permissao
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega os estados
         $estados = $this->Estado->get();
@@ -176,7 +176,7 @@ class Cidades extends MY_Controller {
     public function excluir( $key ) {
 
         // verifica a permissao
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // seta as cidades
         $cidade = $this->Cidade->clean()->key( $key )->get( true );
