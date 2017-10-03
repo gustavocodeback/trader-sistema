@@ -6,28 +6,28 @@
 <div class="container-fluid">
     <div class="row">
         <div class="left-panel col-md-6">
+            <div class="page-header">
+                <h2>Recuperar senha!</h2>
+            </div>
+
+            <hr>
+            
+            <?php if ( $view->item( 'success' ) ): ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <strong>Sucesso!</strong>
+                        <p>
+                            <?php echo $view->item( 'success' ); ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <?php else: ?>
+            
             <?php echo form_open( $url, [ 'class' => 'col-md-9 col-md-offset-1 fade-in' ] )?>
                 <input type="hidden" name="funcionario" value="<?php echo $funcionario; ?>">
                 <input type="hidden" name="cliente" value="<?php echo $cliente; ?>">
-
-                <div class="page-header">
-                    <h2>Recuperar senha!</h2>
-                </div>
-
-                <hr>
-                
-                <?php if ( $view->item( 'success' ) ): ?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-success">
-                            <strong>Sucesso!</strong>
-                            <p>
-                                <?php echo $view->item( 'success' ); ?>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <?php else: ?>
 
                 <div class="row">
                     <div class="col-md-12">
