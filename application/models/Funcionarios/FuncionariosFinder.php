@@ -58,6 +58,19 @@ class FuncionariosFinder extends MY_Model {
         $this->where( " CodSegmento = $segmento " );
         return $this;
     }
+    
+   /**
+    * tokenEmail
+    *
+    * filtra por tokenEmail
+    *
+    */
+    public function tokenEmail( $tokenEmail ) {
+
+        // pesquisa o email
+        $this->where( " TokenEmail = '$tokenEmail' " );
+        return $this;
+    }
 
    /**
     * ignorarAtual

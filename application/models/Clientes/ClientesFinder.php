@@ -69,17 +69,17 @@ class ClientesFinder extends MY_Model {
     }
 
    /**
-    * uid
+    * tokenEmail
     *
-    * filtra por uid
+    * filtra por tokenEmail
     *
     */
-    public function uid( $uid ) {
+    public function tokenEmail( $tokenEmail ) {
 
         // pesquisa o email
-        $this->where( " UID = '$uid' " );
+        $this->where( " TokenEmail = '$tokenEmail' " );
         return $this;
-    }    
+    }
 
    /**
     * funcionario

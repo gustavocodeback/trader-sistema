@@ -9,7 +9,7 @@
         </div><!-- logo -->
     </div>
     <div class="row">
-        <?php echo form_open( 'login/resetar', [ 'id'=> 'login-form', 'class' => 'col-md-6 col-md-offset-3 z-depth-2 fade-in' ] )?>
+        <?php echo form_open( 'recovery/resetar', [ 'id'=> 'login-form', 'class' => 'col-md-6 col-md-offset-3 z-depth-2 fade-in' ] )?>
             
             <div class="page-header text-center">
                 <h1 style="color: #EB0019">Esqueci minha senha</h1>

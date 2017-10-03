@@ -55,8 +55,9 @@ $config['Cliente'] = [
     'idCelular'         => 'IdCelular',
     'plataforma'        => 'Plataforma',
     'token'             => 'Token',
-    'atributoSeg'  => 'AtributoSegmento',
-    'funcionario'       => 'CodFuncionario'
+    'atributoSeg'       => 'AtributoSegmento',
+    'funcionario'       => 'CodFuncionario',
+    'tokenEmail'        => 'TokenEmail'
 ];
 
 // Tabela de clientes
@@ -74,7 +75,8 @@ $config['Funcionario'] = [
     'segmento'    => 'CodSegmento',
     'gid'         => 'GID',
     'token'       => 'Token',
-    'foto'        => 'Foto'
+    'foto'        => 'Foto',
+    'tokenEmail'  => 'TokenEmail'
 ];
 
 

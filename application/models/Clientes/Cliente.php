@@ -55,6 +55,9 @@ class Cliente extends ClientesFinder {
     // xp
     public $xp;
 
+    // tokenEmail
+    public $tokenRecovey;
+
    /**
     * __construct
     *
