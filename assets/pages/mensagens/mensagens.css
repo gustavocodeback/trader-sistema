@@ -66,10 +66,11 @@
 
 /* MENSAGENS WRAPPER */
 .mensagens-wrapper {
-    padding-bottom: 200px;
-    margin-top: 5px;
-    height: calc( 100vh - 350px );
-    overflow-y: scroll;
+    padding-bottom: 20px;
+     margin-top: 0px; 
+     margin-bottom: 0px; 
+    height: calc( 100vh - 310px );
+    overflow-y: auto;
 }
 .mensagens-wrapper .chat-bubble {
     width: 70%;
@@ -100,6 +101,7 @@
     bottom: 0px;
     right: 0px;
     height: 140px;
+    margin-top: 0px;
     background: white;
     border-top: 1px solid #e6e6e6;
     width: calc( 100vw - 250px );
