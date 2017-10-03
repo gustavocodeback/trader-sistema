@@ -2,7 +2,7 @@
 <?php $funcionario = $view->item( 'funcionario' ); ?>
 <?php $cliente = $view->item( 'cliente' ); ?>
 <?php if( $funcionario ) $url = 'recovery/salvar_recovery'; ?>
-<?php if( $cliente ) $url = 'api/salvar_recovery'; ?>
+<?php if( $cliente ) $url = 'recovery/salvar_recovery_cliente'; ?>
 <div class="container-fluid">
     <div class="row">
         <div class="left-panel col-md-6">
