@@ -5,6 +5,9 @@ class Api extends MY_Controller {
     // somente para usuários logados
     public $isFreeToEveryOne = true;
     
+    // somente para usuários não logados
+    public $unloggedUsersOnly = true;
+    
    /**
     * __construct
     *
