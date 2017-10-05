@@ -145,7 +145,8 @@ $config['Post'] = [
     'titulo'        => 'Titulo',
     'textoCurto'    => 'TextoCurto',
     'post'          => 'Post',
-    'imagem'        => 'Imagem'
+    'imagem'        => 'Imagem',
+    'data'          => 'Data'
 ];
 
 // Tabela de Ticket
@@ -159,7 +160,8 @@ $config['Ticket'] = [
     'reclamacao'        => 'Reclamacao',
     'sugestao'          => 'Sugestao',
     'dataAbertura'      => 'DataAbertura',
-    'dataMovimentacao'  => 'DataMovimentacao'
+    'dataMovimentacao'  => 'DataMovimentacao',
+    'descricao'         => 'Descricao'
 ];
 
 /* end of file */

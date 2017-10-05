@@ -67,8 +67,8 @@
 /* MENSAGENS WRAPPER */
 .mensagens-wrapper {
     padding-bottom: 20px;
-     margin-top: 0px; 
-     margin-bottom: 0px; 
+    margin-top: 0px; 
+    margin-bottom: 0px; 
     height: calc( 100vh - 310px );
     overflow-y: auto;
 }

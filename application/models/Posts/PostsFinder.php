@@ -37,6 +37,18 @@ class PostsFinder extends MY_Model {
         ->select( 'CodPost as Código, titulo, CodPost as Ações' );
         return $this;
     }
+    
+   /**
+    * orderByPontos
+    *
+    * ordena pelos pontos
+    *
+    */
+    public function orderByData() {
+        $this->db->order_by( 'Data', 'ASC' );
+        return $this;
+    }
+
 }
 
 /* end of file */

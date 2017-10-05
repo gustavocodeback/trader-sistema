@@ -366,21 +366,27 @@ class MY_Model extends CI_Model {
     * pagina os resultados
     *
     */
-    public function paginate( $offset = 0, $qtde = 20, $return = false ) {
+    public function paginate(  $page = 0, $qtde = 20, $return = false, $pages = true ) {
 
         // seta os resultados como zero
         $this->count = 0;
 
         // seta a pagina
-        $page = $this->input->get( 'page' ) ? $this->input->get( 'page' ) : 1;
+        $page = $this->input->get( 'page' ) ? $this->input->get( 'page' ) : $page;
         $this->page = $page;
         $this->offset = ( $page - 1 ) * $qtde;
 
         // seta a quantidade por pagina
         $this->perPage = $qtde;
 
-        // seta o limite
-        $this->db->limit( $this->perPage, $this->offset );
+        // seta o offset
+        $this->offset = $this->offset < 0 ? 0 : $this->offset;
+
+        if( $pages ) {
+            
+            // seta o limite
+            $this->db->limit( $this->perPage, $this->offset );
+        }
 
         // verifica o retorno
         if ( $return ) return $this->get();

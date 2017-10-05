@@ -86,6 +86,41 @@ class MensagensFinder extends MY_Model {
         $this->where( " CodCliente is not null " );
         return $this;
     }
+    
+   /**
+    * orderByPontos
+    *
+    * ordena pelos pontos
+    *
+    */
+    public function orderByData() {
+        $this->db->order_by( 'DataEnvio', 'ASC' );
+        return $this;
+    }
+    
+   /**
+    * orderByPontos
+    *
+    * ordena pelos pontos
+    *
+    */
+    public function orderByDataNew() {
+        $this->db->order_by( 'DataEnvio', 'DESC' );
+        return $this;
+    }
+    
+   /**
+    * orderByPontos
+    *
+    * ordena pelos pontos
+    *
+    */
+    public function lastMsg( $cod ) {
+        
+        // seta o where
+        $this->where( " CodMensagem > $cod" );
+        return $this;
+    }
 
    /**
     * obter_abertas

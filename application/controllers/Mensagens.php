@@ -59,7 +59,7 @@ class Mensagens extends MY_Controller {
         if ( !$this->carregarEntidades( $CodCliente, $user->CodFuncionario ) ) return $this->close(); 
         
         // seta as mensagens
-        $mensagens = $this->Mensagem->clean()->cliente( $CodCliente )->get();
+        $mensagens = $this->Mensagem->clean()->cliente( $CodCliente )->orderByData()->get();
         $mensagens = $mensagens ? $mensagens : [];
         $this->view->set( 'mensagens', $mensagens );
         
@@ -88,34 +88,8 @@ class Mensagens extends MY_Controller {
                  ->set( 'funcionario', $user->CodFuncionario )
                  ->set( 'visualizada', 'N' )
                  ->set( 'autor', 'F' )
-                 ->set( 'dataEnvio', date( 'Y-m-d', time() ) );
-
-        // salva a mensagem
-        if ( $mensagem->save() ) {
-            
-            // busca a enpresa
-            // $cliente = (object)$this->EmpresasFinder->clean()->key( $evento->cliente )->get( true );
-
-            // // formata a data
-            // $data = date( 'd-m-Y', strtotime( $evento->data ) );
-
-            // $texto = ' do evento ' .$evento->titulo .' da data: ' .$data;
-
-            // // envia o email de notificacao
-            // $this->enviarEmailEvento( $cliente, $texto );
-
-            // // pega os arquivos
-            // $arquivos = $this->input->post( 'arquivos' );
-            
-            // percorre os arquivos
-            // foreach( $arquivos as $CodArquivo ) {
-
-            //     // carrega o arquivo
-            //     $arquivo = $this->ArquivosFinder->key( $CodArquivo )->get( true );
-            //     $arquivo->setMensagem( $mensagem->CodMensagem );
-            //     $arquivo->save();
-            // }
-        }
+                 ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
+        $mensagem->save();
 
         // recarrega a index
         redirect( site_url( 'mensagens/index/'.$this->input->post( 'cliente' ) ) );
@@ -266,7 +240,7 @@ class Mensagens extends MY_Controller {
                     ->set( 'funcionario', $user->CodFuncionario )
                     ->set( 'visualizada', 'N' )
                     ->set( 'autor', 'F' )
-                    ->set( 'dataEnvio', date( 'Y-m-d', time() ) );
+                    ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
 
             // seta o id
             $data['upload_data']['cod_arquivo'] = $arquivo->CodArquivo;

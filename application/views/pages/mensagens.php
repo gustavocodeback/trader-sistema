@@ -31,7 +31,7 @@
                             <?php echo $mensagem->visualizada == 'N' && $mensagem->autor != 'F' ? '<b>' .$mensagem->texto .'</b>' : $mensagem->texto; ?>
                         <?php endif; ?>
                         <small style="display: block; margin-top: 10px;">
-                            <i>Enviado em <?php echo date( 'd/m/Y \à\s H:i' ); ?>
+                            <i>Enviado em <?php echo date( 'd/m/Y \à\s H:i', strtotime( $mensagem->dataEnvio ) ); ?>
                             <?php if( isset( $mensagem->autor ) && $mensagem->autor == 'F' ) : ?>
                             - por <?php echo $view->item( 'funcionario' )->nome; ?>
                             <?php else : ?>

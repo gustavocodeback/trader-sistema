@@ -38,19 +38,19 @@ class Posts extends MY_Controller {
         // seta as regras
         $rules = [
             [
+                'field' => 'titulo',
+                'label' => 'Titulo',
+                'rules' => 'required|min_length[2]|max_length[30]'
+            ],
+            [
                 'field' => 'textoCurto',
                 'label' => 'Texto Curto',
-                'rules' => 'required|min_length[2]|max_length[30]'
+                'rules' => 'required|min_length[2]|max_length[255]'
             ],
             [
                 'field' => 'post',
                 'label' => 'Post',
-                'rules' => 'required|min_length[2]'
-            ],
-            [
-                'field' => 'imagem',
-                'label' => 'Imagem',
-                'rules' => 'required'
+                'rules' => 'min_length[2]'
             ]
         ];
 
@@ -175,7 +175,16 @@ class Posts extends MY_Controller {
 
         // instancia um novo objeto tag
         if( $this->input->post( 'cod' ) ) $post = $this->Post->clean()->key( $this->input->post( 'cod' ) )->get( true );
-        else $post = $this->Post->getEntity();
+        else {
+            $post = $this->Post->getEntity();
+            $post->set( 'data', date( 'Y-m-d H:i:s', time() ) );
+        }
+
+        $post->post( 'titulo' )
+             ->post( 'textoCurto' );
+
+        // verifica se tem post
+        if( $this->input->post( 'post' ) ) $post->post( 'post' );   
          
         // verifica se existe uma foto
         if ( $file_name ) {
@@ -185,10 +194,6 @@ class Posts extends MY_Controller {
             $post->set( 'imagem', $file_name );
             $post->save();
         }
-
-        $post->post( 'post' )
-             ->post( 'titulo' )
-             ->post( 'textoCurto' );
 
         // verifica se o formulario é valido
         if ( !$this->_formularioPosts() ) {

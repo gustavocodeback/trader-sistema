@@ -18,6 +18,9 @@ class Post extends PostsFinder {
     
     // titulo
     public $titulo;
+    
+    // data
+    public $data;
 
     // entidade
     public $entity = 'Post';

@@ -50,7 +50,7 @@ class Funcionario extends FuncionariosFinder {
     public $foto;
 
     // tokenEmail
-    public $tokenRecovey;
+    public $tokenEmail;
 
    /**
     * __construct

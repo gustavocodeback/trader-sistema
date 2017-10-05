@@ -74,10 +74,10 @@ class Grupos extends MY_Controller {
 		->render( site_url( 'grupos/index' ) );
 		
         // seta a url para adiciona
-        $this->view->set( 'add_url', site_url( 'grupos/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'grupos/adicionar' ) );
         
         // seta o titulo
-        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'entity', 'Grupos' );
+        $this->view->set( 'entity', 'Grupos' );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Grupos - listagem' )->render( 'grid' );
