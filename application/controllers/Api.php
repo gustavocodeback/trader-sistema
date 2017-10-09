@@ -155,7 +155,7 @@ class Api extends MY_Controller {
                 'dataEnvio'     => $dataEnvio,
                 'autor'         => $mensagem->autor,
                 'arquivo'       => isset( $mensagem->arquivo ) ? $link : '',
-                'mime'          => isset( $mensagem->arquivo ) ? get_mime_by_extension( $isset( $mensagem->lebel ) ) : ''
+                'mime'          => isset( $mensagem->arquivo ) ? get_mime_by_extension( $isset( $mensagem->label ) ) : ''
             ];
         }, $mensagens );
         
