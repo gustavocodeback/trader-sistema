@@ -123,7 +123,7 @@ class Api extends MY_Controller {
 
         // verifica se alterou a senha
         if( $this->input->post( 'novaSenha' ) ) {
-            $cliente->set( 'senha', $this->input->post( 'novaSenha' ) )->save( true )
+            $cliente->set( 'senha', $this->input->post( 'novaSenha' ) )->save( true );
         }
         $cliente = [
             'email' => $cliente->email,
