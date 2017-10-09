@@ -107,7 +107,7 @@ class Api extends MY_Controller {
         $email = $this->input->post( 'email' );
 
         // verifica se alterou o email
-        if( $cliente != $email ) {
+        if( $cliente->email != $email ) {
 
             // busca um cliente com o email informado
             $clienteVerifica = $this->Cliente->clean()->email( $email )->get( true );
