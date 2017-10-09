@@ -71,7 +71,7 @@ class TicketsFinder extends MY_Model {
     *
     */
     public function orderByData() {
-        $this->db->order_by( 'DataAbertura', 'DESC' );
+        $this->db->order_by( 'DataAbertura', 'ASC' );
         return $this;
     }
 }

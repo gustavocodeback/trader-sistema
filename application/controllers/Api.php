@@ -144,7 +144,7 @@ class Api extends MY_Controller {
         $mensagens = array_map( function( $mensagem ) {
             $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
             if( isset( $mensagem->arquivo ) ) $link = site_url( 'uploads/'.$mensagem->arquivo.'.'.$mensagem->extensao );
-            // if( $mensagem->autor != 'C' && $mensagem->visualizada == 'N' ) $mensagem->lerMensagem();
+            if( $mensagem->autor != 'C' && $mensagem->visualizada == 'N' ) $mensagem->lerMensagem();
             return [
                 'cod'           => $mensagem->CodMensagem,
                 'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
