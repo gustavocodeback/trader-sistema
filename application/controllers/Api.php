@@ -91,7 +91,47 @@ class Api extends MY_Controller {
         return $this->response->resolve( $cliente );
 
     }
-    
+
+    public function atualizar_perfil() {
+
+        // carrega o model
+        $this->load->model( [ 'Clientes/Cliente' ] );
+        
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        // seta o cliente
+        $cliente = $this->request->cliente;
+
+        // pega o email do post
+        $email = $this->input->post( 'email' );
+
+        // verifica se alterou o email
+        if( $cliente != $email ) {
+
+            // busca um cliente com o email informado
+            $clienteVerifica = $this->Cliente->clean()->email( $email )->get( true );
+
+            // verifica se ja existe
+            if( $clienteVerifica ) return $this->response->reject( 'Já existe um cliente com o email informado.' );
+            else $cliente->set( 'email', $email );
+        }
+
+        // seta o nome e o telefone
+        $cliente->set( 'nome', $this->input->post( 'nome' ) )
+                ->set( 'tel', $this->input->post( 'tel' ) )->save();
+
+        // verifica se alterou a senha
+        if( $this->input->post( 'novaSenha' ) ) {
+            $cliente->set( 'senha', $this->input->post( 'novaSenha' ) )->save( true )
+        }
+        $cliente = [
+            'email' => $cliente->email,
+            'token' => $cliente->token
+        ];
+        return $this->response->resolve( $cliente );
+    }
+
    /**
     * obter_mensagens
     *
