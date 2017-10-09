@@ -130,6 +130,8 @@ class Api extends MY_Controller {
     */
     public function obter_mensagens( $indice ) {
 
+        $this->load->helper('file');
+
         // verifica se o usuario ta logado
         $this->request->logged();
 
@@ -142,16 +144,18 @@ class Api extends MY_Controller {
         
         // faz o mapeamento do array
         $mensagens = array_map( function( $mensagem ) {
+            $msg = $mensagem;
             $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
             if( isset( $mensagem->arquivo ) ) $link = site_url( 'uploads/'.$mensagem->arquivo.'.'.$mensagem->extensao );
-            if( $mensagem->autor != 'C' && $mensagem->visualizada == 'N' ) $mensagem->lerMensagem();
+            if( $msg->autor != 'C' && $msg->visualizada == 'N' ) $msg->lerMensagem();
             return [
                 'cod'           => $mensagem->CodMensagem,
                 'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
                 'visualizada'   => $mensagem->visualizada,
                 'dataEnvio'     => $dataEnvio,
                 'autor'         => $mensagem->autor,
-                'arquivo'       => isset( $mensagem->arquivo ) ? $link : ''
+                'arquivo'       => isset( $mensagem->arquivo ) ? $link : '',
+                'mime'          => isset( $mensagem->arquivo ) ? get_mime_by_extension( $isset( $mensagem->lebel ) ) : ''
             ];
         }, $mensagens );
         
