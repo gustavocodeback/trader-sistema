@@ -125,12 +125,10 @@ class Meus_dados extends MY_Controller {
             if ( $usuario->foto ) $this->picture->delete( $usuario->foto );
             $usuario->set( 'foto', $file_name );
             $usuario->save();
-        } else {
-            $this->view->set( 'errors', $this->picture->errors );
         }
         
         // salva o nome do colaborador
-        $usuario->post( 'nome' )->post( 'email' );
+        $usuario->post( 'nome' )->post( 'email' )->post( 'tel' );
 
         // verifica se existe uma nova senha
         if ( $this->input->post( 'novaSenha') ) {

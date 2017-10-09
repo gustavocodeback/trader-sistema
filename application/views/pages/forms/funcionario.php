@@ -15,6 +15,7 @@
             
             <?php print_key( $funcionario ); ?>
             <?php input_text( 'Nome', 'nome', $funcionario, [ 'type' => 'text' ] ); ?>
+            <?php input_text( 'Telefone', 'tel', $funcionario, [ 'type' => 'tel' ] ); ?>
             <?php input_text( 'E-mail', 'email', $funcionario, [ 'type' => 'email' ] ); ?>
             <?php if( !$funcionario ) : ?>
                 <?php input_text( 'Senha', 'senha', $funcionario, [ 'type' => 'password' ] ); ?>

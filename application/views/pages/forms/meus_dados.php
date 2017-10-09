@@ -23,34 +23,10 @@
                     </div><!-- itens de upload -->
 
                     <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label for="nome" style="color: #999">Nome</label>
-                                    <input  type="text" 
-                                            class="form-control" 
-                                            id="nome" 
-                                            name="nome" 
-                                            required
-                                            value="<?php echo $user->nome; ?>"
-                                            placeholder="Carlos Cliente">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group">
-                                <div class="col-xs-12">
-                                    <label for="email" style="color: #999">E-mail</label>
-                                    <input  type="email" 
-                                            class="form-control" 
-                                            id="email" 
-                                            name="email"
-                                            required
-                                            value="<?php echo $user->email; ?>"                                    
-                                            placeholder="email@email.com">
-                                </div>
-                            </div>
-                        </div>
+                    
+                        <?php input_text( 'Nome', 'nome', $user, [ 'type' => 'text', 'length' => '12' ] ); ?>
+                        <?php input_text( 'Telefone', 'tel', $user, [ 'type' => 'tel', 'length' => '12' ] ); ?>
+                        <?php input_text( 'E-mail', 'email', $user, [ 'type' => 'email', 'length' => '12' ] ); ?>
                         <div class="row">
                             <div class="col-xs-12"><br></div>
                             <div class="col-xs-12 text-right">
