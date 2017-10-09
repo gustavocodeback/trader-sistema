@@ -20,7 +20,7 @@
             <div id="mensagens" class="mensagens-wrapper col-md-12">
 
                 <?php foreach( $view->item( 'mensagens' ) as $index => $mensagem ):?>
-                <div class="media chat-bubble <?php echo $mensagem->funcionario ? 'sent' : ''; ?>">
+                <div class="media chat-bubble <?php echo $mensagem->autor == 'F' ? 'sent' : ''; ?>">
                     <div class="media-body">
                         <?php if( isset( $mensagem->arquivo ) ) : ?>
                         <a class="anexo" target="blank" href="<?php echo site_url( 'mensagens/download/'.$mensagem->CodMensagem ); ?>">
@@ -38,7 +38,7 @@
                             - por <?php echo $view->item( 'cliente' )->nome; ?>
                             <?php endif; ?>
                             </i>
-                            <?php if ( $mensagem->visualizada == 'S' ): ?>
+                            <?php if ( $mensagem->visualizada == 'S' && $mensagem->autor == 'F' ): ?>
                             <span class="pull-right">
                                 Visualizado <span class="glyphicon glyphicon-ok"></span>                            
                             </span>  

@@ -60,6 +60,19 @@ class MensagensFinder extends MY_Model {
         $this->where( " CodCliente = $CodCliente" );
         return $this;
     }
+    
+   /**
+    * evento
+    *
+    * seta o codigo do evento
+    *
+    */
+    public function funcionario( $CodFuncionario ) {
+
+        // seta o where
+        $this->where( " CodFuncionario = $CodFuncionario" );
+        return $this;
+    }
 
     /**
     * nLida
@@ -70,7 +83,7 @@ class MensagensFinder extends MY_Model {
     public function nLida() {
 
         // seta o where
-        $this->where( " Visualizado = 'N' " );
+        $this->where( " Visualizada = 'N' " );
         return $this;
     }
 
@@ -80,10 +93,10 @@ class MensagensFinder extends MY_Model {
     * seta o codigo do evento
     *
     */
-    public function cli() {
+    public function autor( $autor ) {
 
         // seta o where
-        $this->where( " CodCliente is not null " );
+        $this->where( " Autor = '$autor' " );
         return $this;
     }
     

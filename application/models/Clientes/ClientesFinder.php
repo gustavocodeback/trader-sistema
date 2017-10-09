@@ -49,9 +49,37 @@ class ClientesFinder extends MY_Model {
     *
     */
     public function grid_func( $CodFuncionario ) {
-        $this->db->from( $this->table )
-        ->select( 'CodCliente as Código, Nome, AtributoSegmento, CodCliente as Ações' )
-        ->where( "CodFuncionario = $CodFuncionario" );
+        $this->db->from( $this->table .' c' )
+        ->select( 'c.CodCliente as Código, c.Nome, COUNT(m.CodMensagem) as Mensagens, c.AtributoSegmento, c.CodCliente as Ações' )
+        ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C' and m.Visualizada = 'N'", 'left' )
+        // ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C'", 'left' )
+        ->where( "c.CodFuncionario = $CodFuncionario" );
+        return $this;
+    }
+
+   /**
+    * email
+    *
+    * pesquisa o cliente por email
+    *
+    */
+    public function trader() {
+
+        // pesquisa o email
+        $this->where( " AtributoSegmento = 'T' " );
+        return $this;
+    }
+
+   /**
+    * email
+    *
+    * pesquisa o cliente por email
+    *
+    */
+    public function inativo() {
+
+        // pesquisa o email
+        $this->where( " AtributoSegmento = 'I' " );
         return $this;
     }
 

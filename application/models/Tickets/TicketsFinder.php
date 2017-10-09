@@ -65,6 +65,32 @@ class TicketsFinder extends MY_Model {
     }
     
    /**
+    * evento
+    *
+    * seta o codigo do evento
+    *
+    */
+    public function funcionario( $CodFuncionario ) {
+
+        // seta o where
+        $this->where( " CodFuncionario = $CodFuncionario" );
+        return $this;
+    }    
+    
+   /**
+    * evento
+    *
+    * seta o codigo do evento
+    *
+    */
+    public function status( $status ) {
+
+        // seta o where
+        $this->where( " Status = '$status'" );
+        return $this;
+    }
+    
+   /**
     * orderByPontos
     *
     * ordena pelos pontos

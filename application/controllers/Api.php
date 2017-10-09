@@ -54,6 +54,42 @@ class Api extends MY_Controller {
             } else return $this->response->reject( 'Não foi possivel logar.' );
         } else return $this->response->reject( 'A senha digitada está incorreta' );
     }
+
+   /**
+    * obter perfil
+    *
+    * faz o login no aplicativo
+    *
+    */
+    public function obter_perfil() {
+
+        // carrega a model de clientes
+        $this->load->model( [ 'Funcionarios/Funcionario', 'Segmentos/Segmento' ] );
+
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        // seta o cliente
+        $cliente = $this->request->cliente;
+
+        // pega o funcionario do cliente
+        $funcionario = $this->Funcionario->clean()->key( $cliente->funcionario )->get( true );
+        if( !$funcionario ) return $this->response->reject( 'Não foi possivel no momento.' );
+
+        // pega o segmento
+        $segmento = $this->Funcionario->clean()->key( $funcionario->segmento )->get( true );
+        if( !$segmento ) return $this->response->reject( 'Não foi possivel no momento.' );
+        
+        // mapeia a resposta
+        $cliente = [
+            'nome'              => $cliente->nome,
+            'tel'               => $cliente->tel,
+            'email'             => $cliente->email,
+            'segmento'          => $segmento->nome
+        ];
+        return $this->response->resolve( $cliente );
+
+    }
     
    /**
     * obter_mensagens
