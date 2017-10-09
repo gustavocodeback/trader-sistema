@@ -136,6 +136,7 @@ class Clientes_func extends MY_Controller {
 		->onApply( 'Ações', function( $row, $key ) {
 			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'clientes_func/alterar/'.$row['Código'] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
 			echo '<a href="'.site_url( 'mensagens/index/'.$row['Código'] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-envelope"></span></a>';
+			echo '<a href="'.site_url( 'tickets/index/'.$row['Código'] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-tags"></span></a>';
 			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'clientes_func/excluir/'.$row['Código'] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 		->onApply( 'AtributoSegmento', function( $row, $key ) {
@@ -223,7 +224,7 @@ class Clientes_func extends MY_Controller {
         
         // verifica se o mesmo existe
         if ( !$cliente ) {
-            redirect( 'clientes/index' );
+            redirect( 'clientes_func/index' );
             exit();
         }
         $cliente->set( 'senha', '' );
@@ -253,8 +254,9 @@ class Clientes_func extends MY_Controller {
         // exclui o funcionario
         $cliente->delete();
 
-        // carrega a index
-        $this->index();
+        
+        // redireciona 
+        redirect( site_url( 'clientes_func/index' ) );
     }
 
     /**

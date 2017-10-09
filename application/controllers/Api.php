@@ -265,8 +265,8 @@ class Api extends MY_Controller {
         
         // faz o mapeamento do array
         $tickets = array_map( function( $ticket ) {
-            $dataAbertura = date( 'd/m/Y', strtotime( $ticket->dataAbertura ) );
-            $dataMovimentacao = $ticket->dataMovimentacao ? date( 'd/m/Y', strtotime( $ticket->dataMovimentacao ) ) : false;
+            $dataAbertura = date( 'd/m/Y á\s H:i:s', strtotime( $ticket->dataAbertura ) );
+            $dataMovimentacao = $ticket->dataMovimentacao ? date( 'd/m/Y á\s H:i:s', strtotime( $ticket->dataMovimentacao ) ) : false;
 
             return [
                 'cod'               => $ticket->CodTicket,
@@ -305,7 +305,7 @@ class Api extends MY_Controller {
         
         // faz o mapeamento do array
         $posts = array_map( function( $post ) {
-            $data = date( 'd/m/Y', strtotime( $post->data ) );
+            $data = date( 'd/m/Y à\s H:i', strtotime( $post->data ) );
             return [
                 'cod'           => $post->CodPost,
                 'textoCurto'    => $post->textoCurto,

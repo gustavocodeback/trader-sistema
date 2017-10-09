@@ -46,10 +46,10 @@ class TicketsFinder extends MY_Model {
     * funcao usada para gerar o grid
     *
     */
-    public function grid() {
-        $this->db->from( $this->table.' p' )
-        ->select( 'p.CodTicket as Código, p.nome, f.Nome as Funcionário, dias, CodTicket as Ações' )
-       ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' );
+    public function grid( $CodCliente ) {
+        $this->db->from( $this->table.' t' )
+        ->select( 'CodTicket as Andamento, t.Nome, DataAbertura as Data Abertura, Status, Descricao' )
+        ->where( " CodCliente = $CodCliente " );
         return $this;
     }
 
