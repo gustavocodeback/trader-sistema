@@ -57,6 +57,7 @@ $config['Cliente'] = [
     'token'             => 'Token',
     'atributoSeg'       => 'AtributoSegmento',
     'funcionario'       => 'CodFuncionario',
+    'foto'              => 'Foto',
     'tokenEmail'        => 'TokenEmail'
 ];
 
