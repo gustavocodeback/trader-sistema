@@ -85,7 +85,8 @@ class Api extends MY_Controller {
             'nome'              => $cliente->nome,
             'tel'               => $cliente->tel,
             'email'             => $cliente->email,
-            'segmento'          => $segmento->nome
+            'segmento'          => $segmento->nome,
+            'foto'              => $cliente->avatar()
         ];
         return $this->response->resolve( $cliente );
 

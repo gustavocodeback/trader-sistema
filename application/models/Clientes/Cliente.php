@@ -58,6 +58,9 @@ class Cliente extends ClientesFinder {
     // tokenEmail
     public $tokenRecovey;
 
+    // foto
+    public $foto;
+
    /**
     * __construct
     *
@@ -176,6 +179,18 @@ class Cliente extends ClientesFinder {
 
         // retorna a instancia
         return $this;
+    }
+
+    public function avatar() {
+
+        // verifica se existe uma foto
+        if ( $this->foto ) {
+
+            // verifica se o arquivo existe
+            if ( file_exists( 'uploads/'.$this->foto ) ) {
+                return base_url( 'uploads/'.$this->foto );
+            } else return base_url( 'images/no-user-image.gif' );
+        } else return base_url( 'images/no-user-image.gif' );
     }
 }
 
