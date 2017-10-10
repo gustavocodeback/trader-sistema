@@ -125,6 +125,11 @@ class Api extends MY_Controller {
         if( $this->input->post( 'novaSenha' ) ) {
             $cliente->set( 'senha', $this->input->post( 'novaSenha' ) )->save( true );
         }
+        
+        // verifica se alterou a senha
+        if( $this->input->post( 'foto' ) ) {
+            $cliente->changeAvatar( $this->input->post( 'foto' ) );
+        }
         $cliente = [
             'email' => $cliente->email,
             'token' => $cliente->token

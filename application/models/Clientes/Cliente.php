@@ -181,6 +181,30 @@ class Cliente extends ClientesFinder {
         return $this;
     }
 
+    public function changeAvatar( $newFoto ) {
+
+        // verifica se existe uma foto
+        if ( $this->foto ) {
+
+            // verifica se o arquivo existe
+            if ( file_exists( 'uploads/'.$this->foto ) ) {
+                unlink( 'uploads/'.$this->foto );
+                $image = imagecreatefromstring( $newFoto );
+                imagejpeg( $image, "uploads/thumbnails/$this->foto" );
+                return base_url( 'uploads/'.$this->foto );
+            } else {
+                $image = imagecreatefromstring( $newFoto );
+                imagejpeg( $image, "uploads/thumbnails/$this->foto" );
+                return base_url( 'uploads/'.$this->foto );
+            }
+        } else {
+            $this->foto = md5( uniqid( time() * rand() ) );
+            $image = imagecreatefromstring( $newFoto );
+            imagejpeg( $image, "uploads/thumbnails/$this->foto" );
+            return base_url( 'uploads/'.$this->foto );
+        }
+    }
+
     public function avatar() {
 
         // verifica se existe uma foto
