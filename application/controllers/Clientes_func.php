@@ -124,7 +124,7 @@ class Clientes_func extends MY_Controller {
         $user = $this->guard->currentUser();
 
         // faz a paginacao
-		$this->Cliente->grid_func( $user->CodFuncionario )
+		$this->Cliente->clean()->grid_func( $user->CodFuncionario )
 
 		// seta os filtros
 		->order()
@@ -144,6 +144,9 @@ class Clientes_func extends MY_Controller {
             elseif( $row[ $key ] == 'T' ) echo 'Trader';
             elseif( $row[ $key ] == 'I' ) echo 'Inativo';
             else echo '';
+		})
+		->onApply( 'Novas Mensagens', function( $row, $key ) {
+            echo $row[ $key ];
 		})
 
 		// renderiza o grid

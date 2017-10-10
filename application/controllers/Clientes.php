@@ -154,7 +154,10 @@ class Clientes extends MY_Controller {
         $this->view->set( 'entity', 'Clientes' );        
 
         // seta a url para adiciona
-        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'clientes/adicionar' ) );
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) {
+            $this->view->set( 'add_url', site_url( 'clientes/adicionar' ) );
+            $this->view->set( 'import_url', site_url( 'clientes/importar_planilha' ) );
+        }
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Clientes - listagem' )->render( 'grid' );
@@ -377,5 +380,189 @@ class Clientes extends MY_Controller {
             // redireciona 
             redirect( site_url( 'clientes/index' ) );
         }
+    }
+    
+   /**
+    * verificaEntidade
+    *
+    * verifica se um entidade existe no banco
+    *
+    */
+    public function verificaEntidade( $model, $method, $dado, $nome, $planilha, $linha, $attr, $status ) {
+
+        // carrega o finder de logs
+        $this->load->model( 'Logs/Log' );
+
+        // verifica se nao esta vazio
+        if ( in_cell( $dado ) ) {
+
+            // carrega o finder
+            $this->load->model( $model );
+
+            // pega a entidade
+            if ( $entidade = $this->$nome->clean()->$method( $dado )->get( true ) ) {
+                return $entidade->$attr;
+            } else {
+
+                // grava o log
+                $log = $this->Log->getEntity();
+                $log->set( 'entidade', $planilha )
+                    ->set( 'funcionario', $this->guard->currentUser()->CodFuncionario )
+                    ->set( 'mensagem', 'O campo '.$nome.' com valor '.$dado.' nao esta gravado no banco - linha '.$linha )
+                    ->set( 'status', $status )
+                    ->set( 'data', date( 'Y-m-d H:i:s', time() ) )
+                    ->set( 'acao', 'importação de planilha de Clientes' )
+                    ->save();
+
+                // retorna falso
+                return null;
+            }
+        } else {
+
+            // grava o log
+            $log = $this->Log->getEntity();
+            $log->set( 'entidade', $planilha )
+                ->set( 'funcionario', $this->guard->currentUser()->CodFuncionario )
+                ->set( 'mensagem', 'Nenhum '.$nome.' encontrado - linha '.$linha )
+                ->set( 'status', $status )
+                ->set( 'data', date( 'Y-m-d H:i:s', time() ) )
+                ->set( 'acao', 'importação de planilha de Clientes' )
+                ->save();
+
+            // retorna falso
+            return null;
+        }
+    }
+    
+   /**
+    * importar_linha
+    *
+    * importa a linha
+    *
+    */
+    public function importar_linha( $linha, $num ) {
+        
+        // percorre todos os campos
+        foreach( $linha as $chave => $coluna ) {
+            $linha[$chave] = in_cell( $linha[$chave] ) ? $linha[$chave] : null;
+        }
+
+        // pega as entidades relacionaveis
+        $linha['CodFuncionario'] = $this->verificaEntidade( 'Funcionarios/Funcionario', 'email', $linha['FUNCIONARIO'], 'Funcionario', 'Clientes', $num, 'CodFuncionario', 'I' );
+
+        // verifica se existe os campos
+        if ( !in_cell( $linha['CodFuncionario'] ) ||
+             !in_cell( $linha['EMAIL'] ) || 
+             !in_cell( $linha['CODXP'] ) || 
+             !in_cell( $linha['TELEFONE'] ) ||
+             !in_cell( $linha['NOME'] ) ) {
+            
+            if ( !in_cell( $linha['EMAIL'] ) ) $erro = 'EMAIL';
+            if ( !in_cell( $linha['CODXP'] ) ) {
+                if( $erro ) $erro .= ', CODXP';
+                else $erro = 'CODXP';
+            }
+            if ( !in_cell( $linha['TELEFONE'] ) ) {
+                if( $erro ) $erro .= ', TELEFONE';
+                else $erro = 'TELEFONE';
+            }
+            if ( !in_cell( $linha['NOME'] ) ) {
+                if( $erro ) $erro .= ', NOME';
+                else $erro = 'NOME';
+            }
+            if ( !in_cell( $linha['CodFuncionario'] ) ) {
+                if( $erro ) $erro .= ', FUNCIONARIO';
+                else $erro = 'FUNCIONARIO';
+            }
+
+            // grava o log
+            $log = $this->Log->getEntity();
+            $log->set( 'entidade', 'Clientes' )
+                ->set( 'funcionario', $this->guard->currentUser()->CodFuncionario )
+                ->set( 'mensagem', 'Não foi possivel inserir o cliente pois nenhum '. $erro .' foi informado - linha '.$num  )
+                ->set( 'status', 'B' )
+                ->set( 'data', date( 'Y-m-d H:i:s', time() ) )
+                ->set( 'acao', 'importação de planilha de Clientes' )
+                ->save();
+
+        } else {
+
+            // tenta carregar a loja pelo nome
+            $cliente = $this->Cliente->clean()->codXp( $linha['CODXP'] )->get( true );
+
+            // verifica se carregou
+            if ( !$cliente ) {
+                $cliente = $this->Cliente->getEntity();
+                $cliente->set( 'xp', $linha['CODXP'] );
+            }
+
+            // preenche os dados
+            
+            $cliente->set( 'nome', $linha['NOME'] )
+                    ->set( 'tel', $linha['TELEFONE'] )
+                    ->set( 'funcionario', $linha['CodFuncionario'] )
+                    ->set( 'email', $linha['EMAIL'] );
+
+            if ( !in_cell( $linha['ATRIBUTO'] ) ) $cliente->set( 'atributoSeg', '' );
+            elseif ( $linha['ATRIBUTO'] == 'TRADER' ) $cliente->set( 'atributoSeg', 'T' );
+            elseif ( $linha['ATRIBUTO'] == 'INATIVO' ) $cliente->set( 'atributoSeg', 'I' );
+            else $cliente->set( 'atributoSeg', '' );
+            
+            // tenta salvar a loja
+            if ( $cliente->save() ) {
+
+                // grava o log
+                $log = $this->Log->getEntity();
+                $log->set( 'entidade', 'Clientes' )
+                    ->set( 'funcionario', $this->guard->currentUser()->CodFuncionario )
+                    ->set( 'mensagem', 'Cliente criado com sucesso - '.$num  )
+                    ->set( 'status', 'S' )
+                    ->set( 'data', date( 'Y-m-d H:i:s', time() ) )
+                    ->set( 'acao', 'importação de planilha de Clientes' )
+                    ->save();
+
+            } else {
+
+                // grava o log
+                $log = $this->Log->getEntity();
+                $log->set( 'entidade', 'Clientes' )
+                    ->set( 'funcionario', $this->guard->currentUser()->CodFuncionario )
+                    ->set( 'mensagem', 'Não foi possivel inserir o cliente - linha '.$num )
+                    ->set( 'status', 'B' )
+                    ->set( 'data', date( 'Y-m-d H:i:s', time() ) )
+                    ->set( 'acao', 'importação de planilha de Clientes' )
+                    ->save();
+            }
+        }
+    }
+    
+   /**
+    * importar_planilha
+    *
+    * importa os dados de uma planilha
+    *
+    */
+    public function importar_planilha() {
+
+        // importa a planilha
+        $this->load->library( 'Planilhas' );
+
+        // faz o upload da planilha
+        $planilha = $this->planilhas->upload();
+
+        // tenta fazer o upload
+        if ( !$planilha ) {
+
+            // seta os erros
+            $this->view->set( 'errors', $this->planilhas->errors );
+        } else {
+            $planilha->apply( function( $linha, $num ) {
+                $this->importar_linha( $linha, $num );
+            });
+            $planilha->excluir();
+        }
+
+        // redireciona 
+        redirect( site_url( 'clientes/index' ) );
     }
 }

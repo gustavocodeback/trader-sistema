@@ -184,6 +184,18 @@ function abrir( seletor ) {
 }
 
 /**
+ * importarPlanilha
+ * 
+ * importa uma planilha
+ * 
+ */
+function importarPlanilha( input ) {
+
+    // verifica se existe algum conteudo
+    if ( input.val() ) $( '#import-form' ).submit();
+}
+
+/**
  * fechar
  * 
  * fecha um elemento

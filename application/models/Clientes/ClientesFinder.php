@@ -50,10 +50,12 @@ class ClientesFinder extends MY_Model {
     */
     public function grid_func( $CodFuncionario ) {
         $this->db->from( $this->table .' c' )
-        ->select( 'c.CodCliente as Código, c.Nome, COUNT(m.CodMensagem) as Mensagens, c.AtributoSegmento, c.CodCliente as Ações' )
+        ->select( 'c.CodCliente as Código, c.Nome, COUNT(m.CodMensagem) as \'Novas Mensagens\', c.AtributoSegmento, c.CodCliente as Ações' )
         ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C' and m.Visualizada = 'N'", 'left' )
         // ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C'", 'left' )
-        ->where( "c.CodFuncionario = $CodFuncionario" );
+        ->where( "c.CodFuncionario = $CodFuncionario" )
+        ->group_by( 'm.CodCliente' )
+        ->order_by('COUNT(m.CodMensagem)', 'DESC');
         return $this;
     }
 
@@ -93,6 +95,19 @@ class ClientesFinder extends MY_Model {
 
         // pesquisa o email
         $this->where( " Email = '$email' " );
+        return $this;
+    }
+
+   /**
+    * email
+    *
+    * pesquisa o cliente por email
+    *
+    */
+    public function codXp( $codXp ) {
+
+        // pesquisa o email
+        $this->where( " CodXp = '$codXp' " );
         return $this;
     }
 

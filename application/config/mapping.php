@@ -165,4 +165,13 @@ $config['Ticket'] = [
     'descricao'         => 'Descricao'
 ];
 
+$config['Log'] = [
+    'entidade' => 'Entidade',
+    'funcionario' => 'CodFuncionario',
+    'mensagem' => 'Mensagem',
+    'status'   => 'Status',
+    'data'     => 'Data',
+    'acao'      => 'Acao'
+];
+
 /* end of file */

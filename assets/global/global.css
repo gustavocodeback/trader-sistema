@@ -63,6 +63,7 @@ body {
 .btn-primary {
   background: #EB0019 !important;
   border-color: #EB0019 !important;
+  color: #fff !important;
 }
 
 .form-control.global {
