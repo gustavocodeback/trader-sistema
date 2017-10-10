@@ -191,17 +191,17 @@ class Cliente extends ClientesFinder {
                 unlink( 'uploads/'.$this->foto );
                 $image = imagecreatefromstring( $newFoto );
                 imagejpeg( $image, "uploads/thumbnails/$this->foto" );
-                return base_url( 'uploads/'.$this->foto );
+                return $this;
             } else {
                 $image = imagecreatefromstring( $newFoto );
                 imagejpeg( $image, "uploads/thumbnails/$this->foto" );
-                return base_url( 'uploads/'.$this->foto );
+                return $this;
             }
         } else {
             $this->foto = md5( uniqid( time() * rand() ) );
             $image = imagecreatefromstring( $newFoto );
             imagejpeg( $image, "uploads/thumbnails/$this->foto" );
-            return base_url( 'uploads/'.$this->foto );
+            return $this;
         }
     }
 
