@@ -128,7 +128,7 @@ class Api extends MY_Controller {
         
         // verifica se alterou a senha
         if( $this->input->post( 'foto' ) ) {
-            $cliente->changeAvatar( str_replace( 'data:', '', $this->input->post( 'foto' ) ) )->save();
+            $cliente->changeAvatar( explode( ',', $this->input->post( 'foto' ) ) )->save();
         }
         $cliente = [
             'email' => $cliente->email,
