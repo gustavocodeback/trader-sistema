@@ -189,18 +189,18 @@ class Cliente extends ClientesFinder {
             // verifica se o arquivo existe
             if ( file_exists( 'uploads/'.$this->foto ) ) {
                 unlink( 'uploads/'.$this->foto );
-                $image = imagecreatefromstring( $newFoto );
-                imagejpeg( $image, "uploads/thumbnails/" .$this->foto );
+                $image = imagecreatefromstring( base64_decode($newFoto) );
+                imagejpeg( $image, "uploads/" .$this->foto );
                 return $this;
             } else {
-                $image = imagecreatefromstring( $newFoto );
-                imagejpeg( $image, "uploads/thumbnails/$this->foto" );
+                $image = imagecreatefromstring( base64_decode($newFoto) );
+                imagejpeg( $image, "uploads/$this->foto" );
                 return $this;
             }
         } else {
             $this->foto = md5( uniqid( time() * rand() ) );
-            $image = imagecreatefromstring( $newFoto );
-            imagejpeg( $image, "uploads/thumbnails/$this->foto" );
+            $image = imagecreatefromstring( base64_decode($newFoto) );
+            imagejpeg( $image, "uploads/$this->foto" );
             return $this;
         }
     }
