@@ -198,7 +198,7 @@ class Cliente extends ClientesFinder {
         } else {
 
             // cria um id para a foto
-            $this->foto = md5( uniqid( time() * rand() ) );
+            $this->foto = md5( uniqid( time() * rand() ) ) .'.png';
             
             // separa o base64
             $exploded = explode(',', $this->input->post( 'foto' ), 2);
