@@ -55,6 +55,20 @@ class Api extends MY_Controller {
         } else return $this->response->reject( 'A senha digitada está incorreta' );
     }
 
+    public function teste() {
+       
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        $exploded = explode(',', $this->input->post( 'foto' ), 2); // limit to 2 parts, i.e: find the first comma
+        $encoded = $exploded[1]; // pick up the 2nd part
+        $decoded = base64_decode($encoded);
+        $img_handler = imagecreatefromstring($decoded);
+        file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/tesTando.png', $decoded );
+         
+        return $this->response->resolve( $decoded );
+    }
+
    /**
     * obter perfil
     *
