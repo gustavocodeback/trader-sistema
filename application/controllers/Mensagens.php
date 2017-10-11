@@ -58,13 +58,28 @@ class Mensagens extends MY_Controller {
         // checa o cliente
         if ( !$this->carregarEntidades( $CodCliente, $user->CodFuncionario ) ) return $this->close(); 
         
+        // renderiza a view
+        $this->view->setTitle( 'Mensagem' )->render( 'mensagens' );
+    }
+
+    public function mensagens_html( $CodCliente ) {
+
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
+        $this->view->set( 'funcionario', $user );
+
+        // checa o cliente
+        if ( !$this->carregarEntidades( $CodCliente, $user->CodFuncionario ) ) return $this->close(); 
+
         // seta as mensagens
         $mensagens = $this->Mensagem->clean()->cliente( $CodCliente )->orderByData()->get();
         $mensagens = $mensagens ? $mensagens : [];
         $this->view->set( 'mensagens', $mensagens );
-        
+
         // renderiza a view
-        $this->view->setTitle( 'Mensagem' )->render( 'mensagens' );
+        $html = $this->view->render( 'mensagens_inner', false, true );
+        $this->load->library( 'Response' );
+        $this->response->resolve( $html );
     }
 
    /**
@@ -93,48 +108,6 @@ class Mensagens extends MY_Controller {
 
         // recarrega a index
         redirect( site_url( 'mensagens/index/'.$this->input->post( 'cliente' ) ) );
-    }
-
-    
-   /**
-    * enviarEmailEvento
-    *
-    * envia o email de notificacao de evento
-    *
-    */
-    private function enviarEmailEvento( $cliente, $evento ) {
-
-        // carrega o template
-        $this->load->finder( 'EmailsFinder' );
-        $template = $this->EmailsFinder->clean()->template( 'TEMPLATE_NEWS' )->get( true );
-        
-        // adiciona os parametros customizaveis
-        $template->corpo = str_replace( '%_EVENTO_%', $evento, $template->corpo );
-        $template->corpo = str_replace( '%_CLIENTE_%', $cliente->razao, $template->corpo );
-
-        // seta o email que esta enviando
-        $emailEnvio   = $this->settings->item( 'EMAIL_SUPORTE' );
-        $usuarioEnvio = $this->settings->item( 'DESTINATARIO_EMAIL' );
-
-        // configuracoes do email
-        $config = [
-            'mailtype' => 'html'
-        ];
-
-        // carrega a library
-        $this->load->library( 'email', $config );
-
-        // seta os emails
-        $this->email->from( $emailEnvio, $usuarioEnvio )
-        ->to( $cliente->emailCobranca )
-
-        // seta o corpo
-        ->subject( 'Notificação do Evento' )
-        ->message( $template->corpo )
-        ->set_mailtype( 'html' );
-        
-        // envia o email
-        $this->email->send();
     }
 
    /**
@@ -251,31 +224,6 @@ class Mensagens extends MY_Controller {
                 return site_url( 'mensagens/index/'.$this->input->post( 'CodCliente' ) );
             }
         }
-    }
-
-   /**
-    * fecharEvento
-    *
-    * fecha um evento
-    *
-    */
-    public function fechar_evento( $CodEvento ) {
-        
-        // busca o evento
-        $evento = $this->EventosFinder->clean()->key( $CodEvento )->get( true );
-        
-        // verifica se o evento existe
-        if( !$evento ) {
-            redirect( 'dashboard' );
-            return;
-        }
-
-        // seta o evento como fechado
-        $evento->setStatus( 'F' );
-        $evento->save();
-
-        redirect( "mensagens/index/$evento->CodEvento" );
-        return;
     }
 }
 /* end of file */

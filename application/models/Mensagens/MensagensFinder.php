@@ -88,9 +88,9 @@ class MensagensFinder extends MY_Model {
     }
 
     /**
-    * cli
+    * autor
     *
-    * seta o codigo do evento
+    * filtra pelo autor
     *
     */
     public function autor( $autor ) {
@@ -101,9 +101,9 @@ class MensagensFinder extends MY_Model {
     }
     
    /**
-    * orderByPontos
+    * orderByData
     *
-    * ordena pelos pontos
+    * ordenar pela data de envio
     *
     */
     public function orderByData() {
@@ -132,6 +132,19 @@ class MensagensFinder extends MY_Model {
         
         // seta o where
         $this->where( " CodMensagem > $cod" );
+        return $this;
+    }
+
+   /**
+    * newerThan
+    *
+    * mensagens mais novas
+    *
+    */
+    public function newerThan( $timestamp ) {
+
+        // seta o where
+        $this->where( " DataEnvio > '".date( 'Y-m-d H:i:s', $timestamp )."'" );
         return $this;
     }
 

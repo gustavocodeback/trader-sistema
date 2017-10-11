@@ -1,3 +1,6 @@
+// indica se esta fazendo uma requisicao
+var req = false;
+
 /**
  * adicionarArquivoNaLista
  * 
@@ -113,6 +116,48 @@ function removeInput( cod ) {
 }
 
 /**
+ * updateMessagesContainer
+ * 
+ * faz o update das mensagens no container
+ * 
+ */
+function updateMessagesContainer( loading = true ) {
+
+    // indica que a requisicao esta acontecendo
+    req = true;
+
+    // verifica se deve mostrar o loading
+    if ( loading ) $( '#loader' ).removeClass( 'hidden' );
+
+    // faz a requisição get
+    $.get( Site.url+'mensagens/mensagens_html/'+Cliente, function( data ) {
+        
+        // pega os dados
+        data = JSON.parse( data );
+
+        // pega o html
+        inner = data.data;
+
+        // salva o html
+        $( '#mensagens' ).html( inner );
+
+        // adiciona para o rodape
+        $('#mensagens').animate({
+            scrollTop: $('#mensagens').height() + 9999
+        }, 0);
+
+    })
+    .always( function() {
+
+        // indica que a requisicao terminou
+        req = false;
+        
+        // verifica se deve mostrar o loading
+        if ( loading ) $( '#loader' ).addClass( 'hidden' );
+    });
+}
+
+/**
  * addInput
  * 
  * adiciona um input de arquivo
@@ -193,19 +238,6 @@ function atualizarProgresso( item, val ) {
     item.find( 'progress' ).val( val );
 }
 
-$( document ).ready( function() {
-
-    $( '#input-anexo' ).change( function() {
-        // var filename = $( this ).val().split('\\').pop();
-
-        // adiciona o arquivo na lista
-        adicionarArquivoNaLista( $( this ), atualizarProgresso, finalizarUpload );
-    });
-    $('#mensagens').animate({
-        scrollTop: $(this).height() + mensagens * 100 // aqui introduz o numero de px que quer no scroll, neste caso é a altura da propria div, o que faz com que venha para o fim
-    }, 0);
-});
-
 function getCaret(el) { 
     if (el.selectionStart) { 
         return el.selectionStart; 
@@ -236,3 +268,24 @@ $('textarea').keyup(function (event) {
         }
     }
 });
+
+$( document ).ready( function() {
+
+    // faz o update das mensagens
+    updateMessagesContainer();
+
+    // obtem novas mensagens de 1s em 1s
+    setInterval( function() {
+
+        // verifica se ja nao existe uma requisicao
+        if ( !req ) updateMessagesContainer( loading = false );
+    }, 1000 );
+
+    $( '#input-anexo' ).change( function() {
+
+        // adiciona o arquivo na lista
+        adicionarArquivoNaLista( $( this ), atualizarProgresso, finalizarUpload );
+    });
+});
+
+

@@ -92,6 +92,12 @@ class Api extends MY_Controller {
 
     }
 
+    /**
+    * atualizar_perfil
+    *
+    * atualiza o perfil do cliente
+    *
+    */
     public function atualizar_perfil() {
 
         // carrega o model
@@ -138,9 +144,9 @@ class Api extends MY_Controller {
     }
 
    /**
-    * obter_mensagens
+    * meu_assessor
     *
-    * resetar a senha
+    * obtem os dados do assessor
     *
     */
     public function meu_assessor() {
@@ -195,6 +201,7 @@ class Api extends MY_Controller {
                 'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
                 'visualizada'   => $mensagem->visualizada,
                 'dataEnvio'     => $dataEnvio,
+                'timestamp'     => strtotime( $mensagem->dataEnvio ),
                 'autor'         => $mensagem->autor,
                 'arquivo'       => isset( $mensagem->arquivo ) ? $link : ''
             ];
@@ -236,6 +243,7 @@ class Api extends MY_Controller {
                 'visualizada'   => $mensagem->visualizada,
                 'dataEnvio'     => $dataEnvio,
                 'autor'         => $mensagem->autor,
+                'timestamp'     => strtotime( $mensagem->dataEnvio ),
                 'arquivo'       => isset( $mensagem->arquivo ) ? $link : '',
                 'mime'          => isset( $mensagem->arquivo ) ? get_mime_by_extension( $mensagem->label ) : ''
             ];
@@ -277,6 +285,7 @@ class Api extends MY_Controller {
                     'visualizada'   => $mensagem->visualizada,
                     'dataEnvio'     => $dataEnvio,
                     'autor'         => $mensagem->autor,
+                    'timestamp'     => strtotime( $mensagem->dataEnvio ),
                     'arquivo'       => isset( $mensagem->arquivo ) ? $link : ''
             ];
             return $this->response->resolve( $mensagem );
@@ -304,6 +313,12 @@ class Api extends MY_Controller {
         } else return $this->response->reject( 'Você não tem permissão para baixar esse arquivo.' );
     }
 
+   /**
+    * add_ticket
+    *
+    * adiciona um novo ticket
+    *
+    */
     public function add_ticket() {
         
         // verifica se o usuario ta logado
@@ -442,6 +457,9 @@ class Api extends MY_Controller {
     */
     public function resetar() {
 
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
         // carrega o model
         $this->load->model( [ 'Clientes/Cliente' ] );
         $user = $this->Cliente->clean()->email( $this->input->post( 'email' ) )->get( true );
@@ -500,13 +518,82 @@ class Api extends MY_Controller {
         }
     }
 
-    public function autenticada() {
+   /**
+    * long_polling
+    *
+    * deixa o chat em tempo real
+    *
+    */
+    public function long_polling( $timestamp ) {
 
-        // verifica se o usuario esta logado
+        // verifica se o usuario ta logado
         $this->request->logged();
 
-        // mensagem de teste
-        $this->response->resolve( $this->request->cliente->nome );
+        // carrega o helpper
+        $this->load->helper('file');
+
+        // deixa o long polling não bloqueante
+        session_write_close();
+
+        // carega as models necessárias
+        $this->load->model( [ 'Mensagens/Mensagem' ] );
+
+        // variavel de controle
+        $controle  = 0;
+        
+        // faz o loop
+        while( true ) {
+
+            // carrega as mensagens
+            $mensagens = $this->Mensagem->clean()
+                                        ->cliente( $this->request->cliente->CodCliente )
+                                        ->newerThan( $timestamp )
+                                        ->autor( 'F' )
+                                        ->orderByDataNew()
+                                        ->get();
+
+            // verifica se existem novas mensagens
+            if (  count( $mensagens ) > 0 ) {
+                
+                // faz o mapeamento do array
+                $mensagens = array_map( function( $mensagem ) {
+                    $msg = $mensagem;
+                    $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
+                    if( $mensagem->arquivo ) $link = site_url( 'uploads/'.$mensagem->arquivo.'.'.$mensagem->extensao );
+                    if( $msg->visualizada == 'N' ) $msg->lerMensagem();
+                    return [
+                        'cod'           => $mensagem->CodMensagem,
+                        'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
+                        'visualizada'   => $mensagem->visualizada,
+                        'dataEnvio'     => $dataEnvio,
+                        'autor'         => $mensagem->autor,
+                        'timestamp'     => strtotime( $mensagem->dataEnvio ),
+                        'arquivo'       => isset( $mensagem->arquivo ) ? $link : '',
+                        'mime'          => isset( $mensagem->arquivo ) ? get_mime_by_extension( $mensagem->label ) : ''
+                    ];
+                }, $mensagens );
+
+                // envia as mensagens
+                return $this->response->resolve( $mensagens );
+
+            } else {
+
+                // verifica a variavel de controle
+                if ( $controle < 15 ) {
+
+                    // incrementa e aguarda 2s
+                    sleep( 2 );
+                    $controle++;                
+                    continue;
+
+                } else {
+
+                    // envia as mensagens
+                    return $this->response->resolve( [ 'time' => time() ] );
+                    break;
+                }
+            }
+        }
     }
 }
 
