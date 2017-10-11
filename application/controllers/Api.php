@@ -60,8 +60,8 @@ class Api extends MY_Controller {
         // verifica se o usuario ta logado
         $this->request->logged();
 
-        $exploded = explode(',', $this->input->post( 'foto' ), 2); // limit to 2 parts, i.e: find the first comma
-        $encoded = $exploded[1]; // pick up the 2nd part
+        $exploded = explode(',', $this->input->post( 'foto' ), 2);
+        $encoded = $exploded[1];
         $decoded = base64_decode($encoded);
         $img_handler = imagecreatefromstring($decoded);
         file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/tesTando.png', $decoded );
@@ -148,7 +148,7 @@ class Api extends MY_Controller {
         
         // verifica se alterou a senha
         if( $this->input->post( 'foto' ) ) {
-            $cliente->changeAvatar( explode( ',', $this->input->post( 'foto' ) ) )->save();
+            $cliente->changeAvatar( $this->input->post( 'foto' ) )->save();
         }
         $cliente = [
             'email' => $cliente->email,

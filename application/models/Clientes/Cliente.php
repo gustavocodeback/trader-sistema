@@ -186,21 +186,28 @@ class Cliente extends ClientesFinder {
         // verifica se existe uma foto
         if ( $this->foto ) {
 
-            // verifica se o arquivo existe
-            if ( file_exists( 'uploads/'.$this->foto ) ) {
-                unlink( 'uploads/'.$this->foto );
-                $image = imagecreatefromstring( base64_decode($newFoto) );
-                imagejpeg( $image, "uploads/" .$this->foto );
-                return $this;
-            } else {
-                $image = imagecreatefromstring( base64_decode($newFoto) );
-                imagejpeg( $image, "uploads/$this->foto" );
-                return $this;
-            }
+            // separa o base64
+            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+
+            // decodifica
+            $decoded = base64_decode($exploded[1]);
+
+            // atualiza a imagem
+            file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'\/uploads\/' .$this->foto, $decoded );
+            return $this;
         } else {
+
+            // cria um id para a foto
             $this->foto = md5( uniqid( time() * rand() ) );
-            $image = imagecreatefromstring( base64_decode($newFoto) );
-            imagejpeg( $image, "uploads/$this->foto" );
+            
+            // separa o base64
+            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+
+            // decodifica
+            $decoded = base64_decode($exploded[1]);
+
+            // atualiza a imagem
+            file_put_contents( $_SERVER['DOCUMENT_ROOT']."\/uploads\/" .$this->foto, $decoded );
             return $this;
         }
     }
