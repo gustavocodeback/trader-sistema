@@ -87,7 +87,7 @@ class Mensagem extends MensagensFinder {
             $this->extensao = 'png';
             
             // separa o base64
-            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+            $exploded = explode(',', $newFoto, 2);
 
             // decodifica
             $decoded = base64_decode($exploded[1]);
