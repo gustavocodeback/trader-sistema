@@ -406,7 +406,6 @@ class Api extends MY_Controller {
             return $this->response->resolve( [] );
         }
         
-        
         // faz o mapeamento do array
         $posts = array_map( function( $post ) {
             $data = date( 'd/m/Y à\s H:i', strtotime( $post->data ) );
@@ -658,7 +657,7 @@ class Api extends MY_Controller {
         $this->load->model( [ 'PropostasClientes/PropostaCliente', 'Propostas/Proposta' ] );
 
         // busca as propostas disparadas pro cliente
-        $propostasClientes = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 3, true );
+        $propostasClientes = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 5, true );
         if ( count( $propostasClientes ) == 0 ) {
 
             // volta vazio
@@ -667,6 +666,7 @@ class Api extends MY_Controller {
 
         // busca as propostas
         $propostas = [];
+        
         foreach ($propostasClientes as $propostaCliente) {
 
             // pega a proposta
