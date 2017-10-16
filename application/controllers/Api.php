@@ -709,7 +709,7 @@ class Api extends MY_Controller {
         }
         $proposta = [
             'cod'   => $proposta->CodProposta,
-            'post'  => $proposta->proposta
+            'proposta'  => $proposta->proposta
         ];
 
         
