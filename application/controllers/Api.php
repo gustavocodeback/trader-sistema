@@ -617,6 +617,38 @@ class Api extends MY_Controller {
         if ( ! $this->upload->do_upload( 'file' ) ) {
             $error = array('error' => $this->upload->display_errors());
             return $this->response->reject( json_encode( $error ) );
+        } else {
+
+            // pega os dados do upload
+            $data = array('upload_data' => $this->upload->data());
+            return $this->response->resolve( $data );
+            
+
+            // $extensao = str_replace( '.', '', $data['upload_data']['file_ext'] );
+
+            // $caminho = site_url( "mensagens/download/".$data['upload_data']['raw_name'] );
+
+            // $label = $data['upload_data']['client_name'];
+            
+            // // seta as propriedades
+            // $mensagem->set( 'cliente', $cliente )
+            //         ->set( 'texto', $label )
+            //         ->set( 'arquivo', $data['upload_data']['raw_name'] )
+            //         ->set( 'label', $label )
+            //         ->set( 'extensao', $extensao )
+            //         ->set( 'funcionario', $user->CodFuncionario )
+            //         ->set( 'visualizada', 'N' )
+            //         ->set( 'autor', 'F' )
+            //         ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
+
+            // // seta o id
+            // $data['upload_data']['cod_arquivo'] = $arquivo->CodArquivo;
+
+            // if( $mensagem->save() ) {
+
+            //     // recarrega a index
+            //     return site_url( 'mensagens/index/'.$this->input->post( 'CodCliente' ) );
+            }
         }
 
         return $this->response->resolve( $data );
