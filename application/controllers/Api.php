@@ -649,7 +649,7 @@ class Api extends MY_Controller {
             //     // recarrega a index
             //     return site_url( 'mensagens/index/'.$this->input->post( 'CodCliente' ) );
             }
-        }
+        
 
         return $this->response->resolve( $data );
     }
