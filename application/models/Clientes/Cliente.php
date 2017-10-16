@@ -184,7 +184,7 @@ class Cliente extends ClientesFinder {
     public function changeAvatar( $newFoto ) {
 
         // verifica se existe uma foto
-        if ( $this->foto ) {
+        if ( file_exists( 'uploads/'.$this->foto ) ) {
 
             // separa o base64
             $exploded = explode(',', $this->input->post( 'foto' ), 2);
