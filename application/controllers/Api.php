@@ -621,6 +621,7 @@ class Api extends MY_Controller {
 
             // pega os dados do upload
             $data = array('upload_data' => $this->upload->data());
+            
             return $this->response->resolve( $data );
             
 
