@@ -708,7 +708,8 @@ class Api extends MY_Controller {
             return $this->response->reject( 'Proposta não existe' );
         }
         $proposta = [
-            'cod'   => $proposta->CodProposta,
+            'cod'       => $proposta->CodProposta,
+            'nome'      => $proposta->nome,
             'proposta'  => $proposta->proposta
         ];
 
