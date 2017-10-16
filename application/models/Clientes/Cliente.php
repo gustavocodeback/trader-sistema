@@ -183,19 +183,19 @@ class Cliente extends ClientesFinder {
 
     public function changeAvatar( $newFoto ) {
 
-        // verifica se existe uma foto
-        if ( file_exists( 'uploads/'.$this->foto ) ) {
+        // // verifica se existe uma foto
+        // if ( file_exists( 'uploads/'.$this->foto ) ) {
 
-            // separa o base64
-            $exploded = explode(',', $newFoto, 2);
+        //     // separa o base64
+        //     $exploded = explode(',', $newFoto, 2);
 
-            // decodifica
-            $decoded = base64_decode($exploded[1]);
+        //     // decodifica
+        //     $decoded = base64_decode($exploded[1]);
 
-            // atualiza a imagem
-            file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/' .$this->foto, $decoded );
-            return $this;
-        } else {
+        //     // atualiza a imagem
+        //     file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/' .$this->foto, $decoded );
+        //     return $this;
+        // } else {
 
             // cria um id para a foto
             $this->foto = md5( uniqid( time() * rand() ) ) .'.png';
@@ -209,7 +209,7 @@ class Cliente extends ClientesFinder {
             // atualiza a imagem
             file_put_contents( $_SERVER['DOCUMENT_ROOT'] ."/uploads/" .$this->foto, $decoded );
             return $this;
-        }
+        // }
     }
 
     public function avatar() {
