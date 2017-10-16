@@ -600,7 +600,7 @@ class Api extends MY_Controller {
         
         // verifica se o usuario ta logado
         $this->request->logged();
-        $data = $_FILES [ 'file' ] [ 'name' ];
+        $data = $_FILES [ 'file' ];
 
         return $this->response->resolve( $data );
     }
