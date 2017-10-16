@@ -84,7 +84,7 @@ class Mensagem extends MensagensFinder {
             $this->label = 'imagem-' .date( 'd-m-y-H-i-s' ) .'.jpeg';            
             
             // extensao
-            $this->$extensao = 'png';
+            $this->extensao = 'png';
             
             // separa o base64
             $exploded = explode(',', $this->input->post( 'foto' ), 2);
