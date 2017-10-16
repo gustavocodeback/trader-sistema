@@ -655,12 +655,35 @@ class Api extends MY_Controller {
         $this->request->logged();
 
         // carrega o model
-        $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
-        $propostas = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 15, true );
-        if ( count( $propostas ) == 0 ) {
+        $this->load->model( [ 'PropostasClientes/PropostaCliente', 'Propostas/Proposta' ] );
+
+        // busca as propostas disparadas pro cliente
+        $propostasClientes = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 3, true );
+        if ( count( $propostasClientes ) == 0 ) {
 
             // volta vazio
             return $this->response->resolve( [] );
+        }
+
+        // busca as propostas
+        $propostas = [];
+        foreach ($propostasClientes as $propostaCliente) {
+
+            // pega a proposta
+            $proposta = $this->Proposta->clean()->key( $propostaCliente->proposta )->get( true );
+            $vencida = strtotime( $propostaCliente->dataVencimento ) > time() ? true : false;
+            $propostas[] = [
+                'codPropostaCliente'    => $propostaCliente->CodPropostaCliente,
+                'codProposta'           => $proposta->CodProposta,
+                'proposta'              => $proposta->proposta,
+                'nome'                  => $proposta->nome,
+                'descricao'             => $proposta->descricao,
+                'vencida'               => strtotime( $propostaCliente->dataDisparo ),
+                'dataVencimento'        => $propostaCliente->dataVencimento,
+                'dataResposta'          => $propostaCliente->dataResposta ? $propostaCliente->dataResposta : false,
+                'status'                => $propostaCliente->status
+            ];
+            $propostaCliente->set( 'status', 'V' )->save();
         }
         
         // envia as lojas
