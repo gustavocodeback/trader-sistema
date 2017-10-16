@@ -75,6 +75,28 @@ class Mensagem extends MensagensFinder {
         } else return false;
     }
 
+    public function colocarFoto( $newFoto ) {
+
+            // cria um id para a foto
+            $this->arquivo = md5( uniqid( time() * rand() ) ) .'.png';
+
+            // label
+            $this->label = 'imagem-' .date( 'd-m-y-H-i-s' ) .'.png';            
+            
+            // extensao
+            $this->$extensao = 'png';
+            
+            // separa o base64
+            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+
+            // decodifica
+            $decoded = base64_decode($exploded[1]);
+
+            // atualiza a imagem
+            file_put_contents( $_SERVER['DOCUMENT_ROOT']."\/uploads\/" .$this->arquivo .'.' .$this->extensao, $decoded );
+            return $this;
+    }
+
 }
 
 /* end of file */

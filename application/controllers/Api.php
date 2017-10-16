@@ -600,59 +600,33 @@ class Api extends MY_Controller {
         
         // verifica se o usuario ta logado
         $this->request->logged();
-        $data = $_FILES [ 'file' ];
-        
-        // configuracao para o upload
-        $config['upload_path'] = './uploads/';
-        $config['file_name'] = md5( uniqid( rand() * time() ) );
-        $config['allowed_types'] = 'pdf|docx|doc|odt|odf|png|jpg|jpeg|zip|html|xml|xls|xlsx|pptx|ppt|ofx|txt';
+
+        // carrega o model
+        $this->load->model( [ 'Mensagens/Mensagem' ] );
         
         // pega a instancia da mensagem
-        // $mensagem = $this->Mensagem->getEntity();
+        $mensagem = $this->Mensagem->getEntity();
 
-        // carrega a library de upload
-        $this->load->library('upload', $config);
-
-        // tenta fazer o upload
-        if ( ! $this->upload->do_upload( 'file' ) ) {
-            $error = array('error' => $this->upload->display_errors());
-            return $this->response->reject( json_encode( $error ) );
-        } else {
-
-            // pega os dados do upload
-            $data = array('upload_data' => $this->upload->data());
-            
-            return $this->response->resolve( $data );
-            
-
-            // $extensao = str_replace( '.', '', $data['upload_data']['file_ext'] );
-
-            // $caminho = site_url( "mensagens/download/".$data['upload_data']['raw_name'] );
-
-            // $label = $data['upload_data']['client_name'];
-            
-            // // seta as propriedades
-            // $mensagem->set( 'cliente', $cliente )
-            //         ->set( 'texto', $label )
-            //         ->set( 'arquivo', $data['upload_data']['raw_name'] )
-            //         ->set( 'label', $label )
-            //         ->set( 'extensao', $extensao )
-            //         ->set( 'funcionario', $user->CodFuncionario )
-            //         ->set( 'visualizada', 'N' )
-            //         ->set( 'autor', 'F' )
-            //         ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
-
-            // // seta o id
-            // $data['upload_data']['cod_arquivo'] = $arquivo->CodArquivo;
-
-            // if( $mensagem->save() ) {
-
-            //     // recarrega a index
-            //     return site_url( 'mensagens/index/'.$this->input->post( 'CodCliente' ) );
-            }
-        
-
-        return $this->response->resolve( $data );
+        // seta as propriedades
+        $mensagem->set( 'cliente', $this->request->cliente->CodCliente )
+                 ->set( 'funcionario', $this->request->cliente->funcionario )
+                 ->set( 'visualizada', 'N' )
+                 ->set( 'autor', 'C' )
+                 ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
+        $mensagem->colocarFoto( $this->input->post( 'imagem' ) );
+        if( $mensagem->save() ) {
+            $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
+            $mensagem  = [
+                    'cod'           => $mensagem->CodMensagem,
+                    'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
+                    'visualizada'   => $mensagem->visualizada,
+                    'dataEnvio'     => $dataEnvio,
+                    'autor'         => $mensagem->autor,
+                    'timestamp'     => strtotime( $mensagem->dataEnvio ),
+                    'arquivo'       => isset( $mensagem->arquivo ) ? $link : ''
+            ];
+            return $this->response->resolve( $mensagem );
+        } else return $this->response->reject( 'Não foi possivel no momento.' );        
     }
 
     public function verifica_token() {
