@@ -193,7 +193,7 @@ class Cliente extends ClientesFinder {
             $decoded = base64_decode($exploded[1]);
 
             // atualiza a imagem
-            file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'\/uploads\/' .$this->foto, $decoded );
+            file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/' .$this->foto, $decoded );
             return $this;
         } else {
 
@@ -207,7 +207,7 @@ class Cliente extends ClientesFinder {
             $decoded = base64_decode($exploded[1]);
 
             // atualiza a imagem
-            file_put_contents( $_SERVER['DOCUMENT_ROOT']."\/uploads\/" .$this->foto, $decoded );
+            file_put_contents( $_SERVER['DOCUMENT_ROOT'] ."/uploads/" .$this->foto, $decoded );
             return $this;
         }
     }
