@@ -658,6 +658,8 @@ class Api extends MY_Controller {
         $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
         $propostas = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 15, true );
         if ( count( $propostas ) == 0 ) {
+
+            // volta vazio
             return $this->response->resolve( [] );
         }
         
