@@ -602,7 +602,7 @@ class Api extends MY_Controller {
         $this->request->logged();
         $data = $this->input->post( 'teste' );
 
-        return $this->response->resolve( $_FILES );
+        return $this->response->resolve( $_POST );
     }
 
     public function verifica_token() {
