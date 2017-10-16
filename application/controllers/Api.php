@@ -597,6 +597,10 @@ class Api extends MY_Controller {
     }
 
     public function upload_arquivo() {
+        
+        // verifica se o usuario ta logado
+        $this->request->logged();
+        
         return $this->response->resolve( $_POST );
     }
     
