@@ -278,7 +278,10 @@ class Api extends MY_Controller {
                  ->set( 'autor', 'C' )
                  ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
         if( $mensagem->save() ) {
+            
+            $msg = $mensagem;
             $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
+            if( $mensagem->arquivo ) $link = site_url( 'uploads/'.$mensagem->arquivo.'.'.$mensagem->extensao );
             $mensagem  = [
                     'cod'           => $mensagem->CodMensagem,
                     'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
@@ -615,7 +618,10 @@ class Api extends MY_Controller {
                  ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
         $mensagem->colocarFoto( $this->input->post( 'imagem' ) );
         if( $mensagem->save() ) {
+            
+            $msg = $mensagem;
             $dataEnvio = date( 'd/m/Y à\s H:i', strtotime( $mensagem->dataEnvio ) );
+            if( $mensagem->arquivo ) $link = site_url( 'uploads/'.$mensagem->arquivo.'.'.$mensagem->extensao );
             $mensagem  = [
                     'cod'           => $mensagem->CodMensagem,
                     'texto'         => !isset( $mensagem->arquivo ) ? $mensagem->texto : $mensagem->label,
