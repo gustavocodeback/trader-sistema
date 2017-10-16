@@ -616,7 +616,7 @@ class Api extends MY_Controller {
         // tenta fazer o upload
         if ( ! $this->upload->do_upload( 'file' ) ) {
             $error = array('error' => $this->upload->display_errors());
-            echo json_encode( $error );
+            return $this->response->reject( json_encode( $error ) );
         }
 
         return $this->response->resolve( $data );
