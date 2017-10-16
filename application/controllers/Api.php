@@ -600,8 +600,9 @@ class Api extends MY_Controller {
         
         // verifica se o usuario ta logado
         $this->request->logged();
+        $data = $this->input->post( 'teste' );
 
-        return $this->response->resolve( $_POST );
+        return $this->response->resolve( 'foi' );
     }
 
     public function verifica_token() {
