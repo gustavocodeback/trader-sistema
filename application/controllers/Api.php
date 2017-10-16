@@ -55,20 +55,6 @@ class Api extends MY_Controller {
         } else return $this->response->reject( 'A senha digitada está incorreta' );
     }
 
-    public function teste() {
-       
-        // verifica se o usuario ta logado
-        $this->request->logged();
-
-        $exploded = explode(',', $this->input->post( 'foto' ), 2);
-        $encoded = $exploded[1];
-        $decoded = base64_decode($encoded);
-        $img_handler = imagecreatefromstring($decoded);
-        file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/tesTando.png', $decoded );
-         
-        return $this->response->resolve( $decoded );
-    }
-
    /**
     * obter perfil
     *
@@ -608,6 +594,32 @@ class Api extends MY_Controller {
                 }
             }
         }
+    }
+
+    public function upload_arquivo() {
+        return $this->response->resolve( $_POST );
+    }
+    
+   /**
+    * obter_mensagens
+    *
+    * resetar a senha
+    *
+    */
+    public function obter_propostas( $indice ) {
+
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        // carrega o model
+        $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
+        $propostas = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 15, true );
+        if ( count( $propostas ) == 0 ) {
+            return $this->response->resolve( [] );
+        }
+        
+        // envia as lojas
+        return $this->response->resolve( $propostas );
     }
 }
 

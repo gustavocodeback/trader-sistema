@@ -82,7 +82,7 @@ class Propostas_func extends MY_Controller {
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
 			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'propostas/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
+			echo '<a href="'.site_url( 'propostas_func/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
 			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'propostas/excluir/'.$row[$key] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
 		})
 
@@ -91,8 +91,8 @@ class Propostas_func extends MY_Controller {
 		
         // seta a url para adiciona
         if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar' ) );
-        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas/disparo' ) );
-        $this->view->set( 'hist_url', site_url( 'propostas/historico' ) );        
+        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
+        $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );        
         
         // seta o titulo
         $this->view->set( 'entity', 'Minhas Propostas' );
@@ -188,13 +188,13 @@ class Propostas_func extends MY_Controller {
             foreach ( $clientes as $cliente ) {
                 if( !$this->PropostaCliente->clean()->periodo( $proposta->CodProposta,
                                                             $cliente->CodCliente,
-                                                            date('Y-m-d', time() ) )->get() ) {
+                                                            date('Y-m-d H:i:s', time() ) )->get() ) {
                     $propostaCliente = $this->PropostaCliente->getEntity();
                     $propostaCliente->set( 'cliente', $cliente->CodCliente )
                             ->set( 'proposta', $proposta->CodProposta )
                             ->set( 'status', "D" )
-                            ->set( 'dataDisparo', date('Y-m-d', time() ) )
-                            ->set( 'dataVencimento', date('Y-m-d', strtotime( "+$proposta->dias days", time() ) ) );
+                            ->set( 'dataDisparo', date('Y-m-d H:i:s', time() ) )
+                            ->set( 'dataVencimento', date('Y-m-d H:i:s', strtotime( "+$proposta->dias days", time() ) ) );
                     $propostaCliente->save();
                 }
             }
@@ -398,7 +398,7 @@ class Propostas_func extends MY_Controller {
 
         } elseif( $this->PropostaCliente->clean()->periodo( $proposta->CodProposta,
                                                             $cliente->CodCliente,
-                                                            date('Y-m-d', time() ) )->get() ) {
+                                                            date('Y-m-d H:i:s', time() ) )->get() ) {
             
             // seta o erro
             $this->view->set( 'errors', 'Cliente selecionado já possui a proposta aberta, aguarde a resposta.' );
@@ -412,8 +412,8 @@ class Propostas_func extends MY_Controller {
             $propostaCliente->set( 'cliente', $cliente->CodCliente )
                         ->set( 'proposta', $proposta->CodProposta )
                         ->set( 'status', "D" )
-                        ->set( 'dataDisparo', date('Y-m-d', time() ) )
-                        ->set( 'dataVencimento', date('Y-m-d', strtotime( "+$proposta->dias days", time() ) ) );
+                        ->set( 'dataDisparo', date('Y-m-d H:i:s', time() ) )
+                        ->set( 'dataVencimento', date('Y-m-d H:i:s', strtotime( "+$proposta->dias days", time() ) ) );
             $propostaCliente->save();
 
             // redireciona para o grid

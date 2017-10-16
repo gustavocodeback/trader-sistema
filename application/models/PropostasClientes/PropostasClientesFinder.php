@@ -112,6 +112,30 @@ class PropostasClientesFinder extends MY_Model {
         $this->where( " CodProposta = $CodProposta AND CodCliente= $CodCliente AND DataVencimento > '$data' " );
         return $this;
     }
+
+   /**
+    * evento
+    *
+    * seta o codigo do evento
+    *
+    */
+    public function cliente( $CodCliente ) {
+
+        // seta o where
+        $this->where( " CodCliente = $CodCliente" );
+        return $this;
+    }
+    
+   /**
+    * orderByPontos
+    *
+    * ordena pelos pontos
+    *
+    */
+    public function orderByDataNew() {
+        $this->db->order_by( 'DataDisparo', 'DESC' );
+        return $this;
+    }
 }
 
 /* end of file */
