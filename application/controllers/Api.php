@@ -601,6 +601,23 @@ class Api extends MY_Controller {
         // verifica se o usuario ta logado
         $this->request->logged();
         $data = $_FILES [ 'file' ];
+        
+        // configuracao para o upload
+        $config['upload_path'] = './uploads/';
+        $config['file_name'] = md5( uniqid( rand() * time() ) );
+        $config['allowed_types'] = 'pdf|docx|doc|odt|odf|png|jpg|jpeg|zip|html|xml|xls|xlsx|pptx|ppt|ofx|txt';
+        
+        // pega a instancia da mensagem
+        $mensagem = $this->Mensagem->getEntity();
+
+        // carrega a library de upload
+        $this->load->library('upload', $config);
+
+        // tenta fazer o upload
+        if ( ! $this->upload->do_upload( 'file' ) ) {
+            $error = array('error' => $this->upload->display_errors());
+            echo json_encode( $error );
+        }
 
         return $this->response->resolve( $data );
     }
