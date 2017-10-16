@@ -675,7 +675,6 @@ class Api extends MY_Controller {
             $propostas[] = [
                 'codPropostaCliente'    => $propostaCliente->CodPropostaCliente,
                 'codProposta'           => $proposta->CodProposta,
-                'proposta'              => $proposta->proposta,
                 'nome'                  => $proposta->nome,
                 'descricao'             => $proposta->descricao,
                 'vencida'               => strtotime( $propostaCliente->dataDisparo ),
@@ -688,6 +687,34 @@ class Api extends MY_Controller {
         
         // envia as lojas
         return $this->response->resolve( $propostas );
+    }
+    
+    
+   /**
+    * resetar
+    *
+    * resetar a senha
+    *
+    */
+    public function obter_proposta( $CodProposta ) {
+
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        // carrega o model
+        $this->load->model( [ 'Propostas/Proposta' ] );
+        $proposta = $this->Proposta->clean()->key( $CodProposta )->get( true );
+        if ( !$proposta ) {
+            return $this->response->reject( 'Proposta não existe' );
+        }
+        $proposta = [
+            'cod'   => $proposta->CodProposta,
+            'post'  => $proposta->proposta
+        ];
+
+        
+        // envia as lojas
+        return $this->response->resolve( $proposta );
     }
 }
 
