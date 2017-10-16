@@ -78,10 +78,10 @@ class Mensagem extends MensagensFinder {
     public function colocarFoto( $newFoto ) {
 
             // cria um id para a foto
-            $this->arquivo = md5( uniqid( time() * rand() ) ) .'.png';
+            $this->arquivo = md5( uniqid( time() * rand() ) ) .'.jpeg';
 
             // label
-            $this->label = 'imagem-' .date( 'd-m-y-H-i-s' ) .'.png';            
+            $this->label = 'imagem-' .date( 'd-m-y-H-i-s' ) .'.jpeg';            
             
             // extensao
             $this->$extensao = 'png';

@@ -123,6 +123,7 @@ class Meus_dados extends MY_Controller {
 
             // seta a foto
             if ( $usuario->foto ) $this->picture->delete( $usuario->foto );
+            die(var_dump($this->picture->errors));
             $usuario->set( 'foto', $file_name );
             $usuario->save();
         }
