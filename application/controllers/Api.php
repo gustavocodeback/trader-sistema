@@ -608,7 +608,7 @@ class Api extends MY_Controller {
         $config['allowed_types'] = 'pdf|docx|doc|odt|odf|png|jpg|jpeg|zip|html|xml|xls|xlsx|pptx|ppt|ofx|txt';
         
         // pega a instancia da mensagem
-        $mensagem = $this->Mensagem->getEntity();
+        // $mensagem = $this->Mensagem->getEntity();
 
         // carrega a library de upload
         $this->load->library('upload', $config);
