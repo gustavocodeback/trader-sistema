@@ -93,7 +93,7 @@ class Mensagem extends MensagensFinder {
             $decoded = base64_decode($exploded[1]);
 
             // atualiza a imagem
-            file_put_contents( $_SERVER['DOCUMENT_ROOT']."\/uploads\/" .$this->arquivo .'.' .$this->extensao, $decoded );
+            file_put_contents( $_SERVER['DOCUMENT_ROOT']."/uploads/" .$this->arquivo .'.' .$this->extensao, $decoded );
             return $this;
     }
 
