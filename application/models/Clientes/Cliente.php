@@ -187,7 +187,7 @@ class Cliente extends ClientesFinder {
         if ( file_exists( 'uploads/'.$this->foto ) ) {
 
             // separa o base64
-            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+            $exploded = explode(',', $newFoto, 2);
 
             // decodifica
             $decoded = base64_decode($exploded[1]);
@@ -201,7 +201,7 @@ class Cliente extends ClientesFinder {
             $this->foto = md5( uniqid( time() * rand() ) ) .'.png';
             
             // separa o base64
-            $exploded = explode(',', $this->input->post( 'foto' ), 2);
+            $exploded = explode(',', $newFoto, 2);
 
             // decodifica
             $decoded = base64_decode($exploded[1]);
