@@ -719,10 +719,10 @@ class Api extends MY_Controller {
         return $this->response->resolve( $proposta );
     }
 
-    public function proposta_respondida( $CodPropostaCliente ) {
+    public function proposta_respondida() {
         $this->request->logged();        
         $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
-        $propostaCliente = $this->PropostaCliente->clean()->key( $CodPropostaCliente )->get( true );
+        $propostaCliente = $this->PropostaCliente->clean()->key( $this->input->post( 'propostaCliente' ) )->get( true );
         $propostaCliente->set( 'dataResposta', date( 'Y-m-d H:i:s', time() ) )
                         ->set( 'status', 'R' )
                         ->save();
