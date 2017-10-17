@@ -720,6 +720,7 @@ class Api extends MY_Controller {
     }
 
     public function proposta_respondida( $CodPropostaCliente ) {
+        $this->request->logged();        
         $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
         $propostaCliente = $this->PropostaCliente->clean()->key( $CodPropostaCliente )->get( true );
         $propostaCliente->set( 'dataResposta', date( 'Y-m-d H:i:s', time() ) )
