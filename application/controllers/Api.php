@@ -677,12 +677,13 @@ class Api extends MY_Controller {
                 'codProposta'           => $proposta->CodProposta,
                 'nome'                  => $proposta->nome,
                 'descricao'             => $proposta->descricao,
-                'vencida'               => strtotime( $propostaCliente->dataDisparo ),
+                'vencida'               => $vencida,
                 'dataVencimento'        => $propostaCliente->dataVencimento,
                 'dataResposta'          => $propostaCliente->dataResposta ? $propostaCliente->dataResposta : false,
                 'status'                => $propostaCliente->status
             ];
-            $propostaCliente->set( 'status', 'V' )->save();
+            if( $propostaCliente->status == 'D' ) $propostaCliente->set( 'status', 'V' )->save();
+            elseif( $propostaCliente->status == 'V' && $vencida ) $propostaCliente->set( 'status', 'E' )->save();
         }
         
         // envia as lojas
@@ -716,6 +717,17 @@ class Api extends MY_Controller {
         
         // envia as lojas
         return $this->response->resolve( $proposta );
+    }
+
+    public function proposta_respondida( $CodPropostaCliente ) {
+        $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
+        $propostaCliente = $this->PropostaCliente->clean()->key( $CodPropostaCliente )->get( true );
+        $propostaCliente->set( 'dataResposta', date( 'Y-m-d H:i:s', time() ) )
+                        ->set( 'status', 'R' )
+                        ->save();
+
+        // envia as lojas
+        return $this->response->resolve( 'Sucesso' );
     }
 }
 
