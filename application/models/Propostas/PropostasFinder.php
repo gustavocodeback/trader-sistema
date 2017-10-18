@@ -46,10 +46,19 @@ class PropostasFinder extends MY_Model {
     * funcao usada para gerar o grid
     *
     */
-    public function grid() {
-        $this->db->from( $this->table.' p' )
-        ->select( 'p.CodProposta as Código, p.nome, f.Nome as Funcionário, dias, CodProposta as Ações' )
-       ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' );
+    public function grid( $acessor = false ) {
+
+        // verifica se é um pedido do acessor
+        if ( $acessor ) {
+            $this->db->from( $this->table.' p' )
+            ->select( 'p.CodProposta as Código, p.nome, f.Nome as Funcionário, dias' )
+            ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' );
+        } else {
+            $this->db->from( $this->table.' p' )
+            ->select( 'p.CodProposta as Código, p.nome, f.Nome as Funcionário, dias, CodProposta as Ações' )
+            ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' );
+        }
+        
         return $this;
     }
 
@@ -59,13 +68,13 @@ class PropostasFinder extends MY_Model {
     * funcao usada para gerar o grid
     *
     */
-    public function grid_assessor( $CodFuncionario ) {
-        $this->db->from( $this->table.' p' )
-        ->select( 'p.CodProposta as Código, p.nome, p.descricao, dias, CodProposta as Ações' )
-       ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' )
-       ->where( "p.CodFuncionario = $CodFuncionario" );
-        return $this;
-    }
+    // public function grid_assessor( $CodFuncionario ) {
+    //     $this->db->from( $this->table.' p' )
+    //     ->select( 'p.CodProposta as Código, p.nome, p.descricao, dias, CodProposta as Ações' )
+    //    ->join( 'Funcionarios f', 'p.CodFuncionario = f.CodFuncionario', 'left' )
+    //    ->where( "p.CodFuncionario = $CodFuncionario" );
+    //     return $this;
+    // }
 
    /**
     * proposta

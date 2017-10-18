@@ -69,8 +69,14 @@ class Propostas extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // Pega o id do funcionario logado
+        $user = $this->guard->currentUser();
+
+        //verifica se é assessor
+        $aux = ( $user->gid == 2 ) ? true : false;
+
         // faz a paginacao
-		$this->Proposta->clean()->grid()
+		$this->Proposta->clean()->grid( $aux )
 
 		// seta os filtros
 		->order()
@@ -83,7 +89,12 @@ class Propostas extends MY_Controller {
 		})
 
 		// renderiza o grid
-		->render( site_url( 'propostas/index' ) );
+        ->render( site_url( 'propostas/index' ) );
+        
+        // seta a url para adiciona
+        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar/' ) );
+        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
+        // $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );
 		 
         // seta o titulo
         $this->view->set( 'entity', 'Propostas' );
@@ -319,6 +330,9 @@ class Propostas extends MY_Controller {
                  ->post( 'descricao' )
                  ->post( 'nome' )
                  ->post( 'dias' );
+
+        // Guarda o funcionario que criou a proposta
+        $proposta->funcionario = $user->CodFuncionario;
 
         // verifica se o formulario é valido
         if ( !$this->_formularioPropostas() ) {

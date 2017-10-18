@@ -73,18 +73,18 @@ class Propostas_func extends MY_Controller {
         $user = $this->guard->currentUser();
 
         // faz a paginacao
-		$this->Proposta->clean()->grid_assessor( $user->CodFuncionario )
+		$this->Proposta->clean()->grid( true )
 
 		// seta os filtros
 		->order()
 		->paginate( 0, 20 )
 
 		// seta as funcoes nas colunas
-		->onApply( 'Ações', function( $row, $key ) {
-			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-			echo '<a href="'.site_url( 'propostas_func/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
-			if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'propostas/excluir/'.$row[$key] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
-		})
+		// ->onApply( 'Ações', function( $row, $key ) {
+		// 	if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
+		// 	echo '<a href="'.site_url( 'propostas_func/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
+		// 	if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'propostas/excluir/'.$row[$key] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
+		// })
 
 		// renderiza o grid
 		->render( site_url( 'propostas_func/index' ) );
@@ -95,7 +95,7 @@ class Propostas_func extends MY_Controller {
         $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );        
         
         // seta o titulo
-        $this->view->set( 'entity', 'Minhas Propostas' );
+        $this->view->set( 'entity', 'Propostas' );
 
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Propostas - listagem' )->render( 'grid' );
