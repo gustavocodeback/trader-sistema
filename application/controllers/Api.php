@@ -327,7 +327,7 @@ class Api extends MY_Controller {
         // verifica se o usuario ta logado
         $this->request->logged();
 
-        // carrega a model de clientes
+        // carrega a model de tickets
         $this->load->model( 'Tickets/Ticket' );
 
         // pega a entidade
@@ -349,9 +349,9 @@ class Api extends MY_Controller {
     }
     
    /**
-    * resetar
+    * obter_tickets
     *
-    * resetar a senha
+    * obtem varios tickets
     *
     */
     public function obter_tickets( $indice ) {
@@ -389,9 +389,9 @@ class Api extends MY_Controller {
     }
     
    /**
-    * resetar
+    * obter_posts
     *
-    * resetar a senha
+    * obtem varios posts
     *
     */
     public function obter_posts( $indice ) {
@@ -425,9 +425,9 @@ class Api extends MY_Controller {
     }
     
    /**
-    * resetar
+    * obter_post
     *
-    * resetar a senha
+    * obtem um post
     *
     */
     public function obter_post( $CodPost ) {
@@ -598,6 +598,12 @@ class Api extends MY_Controller {
         }
     }
 
+    /**
+    * upload_arquivo
+    *
+    * faz o upload de arquivos
+    *
+    */
     public function upload_arquivo() {
         
         // verifica se o usuario ta logado
@@ -634,6 +640,12 @@ class Api extends MY_Controller {
         } else return $this->response->reject( 'Não foi possivel no momento.' );        
     }
 
+    /**
+    * verifica_token
+    *
+    * faz a verificação do token
+    *
+    */
     public function verifica_token() {
         
         // verifica se o usuario ta logado
@@ -643,9 +655,9 @@ class Api extends MY_Controller {
     }
     
    /**
-    * obter_mensagens
+    * obter_propostas
     *
-    * resetar a senha
+    * obtem varias propostas
     *
     */
     public function obter_propostas( $indice ) {
@@ -690,11 +702,10 @@ class Api extends MY_Controller {
         return $this->response->resolve( $propostas );
     }
     
-    
    /**
-    * resetar
+    * obter_proposta
     *
-    * resetar a senha
+    * obtem uma proposta
     *
     */
     public function obter_proposta( $CodProposta ) {
@@ -719,6 +730,12 @@ class Api extends MY_Controller {
         return $this->response->resolve( $proposta );
     }
 
+    /**
+    * proposta_respondida
+    *
+    * resetar a senha
+    *
+    */
     public function proposta_respondida() {
         $this->request->logged();        
         $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
@@ -729,6 +746,33 @@ class Api extends MY_Controller {
 
         // envia as lojas
         return $this->response->resolve( 'Sucesso' );
+    }
+
+    /**
+    * salva_idCelular_plataforma
+    *
+    * salva o id do celular e a plataforma do cliente
+    *
+    */
+    public function salva_idCelular_plataforma( $idCelular = false, $plataforma = false ) {
+        
+        // carrega o model
+        $this->load->model( [ 'Clientes/Cliente' ] );
+        
+        // verifica se o usuario ta logado
+        $this->request->logged();
+
+        // seta o cliente
+        $cliente = $this->request->cliente;
+
+        // verifica se veio o id do celular e o guarda
+        if( $idCelular ) $cliente->set( 'idCelular', $idCelular )->save();
+        
+        // verifica se veio a plataforma e guarda-a
+        if( $plataforma ) $cliente->set( 'plataforma', $plataforma)->save();
+        
+        return $this->response->resolve( $cliente );
+
     }
 }
 
