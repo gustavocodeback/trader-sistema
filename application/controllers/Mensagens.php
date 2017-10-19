@@ -106,8 +106,33 @@ class Mensagens extends MY_Controller {
                  ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
         $mensagem->save();
 
+        $this->envia_push( $mensagem );
+
         // recarrega a index
         redirect( site_url( 'mensagens/index/'.$this->input->post( 'cliente' ) ) );
+    }
+
+    /**
+    * envia_push
+    * 
+    * envia o push de mensagem para o cliente
+    */
+    private function envia_push( $mensagem ) {
+
+        // carrega a library de push
+        $this->load->library( 'Push' );
+
+        // pega a instancia da mensagem
+        $this->push->setTitle( 'Você possui uma nova mensagem do seu acessor!' )
+                   ->setbody( $mensagem->texto );
+
+        // pega o cliente
+        $cliente = $this->Cliente->clean()->key( $mensagem->cliente )->get( true );
+
+        // verifica se tem id do celular
+        if ( $cliente->idCelular ) {
+            return ( $this->push->fire( $cliente->idCelular ) ) ? "sucesso" : "erro";
+        } 
     }
 
    /**

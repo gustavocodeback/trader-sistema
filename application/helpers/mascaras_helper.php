@@ -97,3 +97,23 @@ if ( ! function_exists( 'in_cell' ) ) {
         return true;
     }
 }
+
+/**
+ * debug
+ *
+ * faz o debug de uma variavel
+ *
+ */
+ if ( ! function_exists( 'debug' ) ) {
+    function debug( $var, $blocking = true ) {
+
+        // imprime o pre
+        echo '<pre>';
+
+        // verifica se deve bloquear a execucao
+        if ( $blocking ) {
+            var_dump( $var );
+            die();
+        } else var_dump( $var );
+    }
+}

@@ -209,7 +209,29 @@ class Posts extends MY_Controller {
 
         // verifica se o dado foi salvo
         if ( $post->save() ) {
+
+            // envia push de novo post
+            $this->envia_push( $post->titulo );
+            // redireciona a pagina
             redirect( site_url( 'posts/index' ) );
         }
+    }
+
+    /**
+    * envia_push
+    * 
+    * envia o push de mensagem para o cliente
+    */
+    private function envia_push( $titulo ) {
+        
+        // carrega a library de push
+        $this->load->library( 'Push' );
+
+        // pega a instancia da mensagem
+        $this->push->setTitle( 'Novo post!' )
+                    ->setbody( $titulo );
+
+        // verifica se a proposta foi enviada
+        return ( $this->push->fire() ) ? "sucesso" : "erro";
     }
 }

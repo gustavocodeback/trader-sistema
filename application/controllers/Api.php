@@ -754,7 +754,7 @@ class Api extends MY_Controller {
     * salva o id do celular e a plataforma do cliente
     *
     */
-    public function salva_idCelular_plataforma( $idCelular = false, $plataforma = false ) {
+    public function salvar_dados_push() {
         
         // carrega o model
         $this->load->model( [ 'Clientes/Cliente' ] );
@@ -765,11 +765,14 @@ class Api extends MY_Controller {
         // seta o cliente
         $cliente = $this->request->cliente;
 
+        $idCliente = $this->input->post( 'idCelular' );
+        $plataforma = $this->input->post( 'plataforma' );
+
         // verifica se veio o id do celular e o guarda
-        if( $idCelular ) $cliente->set( 'idCelular', $idCelular )->save();
+        $cliente->set( 'idCelular', $idCliente )->save();
         
         // verifica se veio a plataforma e guarda-a
-        if( $plataforma ) $cliente->set( 'plataforma', $plataforma)->save();
+        $cliente->set( 'plataforma', $plataforma)->save();
         
         return $this->response->resolve( $cliente );
 

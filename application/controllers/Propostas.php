@@ -80,8 +80,8 @@ class Propostas extends MY_Controller {
 
 		// seta os filtros
 		->order()
-		->paginate( 0, 20 )
-
+        ->paginate( 0, 20 )
+        
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
 			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
@@ -348,8 +348,31 @@ class Propostas extends MY_Controller {
 
         // verifica se o dado foi salvo
         if ( $proposta->save() ) {
+            
+            // envia o push para os clientes
+            $this->envia_push( $proposta->nome );
+
+            // redireciona a pagina
             redirect( site_url( 'propostas/index' ) );
         }
+    }
+
+    /**
+    * envia_push
+    * 
+    * envia o push de mensagem para o cliente
+    */
+    private function envia_push( $nomeProposta ) {
+        
+        // carrega a library de push
+        $this->load->library( 'Push' );
+
+        // pega a instancia da mensagem
+        $this->push->setTitle( 'Nova proposta!' )
+                    ->setbody( $nomeProposta );
+
+        // verifica se a proposta foi enviada
+        return ( $this->push->fire() ) ? "sucesso" : "erro";
     }
 
     

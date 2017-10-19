@@ -153,7 +153,7 @@ class Clientes_func extends MY_Controller {
 		->render( site_url( 'clientes/index' ) );
         if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'clientes_func/adicionar' ) );
         $this->view->set( 'entity', 'Meus Clientes' );
-
+        
 		// seta o titulo da pagina
 		$this->view->setTitle( 'Clientes - listagem' )->render( 'grid' );
     }
