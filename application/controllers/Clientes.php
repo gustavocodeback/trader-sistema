@@ -375,11 +375,42 @@ class Clientes extends MY_Controller {
                 foreach ( $tagsSelected as $tag ) {     
                     $this->_salvarTagCliente( $cliente->CodCliente, $tag  );
                 }
+
             }
+
+            // envia a mensagem para o cliente
+            $this->enviar_mensagem( $cliente );
 
             // redireciona 
             redirect( site_url( 'clientes/index' ) );
         }
+    }
+
+    /**
+    * enviar_mensagem
+    *
+    * envia uma mensagem
+    *
+    */
+    public function enviar_mensagem( $cliente ) {
+        
+        // carrega o model de clientes
+        $this->load->model( [ 'Mensagens/Mensagem' ] );
+        
+        // gera o texto que vai ser enviado para o cliente
+        $text = "Bem vindo(a), ".$cliente->nome." eu sou o seu assessor, sempre que precisar falar comigo estarei a disposição aqui no chat!";
+        
+        // pega a instancia da mensagem
+        $mensagem = $this->Mensagem->getEntity();
+
+        // seta as propriedades
+        $mensagem->set( 'cliente', $cliente->CodCliente )
+                 ->set( 'texto', $text )
+                 ->set( 'funcionario', $cliente->funcionario )
+                 ->set( 'visualizada', 'N' )
+                 ->set( 'autor', 'C' )
+                 ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
+        echo $mensagem->save();
     }
     
    /**
