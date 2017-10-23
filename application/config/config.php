@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-// $config['base_url'] = 'http://traderbackoffice-com-br.umbler.net/';
-$config['base_url'] = 'http://192.168.25.163/trader/trader-sistema/';
+$config['base_url'] = 'http://traderbackoffice-com-br.umbler.net/';
+// $config['base_url'] = 'http://192.168.25.163/trader/trader-sistema/';
 
 /*
 |--------------------------------------------------------------------------
