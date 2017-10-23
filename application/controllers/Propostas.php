@@ -168,11 +168,11 @@ class Propostas extends MY_Controller {
         // verifica se o mesmo existe
         if ( !$proposta ) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas/index' );
             exit();
         } elseif ( $proposta->funcionario != $user->CodFuncionario) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas/index' );
             exit();
         } else {
 
@@ -181,7 +181,7 @@ class Propostas extends MY_Controller {
 
             // verifica se existe cliente
             if( !$clientes ) {
-                redirect( 'propostas/index_func' );
+                redirect( 'propostas/index' );
                 exit();
             }
 
@@ -202,7 +202,7 @@ class Propostas extends MY_Controller {
         }
         
         // redireciona para o grid
-        redirect( site_url( 'propostas/index_func' ) );
+        redirect( site_url( 'propostas/index' ) );
     }
 
    /**
@@ -408,7 +408,7 @@ class Propostas extends MY_Controller {
         // verifica se o mesmo existe
         if ( !$proposta || !$cliente ) {
             
-            redirect( 'propostas/index_func' );
+            redirect( 'propostas/index' );
             exit();
         } elseif( !$proposta->funcionario == $user->CodFuncionario 
             || !$cliente->funcionario == $user->CodFuncionario ) {
@@ -440,7 +440,7 @@ class Propostas extends MY_Controller {
             $propostaCliente->save();
 
             // redireciona para o grid
-            redirect( site_url( 'propostas/index_func' ) );
+            redirect( site_url( 'propostas/index' ) );
         }
         
     }

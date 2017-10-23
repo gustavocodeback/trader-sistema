@@ -104,6 +104,7 @@ $db['umbler'] = array(
 	'password' => '18055054a',
 	'database' => 'traderbd',
 	'dbdriver' => 'mysqli',
+	'port'     => 41890,
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
