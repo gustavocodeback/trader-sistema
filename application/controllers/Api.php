@@ -441,11 +441,14 @@ class Api extends MY_Controller {
         if ( !$post ) {
             return $this->response->reject( 'Post não existe' );
         }
+        $data = date( 'd/m/Y à\s H:i', strtotime( $post->data ) );
         $post = [
-            'cod'   => $post->CodPost,
-            'post'  => $post->post
+            'cod'    => $post->CodPost,
+            'post'   => $post->post,
+            'imagem' => $post->imagem ? base_url('uploads/' .$post->imagem) : false,
+            'titulo' => $post->titulo,
+            'data'   => $data
         ];
-
         
         // envia as lojas
         return $this->response->resolve( $post );
