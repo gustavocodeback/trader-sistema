@@ -130,12 +130,6 @@ $config['Tag'] = [
     'descricao' => 'Descricao'
 ];
 
-// Tabela de TagCliente
-$config['TagCliente'] = [
-    'tag' => 'CodTag',
-    'cliente' => 'CodCliente'
-];
-
 // Tabela de Template
 $config['Template'] = [
     'nome'  => 'Nome',

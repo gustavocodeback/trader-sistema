@@ -304,10 +304,6 @@ class Clientes extends MY_Controller {
         //     if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
         // else
         //     if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
-        
-        // pega a tag selecionada
-        //$tagsSelected = $this->input->post('tag');
-
         // instancia um novo objeto funcionario
         if( $this->input->post( 'cod' ) ) {
             $cliente = $this->Cliente->clean()->key( $this->input->post( 'cod' ) )->get( true );
