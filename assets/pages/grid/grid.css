@@ -55,3 +55,8 @@ body {
 .inline-block-button {
 	display: inline-block;
 }
+.button-importar-planilha {
+	position: absolute;
+	left: 108px;
+	top: 0px;
+}

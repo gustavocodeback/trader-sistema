@@ -28,6 +28,7 @@
                         <?php endif; ?>                    
                         <?php if( $view->item( 'import_url' ) ) : ?>
                             <?php echo form_open_multipart( $view->item( 'import_url' ), [  'id' => 'import-form'] ); ?>
+                            <div class="button-importar-planilha">
                                 <input  id="planilha" 
                                         name="planilha" 
                                         onchange="importarPlanilha( $( this ) )" 
@@ -36,6 +37,7 @@
                                 <label for="planilha" class="btn btn-primary z-depth-2">
                                     Importar planilha
                                 </label> 
+                            </div>
                             <?php echo form_close(); ?>
                         <?php endif; ?>
                         <?php if ( $view->item( 'send_url' ) ): ?>
