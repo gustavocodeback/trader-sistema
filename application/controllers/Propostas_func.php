@@ -79,19 +79,10 @@ class Propostas_func extends MY_Controller {
 		->order()
 		->paginate( 0, 20 )
 
-		// seta as funcoes nas colunas
-		// ->onApply( 'Ações', function( $row, $key ) {
-		// 	if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
-		// 	echo '<a href="'.site_url( 'propostas_func/disparar_proposta/'.$row[$key] ).'" class="margin btn btn-xs btn-default"><span class="glyphicon glyphicon-send"></span></a>';            
-		// 	if ( $this->checkAccess( [ 'canDelete' ], false ) ) echo '<a href="'.site_url( 'propostas/excluir/'.$row[$key] ).'" class="margin btn btn-xs btn-danger"><span class="glyphicon glyphicon-trash"></span></a>';            
-		// })
-
 		// renderiza o grid
 		->render( site_url( 'propostas_func/index' ) );
 		
         // seta a url para adiciona
-        if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar' ) );
-        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
         $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );        
         
         // seta o titulo
@@ -205,33 +196,30 @@ class Propostas_func extends MY_Controller {
     }
 
    /**
-    * adicionar
+    * disparo
     *
-    * mostra o formulario de adicao
+    * Busca os dados para preparar o form de disparar proposta
     *
     */
     public function disparo() {
 
         // checa a permissao
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
-        
-        // Pega o id do funcionario logado
-        $user = $this->guard->currentUser();
 
-        // carrega a model
-        $this->load->model( [ 'Clientes/Cliente' ] );
+        // carrega a model de segmentos
+        $this->load->model( [ 'Segmentos/Segmento' ] );
         
-        // busca os clientes
-        $clientes = $this->Cliente->clean()->funcionario( $user->CodFuncionario )->get();
-        $clientes = $clientes ? $clientes : [];
-        $this->view->set( 'clientes', $clientes );
+        // busca todos os segmentos
+        $segmentos = $this->Segmento->clean()->get();
+        $segmentos = $segmentos ? $segmentos : [];
+        $this->view->set( 'segmentos', $segmentos );
 
-        // busca as propostas
-        $propostas = $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get();
+        // busca todas as propostas
+        $propostas = $this->Proposta->clean()->get();
         $propostas = $propostas ? $propostas : [];
         $this->view->set( 'propostas', $propostas );
 
-        // carrega a view de adicionar
+        // carrega a view de disparo de proposta para os clientes
         $this->view->setTitle( 'Trader - Disparar proposta' )->render( 'forms/proposta_disparo' );
     }
 

@@ -52,3 +52,6 @@ body {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+.inline-block-button {
+	display: inline-block;
+}

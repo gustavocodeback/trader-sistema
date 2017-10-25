@@ -154,7 +154,31 @@ class ClientesFinder extends MY_Model {
         // retorna uma instancia
         return $this;
     }
-    
+
+    /**
+    * buscaClientePorSegmento
+    *
+    * Busca o cliente pelo segmento
+    *
+    */
+    public function buscaClientePorSegmento( $segmento ) {
+
+        // monta a query
+        $retorno = $this->db->query("  SELECT c.*
+                            FROM Clientes c
+                            INNER JOIN Funcionarios f ON c.CodFuncionario = f.CodFuncionario
+                            WHERE f.CodSegmento = $segmento
+                            ORDER BY c.CodCliente ASC ");
+        
+        $dados =  $retorno->result_array();
+        $ret = [];
+        foreach( $dados as $dado ) {
+            $var = $this->getEntity();
+            $var->parse($dado);
+            $ret[] = $var; 
+        }
+        return $ret;
+    }
 }
 
 /* end of file */

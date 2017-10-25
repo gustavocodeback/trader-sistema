@@ -410,7 +410,7 @@ class Clientes extends MY_Controller {
                  ->set( 'visualizada', 'N' )
                  ->set( 'autor', 'C' )
                  ->set( 'dataEnvio', date( 'Y-m-d H:i:s', time() ) );
-        echo $mensagem->save();
+        $mensagem->save();
     }
     
    /**

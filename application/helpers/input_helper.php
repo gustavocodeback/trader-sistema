@@ -382,7 +382,7 @@ if ( ! function_exists( 'print_alert' ) ) {
         // imprime o alerta
         echo '<div class="row">
             <div class="col-md-'.$len.'">
-                <div class="alert alert-danger">
+                <div class="alert alert-'.$type.'">
                     <b>'.$title.'</b>
                     <p>'.$msg.'</p>
                 </div>

@@ -81,7 +81,7 @@ class Propostas extends MY_Controller {
 		// seta os filtros
 		->order()
         ->paginate( 0, 20 )
-        
+
 		// seta as funcoes nas colunas
 		->onApply( 'Ações', function( $row, $key ) {
 			if ( $this->checkAccess( [ 'canUpdate' ], false ) ) echo '<a href="'.site_url( 'propostas/alterar/'.$row[$key] ).'" class="margin btn btn-xs btn-info"><span class="glyphicon glyphicon-pencil"></span></a>';
@@ -94,7 +94,7 @@ class Propostas extends MY_Controller {
         // seta a url para adiciona
         if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar/' ) );
         if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
-        // $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );
+        $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );
 		 
         // seta o titulo
         $this->view->set( 'entity', 'Propostas' );
@@ -348,9 +348,6 @@ class Propostas extends MY_Controller {
 
         // verifica se o dado foi salvo
         if ( $proposta->save() ) {
-            
-            // envia o push para os clientes
-            $this->envia_push( $proposta->nome );
 
             // redireciona a pagina
             redirect( site_url( 'propostas/index' ) );
@@ -362,86 +359,150 @@ class Propostas extends MY_Controller {
     * 
     * envia o push de mensagem para o cliente
     */
-    private function envia_push( $nomeProposta ) {
+    private function envia_push( $dados ) {
         
         // carrega a library de push
         $this->load->library( 'Push' );
 
-        // pega a instancia da mensagem
-        $this->push->setTitle( 'Nova proposta!' )
-                    ->setbody( $nomeProposta );
+        $ret = [];
 
-        // verifica se a proposta foi enviada
-        return ( $this->push->fire() ) ? "sucesso" : "erro";
+        // percorre o array de dados
+        foreach( $dados as $key => $dado ) {
+
+            // verifica se veio id do celular
+            if ( !$dado['idCelular'] ) return false;
+    
+            // pega a instancia da mensagem
+            $this->push->setTitle( 'Você possui '. $dado['qtde'] .' nova(s) proposta(s)!'  )
+                    ->setbody( "Clique aqui para visualizar" );
+
+            // verifica se a proposta foi enviada
+            $ret[] = ( $this->push->fire( $dado['idCelular'] ) ) ? "sucesso" : "erro";
+            
+        }
     }
-
     
    /**
-    * salvar
+    * salvar_disparo
     *
-    * salva os dados
+    * salva o disparo
     *
     */
     public function salvar_disparo() {
 
         // carrega o finder
-        $this->load->model( [ 'Clientes/Cliente' ] );
+        $this->load->model( [ 'Clientes/Cliente', 'Funcionarios/Funcionario', 'Segmentos/Segmento' ] );
 
-        // Pega o id do funcionario logado
-        $user = $this->guard->currentUser();
+        // busca todos os segmentos e seta na view
+        $segmentos = $this->Segmento->clean()->get();
+        $segmentos = $segmentos ? $segmentos : [];
+        $this->view->set( 'segmentos', $segmentos );
 
-        // carrega a proposta
-        $proposta = $this->Proposta->clean()->key( $this->input->post('proposta') )->get( true );
-        
-        $cliente = $this->Cliente->clean()->key( $this->input->post('cliente') )->get( true );
-        
-        // busca os clientes
-        $clientes = $this->Cliente->clean()->funcionario( $user->CodFuncionario )->get();
-        $clientes = $clientes ? $clientes : [];
-        $this->view->set( 'clientes', $clientes );
-
-        // busca as propostas
-        $propostas = $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get();
+        // busca todas as propostas e seta na view
+        $propostas = $this->Proposta->clean()->get();
         $propostas = $propostas ? $propostas : [];
         $this->view->set( 'propostas', $propostas );
 
+        // busca os cliente
+        if ( $this->input->post('segmento') == 0 ) {
+            $clientes = $this->Cliente->clean()->get();
+        } else {
+            $clientes = $this->Cliente->clean()->buscaClientePorSegmento( $this->input->post('segmento') );
+        }
+
+        // verifica se veio clientes
+        if ( !$clientes ) {
+            
+            // seta a mensagem de erro
+            $this->view->set( 'errors', 'Não foram encontrados clientes' );
+
+            // carrega a view de adicionar
+            $this->view->render( 'forms/proposta_disparo' );
+            return;
+        }
+
+        // Salva as chaves das propostas
+        $propostasKey = $this->input->post( 'propDisparadas' );
+
+        // verifica se veio as propostas
+        if ( !$propostasKey ) {
+            
+            // seta a mensagem de erro
+            $this->view->set( 'errors', 'Selecione pelo menos uma proposta' );
+            
+            // carrega a view de adicionar
+            $this->view->render( 'forms/proposta_disparo' );
+            return;
+        }
+    
+        // busca as propostas
+        if ( $propostasKey[0] == 0 ) {
+            $propostasSelecionadas = $this->Proposta->clean()->get();
+
+        } else {
+
+            // percorre as chaves das propostas
+            foreach( $propostasKey as $key ) {
+                $propostasSelecionadas[] = $this->Proposta->clean()->key( $key )->get(true);
+            }
+        }
+
         // verifica se o mesmo existe
-        if ( !$proposta || !$cliente ) {
+        if ( !$propostasSelecionadas || !$clientes ) {
             
             redirect( 'propostas/index' );
             exit();
-        } elseif( !$proposta->funcionario == $user->CodFuncionario 
-            || !$cliente->funcionario == $user->CodFuncionario ) {
 
-            // seta o erro
-            $this->view->set( 'errors', 'Não foi possivel enviar a proposta selecionada.' );
-
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Trader - Disparar proposta' )->render( 'forms/proposta_disparo' );
-
-        } elseif( $this->PropostaCliente->clean()->periodo( $proposta->CodProposta,
-                                                            $cliente->CodCliente,
-                                                            date('Y-m-d', time() ) )->get() ) {
-            
-            // seta o erro
-            $this->view->set( 'errors', 'Cliente selecionado já possui a proposta aberta, aguarde a resposta.' );
-
-            // carrega a view de adicionar
-            $this->view->setTitle( 'Trader - Disparar proposta' )->render( 'forms/proposta_disparo' );
         } else {
+            
+            // declaracao
+            $aux = 0;
+            $disparos = [];
 
-            // seta a entidade
-            $propostaCliente = $this->PropostaCliente->getEntity();
-            $propostaCliente->set( 'cliente', $cliente->CodCliente )
-                        ->set( 'proposta', $proposta->CodProposta )
-                        ->set( 'status', "D" )
-                        ->set( 'dataDisparo', date('Y-m-d', time() ) )
-                        ->set( 'dataVencimento', date('Y-m-d', strtotime( "+$proposta->dias days", time() ) ) );
-            $propostaCliente->save();
+            // percorre todos os clientes
+            foreach ( $clientes as $cliente ) {
 
-            // redireciona para o grid
-            redirect( site_url( 'propostas/index' ) );
+                // inicia os disparos
+                $disparos[$cliente->CodCliente]['idCelular'] = $cliente->idCelular;
+                $disparos[$cliente->CodCliente]['qtde'] = 0;
+
+                // percorre todas as propostas
+                foreach( $propostasSelecionadas as $propostaSelecionada ) {
+
+                    // proposta no periodo
+                    $propPeriodo = $this->PropostaCliente->clean()
+                                    ->periodo( $propostaSelecionada->CodProposta, $cliente->CodCliente, date( 'Y-m-d', time() ) )
+                                    ->get();
+                
+                    if ( !$propPeriodo ) {
+
+                        $aux++;
+                        $propostaCliente = $this->PropostaCliente->getEntity();
+                        $propostaCliente->set( 'cliente', $cliente->CodCliente )
+                                    ->set( 'proposta', $propostaSelecionada->CodProposta )
+                                    ->set( 'status', "D" )
+                                    ->set( 'dataDisparo', date('Y-m-d', time() ) )
+                                    ->set( 'dataVencimento', date('Y-m-d', strtotime( "+$propostaSelecionada->dias days", time() ) ) );
+                        if ( true /*$propostaCliente->save()*/ ) {
+
+                            $disparos[$cliente->CodCliente]['qtde']++;
+                        } 
+                    }
+                }
+            }
         }
-        
+
+        // verifica se tem $dados
+        if ( isset( $disparos ) ) $this->envia_push( $disparos );
+
+        // verifica se foi enviado o disparo
+        if ( $aux == 0 ) {
+            $this->view->set( 'errors', 'Proposta(s) já enviada(s) para esse(s) cliente(s)' );
+            $this->view->render( 'forms/proposta_disparo' );
+        } else {
+            $this->view->set( 'success', 'Proposta(s) enviadas com sucesso' );
+            // redireciona para o grid
+            $this->view->render( 'forms/proposta_disparo' );
+        }
     }
 }
