@@ -305,8 +305,8 @@ class Clientes extends MY_Controller {
         // else
         //     if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
         
-        // pega as tags selecionadas
-        $tagsSelected = $this->input->post('tagsCliente');
+        // pega a tag selecionada
+        //$tagsSelected = $this->input->post('tag');
 
         // instancia um novo objeto funcionario
         if( $this->input->post( 'cod' ) ) {
@@ -339,6 +339,7 @@ class Clientes extends MY_Controller {
                 ->post( 'xp' )
                 ->post( 'email' )
                 ->post( 'funcionario' )
+                ->post( 'tag' )
                 ->post( 'atributoSeg' );
 
         // verifica se o formulario é valido
@@ -367,16 +368,6 @@ class Clientes extends MY_Controller {
 
         // verifica se o dado foi salvo
         if ( $cliente->save() ) {
-
-            // Verifica se o usuario selecionou alguma tag
-            if( $tagsSelected ) {
-
-                // percorre as tags selecionadas
-                foreach ( $tagsSelected as $tag ) {     
-                    $this->_salvarTagCliente( $cliente->CodCliente, $tag  );
-                }
-
-            }
 
             // envia a mensagem para o cliente
             $this->enviar_mensagem( $cliente );

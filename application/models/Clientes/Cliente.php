@@ -61,6 +61,9 @@ class Cliente extends ClientesFinder {
     // foto
     public $foto;
 
+    // tag
+    public $tag;
+
    /**
     * __construct
     *

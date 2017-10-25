@@ -58,7 +58,8 @@ $config['Cliente'] = [
     'atributoSeg'       => 'AtributoSegmento',
     'funcionario'       => 'CodFuncionario',
     'foto'              => 'Foto',
-    'tokenEmail'        => 'TokenEmail'
+    'tokenEmail'        => 'TokenEmail',
+    'tag'               => 'Tag'
 ];
 
 // Tabela de clientes

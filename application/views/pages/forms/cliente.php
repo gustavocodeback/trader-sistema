@@ -52,18 +52,16 @@
                 <?php option( 'T', 'Trader', $cliente, 'atributoSeg' ); ?>
                 <?php option( 'I', 'Inativo', $cliente, 'atributoSeg' ); ?>
             <?php endselect( 'Atributo de segmento' ); ?><!-- seta o status do cadastro -->
-            <div class="row">
-            <?php if ( $view->item( 'tags' ) ):?>
-                <h4>Tags:</h4>
-                <?php foreach( $view->item( 'tags' ) as $tag ) : ?>
-                        <?php if( $cliente && $view->hasTag( $tag->CodTag, $cliente->CodCliente ) ) : ?>
-                            <?php input_checkbox( $tag->descricao, 'tagsCliente[]', false, [ 'value' => $tag->CodTag, 'row' => false, 'length' => 2, 'checked' => 'checked' ] ); ?>
-                        <?php else : ?>
-                            <?php input_checkbox( $tag->descricao, 'tagsCliente[]', false, [ 'value' => $tag->CodTag, 'row' => false, 'length' => 2 ] ); ?>
-                        <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            </div>
+
+            <?php select( 'Tags', 'tag', $view->item( 'tags' ) ? [] : [ 'disabled' => 'disabled' ] );?>
+                <?php option(); ?>
+                <?php if ( $view->item( 'tags' ) ):?>
+                    <?php foreach( $view->item( 'tags' ) as $item ): ?>
+                        <?php option( $item->CodTag, $item->descricao, $view->item( 'tag' ), 'CodTag' ); ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            <?php endselect( 'Tags' ); ?><!-- seta as tags -->
+
             <div class="row">
                 <hr>
             </div>
