@@ -35,6 +35,8 @@
                     </label>
                     <input type="file" id="foto" name="foto">
                 </div>
+            </div><br>
+            <div class="row">
                 <div class="col-md-6">                
                     <label for="descricao">Texto Curto</label>
                     <textarea rows="3" cols="" type="text" 

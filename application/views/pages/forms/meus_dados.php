@@ -89,14 +89,15 @@
                             <div class="row"><hr></div>
                         </div>
                     </div><!-- campos do form -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary pull-right">Salvar</button>                                            
+                            <div class="clearfix"></div>
+                        </div>
+                    </div><!-- botao de salvar -->
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-primary pull-right">Salvar</button>                                            
-                        <div class="clearfix"></div>
-                    </div>
-                </div><!-- botao de salvar -->
+                
                 
                 <?php if ( $view->item( 'errors' ) ): ?>
                 <div class="row">
