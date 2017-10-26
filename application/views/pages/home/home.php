@@ -69,7 +69,6 @@
                 </div>
             </div><!-- num funcionarios -->
         </div>
-
         <div class="page-header">
             <h4>Tickets</h4>
         </div>
@@ -117,7 +116,6 @@
                 </div>
             </div><!-- num funcionarios -->
         </div>
-        
         </div>
     </div>
 </div>

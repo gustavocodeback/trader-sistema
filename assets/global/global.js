@@ -4,9 +4,8 @@
  * esconde e mostra o sidebar
  * 
  */
-function toggleSideBar() {
-    $('#aside').toggleClass( 'hide' );
-    $('#wrapper').toggleClass( 'hide' );
+function toggleSidebar() {
+    $('.aside').toggleClass( 'active' );
     return false;
 }
 

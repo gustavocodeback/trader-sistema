@@ -22,18 +22,18 @@ $index = $view->item( 'navbar-index' );
 <div id="navbar" class="z-depth-1">
   <div class="line container">
     <div class="row">
+      
+      <div class="left-content pull-left">
+        <span onclick="toggleSidebar()" class="btn" role="button">          
+          <span class="glyphicon glyphicon-menu-hamburger"></span>
+        </a><!-- botao home -->
+      </div>
 
       <div class="right-content pull-right">
         
         <a href='<?php echo site_url(); ?>' class="btn" role="button">          
           <span class="glyphicon glyphicon-home"></span>
-        </a>
-
-
-        <button class="btn" data-toggle="tooltip" data-placement="bottom" title="Notificações Equipe Trader">
-
-          <span class="glyphicon glyphicon-globe"></span>
-        </button><!-- botao de notificacoes -->
+        </a><!-- botao home -->
 
         <div class="dropdown pull-right">
           <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

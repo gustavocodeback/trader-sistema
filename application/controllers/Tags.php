@@ -57,6 +57,9 @@ class Tags extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Tags' );
+
         // faz a paginacao
 		$this->Tag->grid()
 

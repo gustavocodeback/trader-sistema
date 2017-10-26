@@ -65,6 +65,9 @@ class Classificacoes extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Classificações' );
+
         // faz a paginacao
 		$this->Classificacao->clean()->grid()
 

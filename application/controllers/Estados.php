@@ -61,6 +61,9 @@ class Estados extends MY_Controller {
         // verifica a permissao
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Estados' );
+
         // faz a paginacao
 		$this->Estado->grid()
 

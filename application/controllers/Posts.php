@@ -70,6 +70,9 @@ class Posts extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Postagens' );
+
         // faz a paginacao
 		$this->Post->clean()->grid()
 

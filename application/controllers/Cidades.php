@@ -61,6 +61,9 @@ class Cidades extends MY_Controller {
         // verifica a permissao
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Cidades' );
+
         // faz a paginacao
 		$this->Cidade->grid()
 

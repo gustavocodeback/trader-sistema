@@ -1,13 +1,67 @@
 .aside {
-    padding-top: 30px;
+    padding-top: 50px;
+    width: 200px;
     color: #999;
+    background: #4A4C4A;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    color: #f1f1f1;
+    z-index: 999;
+}
+
+.aside .divider {
+    width: calc( 100% - 10px );
+    margin-left: 5px;
+    height: 1px;
+    background: #777;
+}
+
+.aside .row {
+    padding: 5px;
+}
+
+.aside .panel-heading,
+.aside .panel {
+    background: transparent;
+    border: 0px;
+    color: #ccc;
 }
 
 .aside .perfil {
-    width: 100%;
+    width: 50px;
+}
+.aside .perfil {
+    border-radius: 5px;
 }
 
 .aside .list-group-item.active {
     background: #494A48;
     border-color: #494A48;
+}
+
+.aside .list-group-item:hover {
+    color: #999 !important;
+}
+
+.aside .hide-button {
+    display: none;
+}
+
+/* Medium Devices, Desktops */
+@media only screen and ( max-width : 1100px ) {
+    .aside {
+        left: -200px;
+        transition: .25s;
+    }
+    .aside.active {
+        left: 0px;
+    }
+    .aside .hide-button {
+        display: block;
+    }
+    .aside .hide-button:hover {
+        cursor: pointer;
+        color: #999;
+    }
 }

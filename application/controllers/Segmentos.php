@@ -57,6 +57,9 @@ class Segmentos extends MY_Controller {
         // verifica o acesso
         if ( !$this->checkAccess( [ 'canRead' ] ) ) return;
 
+        // seta o titulo
+        $this->view->set( 'entity', 'Segmentos' );
+
         // faz a paginacao
 		$this->Segmento->grid()
 
