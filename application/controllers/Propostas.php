@@ -93,7 +93,7 @@ class Propostas extends MY_Controller {
         
         // seta a url para adiciona
         if ( $this->checkAccess( [ 'canCreate' ], false ) ) $this->view->set( 'add_url', site_url( 'propostas/adicionar/' ) );
-        if ( $this->Proposta->clean()->funcionario( $user->CodFuncionario )->get() ) $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
+        $this->view->set( 'send_url', site_url( 'propostas_func/disparo' ) );
         $this->view->set( 'hist_url', site_url( 'propostas_func/historico' ) );
 		 
         // seta o titulo
@@ -382,6 +382,40 @@ class Propostas extends MY_Controller {
         }
     }
     
+    /**
+    * propostasSelecionadas
+    * 
+    * pega as propostas selecionadas pelo usuario
+    */
+    private function propostasSelecionadas( $key ) {
+
+        // carrega a model
+        $this->load->model( 'Propostas/Proposta' );
+
+        // Salva as chaves das propostas
+        $propostasKeys = $this->input->post( $key );
+        
+        // verifica se veio as propostas
+        if ( !$propostasKeys ) return [];
+        
+        // propostas selecionadas
+        $propostasSelecionadas = [];
+
+        // busca as propostas
+        if ( $propostasKeys[0] == 0 ) {
+
+            // pega a proposta
+            $propostasSelecionadas = $this->Proposta->clean()->get();
+        } else {
+
+            // percorre as chaves das propostas
+            $propostasSelecionadas = $this->Proposta->clean()->in( $propostasKeys )->get();
+        }
+
+        // volta as propostas encontradas
+        return $propostasSelecionadas;
+    }
+
    /**
     * salvar_disparo
     *
@@ -391,104 +425,35 @@ class Propostas extends MY_Controller {
     public function salvar_disparo() {
 
         // carrega o finder
-        $this->load->model( [ 'Clientes/Cliente', 'Funcionarios/Funcionario', 'Segmentos/Segmento' ] );
+        $this->load->model( [ 'Segmentos/Segmento' ] );
 
         // busca todos os segmentos e seta na view
         $segmentos = $this->Segmento->clean()->get();
-        $segmentos = $segmentos ? $segmentos : [];
-        $this->view->set( 'segmentos', $segmentos );
+        $this->view->set( 'segmentos', $segmentos ? $segmentos : [] );
 
         // busca todas as propostas e seta na view
         $propostas = $this->Proposta->clean()->get();
-        $propostas = $propostas ? $propostas : [];
-        $this->view->set( 'propostas', $propostas );
+        $this->view->set( 'propostas', $propostas ? $propostas : [] );
 
         // busca os cliente
-        if ( $this->input->post('segmento') == 0 ) {
-            $clientes = $this->Cliente->clean()->get();
-        } else {
-            $clientes = $this->Cliente->clean()->buscaClientePorSegmento( $this->input->post('segmento') );
-        }
+        $segmento = $this->Segmento->clean()->key( $this->input->post( 'segmento' ) )->get( true );
+        if ( !$segmento ) {
 
-        // verifica se veio clientes
-        if ( !$clientes ) {
-            
-            // seta a mensagem de erro
-            $this->view->set( 'errors', 'Não foram encontrados clientes' );
-
-            // carrega a view de adicionar
+            // seta os erros
+            $this->view->set( 'errors', 'Informe um segmento.' );
             $this->view->render( 'forms/proposta_disparo' );
             return;
         }
 
-        // Salva as chaves das propostas
-        $propostasKey = $this->input->post( 'propDisparadas' );
-
-        // verifica se veio as propostas
-        if ( !$propostasKey ) {
-            
-            // seta a mensagem de erro
-            $this->view->set( 'errors', 'Selecione pelo menos uma proposta' );
-            
-            // carrega a view de adicionar
-            $this->view->render( 'forms/proposta_disparo' );
-            return;
-        }
-    
         // busca as propostas
-        if ( $propostasKey[0] == 0 ) {
-            $propostasSelecionadas = $this->Proposta->clean()->get();
-
-        } else {
-
-            // percorre as chaves das propostas
-            foreach( $propostasKey as $key ) {
-                $propostasSelecionadas[] = $this->Proposta->clean()->key( $key )->get(true);
-            }
-        }
-
-        // verifica se o mesmo existe
-        if ( !$propostasSelecionadas || !$clientes ) {
+        $propostas = $this->propostasSelecionadas( 'propDisparadas' );
+        foreach( $propostas as $proposta ) {
             
-            redirect( 'propostas/index' );
-            exit();
-
-        } else {
-            
-            // declaracao
-            $aux = 0;
-            $disparos = [];
-
-            // percorre todos os clientes
-            foreach ( $clientes as $cliente ) {
-
-                // inicia os disparos
-                $disparos[$cliente->CodCliente]['idCelular'] = $cliente->idCelular;
-                $disparos[$cliente->CodCliente]['qtde'] = 0;
-
-                // percorre todas as propostas
-                foreach( $propostasSelecionadas as $propostaSelecionada ) {
-
-                    // proposta no periodo
-                    $propPeriodo = $this->PropostaCliente->clean()
-                                    ->periodo( $propostaSelecionada->CodProposta, $cliente->CodCliente, date( 'Y-m-d', time() ) )
-                                    ->get();
+            // verifica se pode enviar a proposta
+            if( $proposta->podeEnviar( $segmento->CodSegmento ) ) {
                 
-                    if ( !$propPeriodo ) {
-
-                        $aux++;
-                        $propostaCliente = $this->PropostaCliente->getEntity();
-                        $propostaCliente->set( 'cliente', $cliente->CodCliente )
-                                    ->set( 'proposta', $propostaSelecionada->CodProposta )
-                                    ->set( 'status', "D" )
-                                    ->set( 'dataDisparo', date('Y-m-d', time() ) )
-                                    ->set( 'dataVencimento', date('Y-m-d', strtotime( "+$propostaSelecionada->dias days", time() ) ) );
-                        if ( true /*$propostaCliente->save()*/ ) {
-
-                            $disparos[$cliente->CodCliente]['qtde']++;
-                        } 
-                    }
-                }
+                // envia a proposta
+                $segmento->enviarProposta( $proposta );
             }
         }
 
@@ -496,13 +461,7 @@ class Propostas extends MY_Controller {
         if ( isset( $disparos ) ) $this->envia_push( $disparos );
 
         // verifica se foi enviado o disparo
-        if ( $aux == 0 ) {
-            $this->view->set( 'errors', 'Proposta(s) já enviada(s) para esse(s) cliente(s)' );
-            $this->view->render( 'forms/proposta_disparo' );
-        } else {
-            $this->view->set( 'success', 'Proposta(s) enviadas com sucesso' );
-            // redireciona para o grid
-            $this->view->render( 'forms/proposta_disparo' );
-        }
+        $this->view->set( 'success', 'Proposta(s) enviadas com sucesso' );
+        $this->view->render( 'forms/proposta_disparo' );
     }
 }

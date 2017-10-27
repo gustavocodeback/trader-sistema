@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4 text-center" style="padding-top: 5px;">
-            <strong>Apresente.se</strong>
+            <strong>Trader</strong>
             <br>
             <small>Todos os direitos reservados - <?php echo date( 'Y', time() ); ?></small>
         </div>

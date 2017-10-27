@@ -45,7 +45,6 @@
                                 <a href="<?php echo $view->item( 'send_url' ); ?>" class="btn btn-primary z-depth-2">Disparar</a> 
                             </div>
                         <?php endif; ?>
-                    
                         <?php if ( $view->item( 'hist_url' ) ): ?>
                             <div class="inline-block-button">
                                 <a href="<?php echo $view->item( 'hist_url' ); ?>" class="btn btn-primary z-depth-2">Histórico</a> 

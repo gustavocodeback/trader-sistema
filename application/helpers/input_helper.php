@@ -197,6 +197,12 @@ if ( ! function_exists( 'input_checkbox' ) ) {
             unset( $attr['value'] );
         }
 
+        // verifica se existe a propriedade name
+        if ( isset( $attr['name'] ) ) {
+            $nameVal = $attr['name'];
+            unset( $attr['name'] );
+        } else $nameVal = $name;
+
         // inicio da lina
         $rowT = "<div class='row'>";
 
@@ -206,7 +212,7 @@ if ( ! function_exists( 'input_checkbox' ) ) {
                             <label class='control-label' for='$name'>
                                 <input  type='checkbox' 
                                         id='$name' 
-                                        name='$name'
+                                        name='$nameVal'
                                         value='$value'
                                         ";
 

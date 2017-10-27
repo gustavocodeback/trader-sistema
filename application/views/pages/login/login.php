@@ -1,13 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
-<div class="container-fluid">
+<div class="container">
 
     <div class="row teste">
         <?php echo form_open( 'login/logar', [ 'id'=> 'login-form', 'class' => 'col-md-6 col-md-offset-3 z-depth-2 fade-in' ] )?>
             
             <div class="page-header text-center">
-                <div class="row">
-                    <h1>Bem-vindo</h1>                    
-                </div>
                 <div class="row">
                     <div class="text-center logo-content">
                         <img    src="<?php echo site_url( 'images/logo_equipe_trader.png' ); ?>" 
@@ -45,30 +42,6 @@
                 </div>
             </div><!-- boto de login -->
             <br>
-            <div class="row hidden">
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-primary">
-                        Facebook
-                    </button>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-danger">
-                        Google
-                    </button>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-block btn-info">
-                        Twitter
-                    </button>
-                </div>
-            </div><!-- login com as redes sociais -->
-            <hr>
-            <div class="row">
-                <div class="col-md-12">
-                    <p class="text-center">Todos os direitos reservados</p>
-                </div>
-            </div>
-            <hr>
         <?php echo form_close(); ?><!-- fim do formulario de login -->
     </div>
 </div>

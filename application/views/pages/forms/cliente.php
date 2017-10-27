@@ -62,17 +62,16 @@
                 <?php endif; ?>
             <?php endselect( 'Tags' ); ?><!-- seta as tags -->
 
-            <div class="row">
-                <hr>
-            </div>
             <?php if( $cliente ) : ?>
             <div class="row">
-                <button type="button"
-                        class="btn btn-warning"
-                        id="btnTroca"
-                        onclick="exibir('#TrocaSenha', '#btnTroca')" >
-                        Trocar Senha
-                </button>
+                <div class="col-xs-12">
+                    <button type="button"
+                            class="btn btn-warning"
+                            id="btnTroca"
+                            onclick="exibir('#TrocaSenha', '#btnTroca')" >
+                            Trocar Senha
+                    </button>
+                </div>
             </div>
             <br>
             <div id="TrocaSenha" class="hidden"> 
@@ -100,7 +99,7 @@
                     </div><!-- senha -->
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <button type="button"
                                 class="btn btn-warning pull-right"
                                 onclick="esconder( '#TrocaSenha', [ '#senhaAtual', '#novaSenha', '#confirmaSenha' ], '#btnTroca'  )" >
@@ -123,3 +122,4 @@
         </div>
     </div>
 </div>
+<br>

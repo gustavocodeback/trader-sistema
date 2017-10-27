@@ -36,7 +36,13 @@ class ClientesFinder extends MY_Model {
     */
     public function grid() {
         $this->db->from( $this->table .' c')
-        ->select( 'CodCliente as Código, c.Nome, f.Nome as Assessor, s.Nome as Segmento, AtributoSegmento, CodCliente as Ações' )
+        ->select( ' CodCliente as Código, 
+                    c.Nome, 
+                    c.Email,
+                    f.Nome as Assessor, 
+                    s.Nome as Segmento, 
+                    AtributoSegmento, 
+                    CodCliente as Ações' )
         ->join( 'Funcionarios f', 'c.CodFuncionario = f.CodFuncionario' )
         ->join( 'Segmentos s', 'f.CodSegmento = s.CodSegmento' );
         return $this;
@@ -50,7 +56,12 @@ class ClientesFinder extends MY_Model {
     */
     public function grid_func( $CodFuncionario ) {
         $this->db->from( $this->table .' c' )
-        ->select( 'c.CodCliente as Código, c.Nome, COUNT(m.CodMensagem) as \'Novas Mensagens\', c.AtributoSegmento, c.CodCliente as Ações' )
+        ->select( ' c.CodCliente as Código, 
+                    c.Nome, 
+                    c.Email,
+                    COUNT(m.CodMensagem) as \'Novas Mensagens\', 
+                    c.AtributoSegmento, 
+                    c.CodCliente as Ações' )
         ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C' and m.Visualizada = 'N'", 'left' )
         // ->join( 'Mensagens m', "c.CodCliente = m.CodCliente and m.Autor = 'C'", 'left' )
         ->where( "c.CodFuncionario = $CodFuncionario" )
@@ -60,9 +71,9 @@ class ClientesFinder extends MY_Model {
     }
 
    /**
-    * email
+    * trader
     *
-    * pesquisa o cliente por email
+    * pega os clientes da trader
     *
     */
     public function trader() {
@@ -73,9 +84,9 @@ class ClientesFinder extends MY_Model {
     }
 
    /**
-    * email
+    * inativo
     *
-    * pesquisa o cliente por email
+    * obtem os clientes inativos
     *
     */
     public function inativo() {
@@ -99,9 +110,9 @@ class ClientesFinder extends MY_Model {
     }
 
    /**
-    * email
+    * codXp
     *
-    * pesquisa o cliente por email
+    * obtem os clientes pelo codXp
     *
     */
     public function codXp( $codXp ) {
@@ -137,21 +148,17 @@ class ClientesFinder extends MY_Model {
         return $this;
     }
 
-   /**
-    * ignorarAtual
+    /**
+    * meusClientes
     *
-    * ignora o usuário logado
+    * obtem os clientes do funcionário logado
     *
     */
-    public function ignorarAtual() {
+    public function meusClientes() {
 
-        // pega o usuario atual
-        $uid = $this->guard->currentUser()->UID;
-
-        // adiciona no where
-        $this->clean()->where( " UID <> '$uid' " );
-        
-        // retorna uma instancia
+        // seta o where
+        $id = $this->guard->currentUser()->CodFuncionario;
+        $this->where( " CodFuncionario =  $id " );
         return $this;
     }
 

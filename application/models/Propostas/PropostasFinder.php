@@ -108,6 +108,17 @@ class PropostasFinder extends MY_Model {
         $this->where( " CodFuncionario = $funcionario " );
         return $this;
     }
+
+    /**
+     * in
+     *
+     * busca propostas dentro de um array
+     *
+     */
+    public function in( $ids ) {
+        $this->db->where_in( 'CodProposta', $ids );
+        return $this;
+    }
 }
 
 /* end of file */

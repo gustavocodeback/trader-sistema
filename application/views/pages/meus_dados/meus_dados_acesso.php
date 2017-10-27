@@ -3,7 +3,7 @@
 <div class="col-md-offset-2 col-md-8">
     
     <div class="page-header">
-        <h4 style="color: #EB0019">Dados de acesso</h4>
+        <h4 style="color: #FC4044">Dados de acesso</h4>
     </div>
     <?php input_text( false, 'nome', false, [ 'class' => 'global', 'required' => 'required', 'placeholder' => 'Email', 'length' => 12 ] ); ?>
     <?php input_text( false, 'cpf', false, [ 'class' => 'global', 'required' => 'required', 'placeholder' => 'Senha atual', 'length' => 12 ] ); ?>

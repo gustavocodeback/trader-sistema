@@ -668,16 +668,29 @@ class Api extends MY_Controller {
         // verifica se o usuario ta logado
         $this->request->logged();
 
+        // pega o cliente logado
+        $cliente = $this->request->cliente;
+
         // carrega o model
-        $this->load->model( [ 'PropostasClientes/PropostaCliente', 'Propostas/Proposta' ] );
+        $this->load->model( [   'PropostasClientes/PropostaCliente', 
+                                'Segmentos/Segmento',
+                                'Propostas/Proposta' ] );
+
+        // obtem o seguimento
+        $segmento = $this->Segmento->clean()->key( $cliente->atributoSeg )->get( true );
+        if ( !$segmento ) return $this->response->reject( 'O cliente não possuí um segmento.' );
 
         // busca as propostas disparadas pro cliente
-        $propostasClientes = $this->PropostaCliente->clean()->cliente( $this->request->cliente->CodCliente )->orderByDataNew()->paginate( $indice, 5, true );
-        if ( count( $propostasClientes ) == 0 ) {
+        $disparos = $this->PropostaCliente->clean()->segmento( $segmento->CodSegmento )->orderByDataNew()->paginate( $indice, 5, true );
+        $disparos = $disparos ? $disparos : [];
 
-            // volta vazio
-            return $this->response->resolve( [] );
-        }
+        // obtem os ids das propostas
+        $ids = array_map( function( $value ){
+            return $value->proposta;
+        }, $disparos );
+
+        // obtem as propostas disparadas
+        $propostas = $this->Propostaclean()->in( $ids )->get();
 
         // busca as propostas
         $propostas = [];
@@ -686,6 +699,8 @@ class Api extends MY_Controller {
 
             // pega a proposta
             $proposta = $this->Proposta->clean()->key( $propostaCliente->proposta )->get( true );
+            if ( !$proposta ) continue;
+
             $vencida = strtotime( $propostaCliente->dataVencimento ) > time() ? true : false;
             $propostas[] = [
                 'codPropostaCliente'    => $propostaCliente->CodPropostaCliente,

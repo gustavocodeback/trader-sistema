@@ -43,6 +43,9 @@ $index = $view->item( 'navbar-index' );
             <li>
               <a href="<?php echo site_url( 'meus_dados' ); ?>">Meus dados</a>
             </li>
+            <li>
+              <a href="<?php echo site_url( 'clientes_func' ); ?>">Meus clientes</a>
+            </li>
             <li role="separator" class="divider"></li>
             <li>
               <a href="<?php echo site_url( 'home/logout' ); ?>">

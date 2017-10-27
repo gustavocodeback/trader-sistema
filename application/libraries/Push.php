@@ -74,18 +74,22 @@ class Push {
             'Content-Type: application/json'
         ];
 
-        // envia o curl
-        $ch = curl_init ();
-        curl_setopt ( $ch, CURLOPT_URL, $this->url );
-        curl_setopt ( $ch, CURLOPT_POST, true );
-        curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-        curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-        curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+        // verifica se o curl esta instalado no servidor
+        if ( function_exists( 'curl_init' ) ) {
 
-        // pega o resultado
-        $result = curl_exec ( $ch );
-        curl_close ( $ch );
-        return $result ;
+            // envia o curl
+            $ch = curl_init ();
+            curl_setopt ( $ch, CURLOPT_URL, $this->url );
+            curl_setopt ( $ch, CURLOPT_POST, true );
+            curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+            curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+            // pega o resultado
+            $result = curl_exec ( $ch );
+            curl_close ( $ch );
+            return $result ;
+        } else return false;
     }
 }
 

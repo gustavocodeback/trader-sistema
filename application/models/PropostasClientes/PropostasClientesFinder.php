@@ -61,10 +61,13 @@ class PropostasClientesFinder extends MY_Model {
     */
     public function grid_assessor( $CodFuncionario ) {
         $this->db->from( $this->table.' a' )
-        ->select( 'a.CodPropostaCliente as Código, p.nome as Proposta, c.nome as Cliente, a.DataVencimento as Vencimento, a.Status as Status' )
+        ->select( ' a.CodPropostaCliente as Código, 
+                    p.nome as Proposta, 
+                    s.nome as Segmento, 
+                    a.DataVencimento as Vencimento, 
+                    a.Status as Status' )
        ->join( 'Propostas p', 'a.CodProposta = p.CodProposta', 'left' )
-       ->join( 'Clientes c', 'a.CodCliente = c.CodCliente', 'left' )
-       ->where( "p.CodFuncionario = $CodFuncionario" )
+       ->join( 'Segmentos s', 'a.CodSegmento = s.CodSegmento' )
        ->order_by( 'a.DataVencimento', 'DESC' );
         return $this;
     }
@@ -77,6 +80,17 @@ class PropostasClientesFinder extends MY_Model {
     */
     public function proposta( $proposta ) {
         $this->where( " proposta = '$proposta' " );
+        return $this;
+    }
+
+    /**
+     * segmento
+     *
+     * filtra pelo codigo do segmento
+     *
+     */
+    public function segmento( $CodSegmento ) {
+        $this->where( " CodSegmento = '$CodSegmento' " );
         return $this;
     }
 

@@ -7,7 +7,7 @@ $config['default'] = [ 'jquery', 'global', 'bootstrap', 'navbar', 'aside', 'foot
 $config['global'] = [
     'css' => [
         site_url( 'assets/global/global.css' ),
-        'https://fonts.googleapis.com/css?family=Ubuntu'
+        'https://fonts.googleapis.com/css?family=Roboto'
     ],
     'js' => [
         site_url( 'assets/global/global.js' ),

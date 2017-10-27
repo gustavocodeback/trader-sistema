@@ -224,6 +224,9 @@ function fechar( seletor, limpar = false ) {
  */
 function carregar( url, dados, recipiente, loading = false ) {
 
+    // mostra o loading
+    if ( loading ) abrir( loading );
+
     // faz a requisicao ajax
     $.post( Site.url+url, dados, function( data ) {
 

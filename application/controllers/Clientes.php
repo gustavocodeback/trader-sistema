@@ -128,10 +128,11 @@ class Clientes extends MY_Controller {
         $segmentos = $this->Segmento->filtro();
 
         // faz a paginacao
-		$this->Cliente->grid()
+		$this->Cliente->clean()->grid()
 
 		// seta os filtros
 		->order()
+        ->addFilter( 'Email', 'text', false, 'c' )        
         ->addFilter( 'CodFuncionario', 'select', $funcionarios, 'c' )
         ->addFilter( 'CodSegmento', 'select', $segmentos, 'f' )
         ->filter()
@@ -172,7 +173,7 @@ class Clientes extends MY_Controller {
     public function adicionar() {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
 
         // carrega a model de grupos
         $this->load->model( 'Segmentos/Segmento' );
@@ -197,7 +198,7 @@ class Clientes extends MY_Controller {
     public function alterar( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
 
         // carrega o cargo
         $cliente = $this->Cliente->clean()->key( $key )->get( true );
@@ -242,53 +243,17 @@ class Clientes extends MY_Controller {
     public function excluir( $key ) {
 
         // verifica o acesso
-        // if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
+        if ( !$this->checkAccess( [ 'canDelete' ] ) ) return;
 
         // pega o funcionario
         $cliente = $this->Cliente->clean()->key( $key )->get( true );
+        if ( !$cliente ) return $this->close();
 
         // exclui o funcionario
         $cliente->delete();
 
         // carrega a index
         $this->index();
-    }
-
-    /**
-    * deleteAllClientesTags
-    *
-    * remove todos os dados da tabela
-    *
-    */
-    private function deleteAllClientesTags( $CodCliente ) {
-        
-        // busca as tags do cliente
-        $tagsCliente = $this->TagCliente->clean()->cliente( $CodCliente )->get();
-        
-        // verifica se o cliente tem tag
-        if( $tagsCliente ) {
-
-            // percorre todas as tags
-            foreach ( $tagsCliente as $tag ) {
-                $tag->delete();
-            }
-        }
-    }
-    
-   /**
-    * _salvarPermissao
-    *
-    * salva a permissao
-    *
-    */
-    private function _salvarTagCliente( $CodCliente, $CodTag ) {
-
-        $tagCliente = $this->TagCliente->getEntity();
-        $tagCliente->set( 'cliente', $CodCliente )
-                   ->set( 'tag', $CodTag );
-
-        // salva no banco
-        return $tagCliente->save();
     }
 
    /**
@@ -300,10 +265,11 @@ class Clientes extends MY_Controller {
     public function salvar() {
 
         // checa a permissao
-        // if ( $this->input->post( 'cod' ) )
-        //     if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
-        // else
-        //     if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+        if ( $this->input->post( 'cod' ) )
+             if ( !$this->checkAccess( [ 'canUpdate' ] ) ) return;
+        else
+             if ( !$this->checkAccess( [ 'canCreate' ] ) ) return;
+
         // instancia um novo objeto funcionario
         if( $this->input->post( 'cod' ) ) {
             $cliente = $this->Cliente->clean()->key( $this->input->post( 'cod' ) )->get( true );
@@ -315,8 +281,6 @@ class Clientes extends MY_Controller {
             $this->view->set( 'assessores', $funcionarios );
             $this->view->set( 'assessor', $funcionario );
 
-            // deleta as tags relacionadas ao cliente
-            $this->deleteAllClientesTags( $cliente->CodCliente );
         } else $cliente = $this->Cliente->getEntity();
             
         // carrega a model de grupos

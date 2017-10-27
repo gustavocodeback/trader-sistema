@@ -40,7 +40,7 @@ class Posts extends MY_Controller {
             [
                 'field' => 'titulo',
                 'label' => 'Titulo',
-                'rules' => 'required|min_length[2]|max_length[30]'
+                'rules' => 'required|min_length[2]|max_length[255]'
             ],
             [
                 'field' => 'textoCurto',

@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="text-center col-md-6 col-md-offset-3 logo-content">
         <img    src="<?php echo site_url( 'images/logo_equipe_trader.png' ); ?>" 
@@ -12,8 +12,8 @@
         <?php echo form_open( 'recovery/resetar', [ 'id'=> 'login-form', 'class' => 'col-md-6 col-md-offset-3 z-depth-2 fade-in' ] )?>
             
             <div class="page-header text-center">
-                <h1 style="color: #EB0019">Esqueci minha senha</h1>
-                <h4 style="color: #EB0019">Informe o e-mail da sua conta para recuperar sua senha</h4>
+                <h1 style="color: #FC4044">Esqueci minha senha</h1>
+                <h4 style="color: #FC4044">Informe o e-mail da sua conta para recuperar sua senha</h4>
             </div>
 
             <?php input_text( false, 'email', false, [ 'class' => 'global', 'placeholder' => 'E-mail', 'length' => 12, 'type' => 'email' ] ); ?>

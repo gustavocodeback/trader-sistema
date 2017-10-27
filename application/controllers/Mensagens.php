@@ -62,6 +62,12 @@ class Mensagens extends MY_Controller {
         $this->view->setTitle( 'Mensagem' )->render( 'mensagens' );
     }
 
+    /**
+    * mensagens_html
+    *
+    * retorna os htmls das mensagens
+    *
+    */
     public function mensagens_html( $CodCliente ) {
 
         // Pega o id do funcionario logado
@@ -144,12 +150,12 @@ class Mensagens extends MY_Controller {
     public function download( $CodMensagem ) {
 
         // carrega o arquivo
-        $arquivo = $this->Mensagem->clean()->key( $CodMensagem )->get( true );
-        if ( !$arquivo ) return;
+        $mensagem = $this->Mensagem->clean()->key( $CodMensagem )->get( true );
+        if ( !$mensagem ) return;
 
         // verifica se foi enviado pelo colaborador
-        if ( $mensagem->funcionario == $this->funcionario->CodFuncionario ) {
-            $arquivo->download();
+        if ( $mensagem->funcionario == $this->guard->currentUser()->CodFuncionario ) {
+            if ( !$mensagem->download() ) echo 'Erro ao tentar baixar o arquivo.';
         } else echo 'Você não tem permissão para baixar esse arquivo.';
     }
 

@@ -28,7 +28,7 @@
                 <h4>Propostas:</h4>
                 <?php input_checkbox( 'Todas', 'propDisparadas[]', false, [ 'value' => 0 ] ); ?>
                 <?php foreach( $view->item( 'propostas' ) as $proposta ) : ?>
-                            <?php input_checkbox( $proposta->nome, 'propDisparadas[]', false, [ 'value' => $proposta->CodProposta ] ); ?>
+                    <?php input_checkbox( $proposta->nome, $proposta->nome, false, [ 'name' => 'propDisparadas[]','value' => $proposta->CodProposta ] ); ?>
                 <?php endforeach; ?>
             <?php endif; ?>
 

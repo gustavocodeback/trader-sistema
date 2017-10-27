@@ -80,6 +80,29 @@ class Proposta extends PropostasFinder {
     public function setDias( $dias ) {
         $this->dias = $dias;
     }
+
+   /**
+    * podeEnviar
+    *
+    * verifica se pode enviar a proposta para um seguimento
+    *
+    */
+    public function podeEnviar( $segmento ) {
+
+        // pega o dia atual
+        $hoje = date( 'Y-m-d', time() );
+
+        // faz a busca
+        $this->db->from( 'PropostasClientes' )
+        ->select( 'CodPropostaCliente' )
+        ->where( " '$hoje' < DataVencimento AND CodSegmento = $segmento AND CodProposta = $this->CodProposta "  );
+
+        // faz a busca
+        $query = $this->db->get();
+
+        // verifica se existem resultados
+        return ( $query->num_rows() > 0 ) ? false: true;
+    }
 }
 
 /* end of file */

@@ -3,7 +3,7 @@
 <div class="col-md-offset-2 col-md-8">
     
     <div class="page-header">
-        <h4 style="color: #EB0019">Dados pessoais</h4>
+        <h4 style="color: #FC4044">Dados pessoais</h4>
     </div>
     <?php input_text( false, 'nome', false, [ 'class' => 'global', 'required' => 'required', 'placeholder' => 'Nome', 'length' => 12 ] ); ?>
     <?php input_text( false, 'cpf', false,  [ 'class' => 'global cpf', 'required' => 'required', 'placeholder' => 'CPF', 'length' => 12 ] ); ?>
@@ -17,13 +17,13 @@
     </div>
 
     <div class="page-header">
-        <h4 style="color: #EB0019">Dados de contato</h4>
+        <h4 style="color: #FC4044">Dados de contato</h4>
     </div>
     <?php input_text( false, 'telefone', false, [ 'class' => 'global telefone', 'required' => 'required', 'placeholder' => 'Telefone fixo', 'length' => 12 ] ); ?>
     <?php input_text( false, 'celular', false,  [ 'class' => 'global telefone', 'required' => 'required', 'placeholder' => 'Celular', 'length' => 12 ] ); ?>
     
     <div class="page-header">
-        <h4 style="color: #EB0019">Dados de endereço</h4>
+        <h4 style="color: #FC4044">Dados de endereço</h4>
     </div>
 
     <?php select( 'Estado', 'estado', [ 'class' => 'global', 'required' => 'required', 'placeholder' => 'Nome da loja', 'length' => 12 ] );?>

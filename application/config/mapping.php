@@ -101,6 +101,15 @@ $config['Parametro'] = [
     'valor'     => 'Valor'
 ];
 
+// Tabela de historico
+$config['Historico'] = [
+    'cliente'  => 'CodCliente',
+    'segmento' => 'CodSegmento',
+    'sistema'  => 'Sistema',
+    'texto'    => 'Texto',
+    'data'     => 'Data'
+];
+
 // Tabela de Parametro
 $config['Proposta'] = [
     'funcionario' => 'CodFuncionario',
@@ -113,7 +122,7 @@ $config['Proposta'] = [
 // Tabela de colunas
 $config['PropostaCliente'] = [
     'proposta'          => 'CodProposta',
-    'cliente'           => 'CodCliente',
+    'segmento'          => 'CodSegmento',
     'status'            => 'Status',
     'dataDisparo'       => 'DataDisparo',
     'dataVencimento'    => 'DataVencimento',

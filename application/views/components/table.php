@@ -40,7 +40,7 @@
 
 <style>
     thead {
-        background-color: #EB0019;
+        background-color: #FC4044;
         color: #fff;
 
     }

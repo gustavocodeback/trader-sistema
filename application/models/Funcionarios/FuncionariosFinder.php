@@ -71,25 +71,6 @@ class FuncionariosFinder extends MY_Model {
         $this->where( " TokenEmail = '$tokenEmail' " );
         return $this;
     }
-
-   /**
-    * ignorarAtual
-    *
-    * ignora o usuário logado
-    *
-    */
-    public function ignorarAtual() {
-
-        // pega o usuario atual
-        $uid = $this->guard->currentUser()->UID;
-
-        // adiciona no where
-        $this->clean()->where( " UID <> '$uid' " );
-        
-        // retorna uma instancia
-        return $this;
-    }
-
     
     /**
     * filtro

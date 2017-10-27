@@ -96,7 +96,6 @@ class Mensagem extends MensagensFinder {
             file_put_contents( $_SERVER['DOCUMENT_ROOT']."/uploads/" .$this->arquivo .'.' .$this->extensao, $decoded );
             return $this;
     }
-
 }
 
 /* end of file */
