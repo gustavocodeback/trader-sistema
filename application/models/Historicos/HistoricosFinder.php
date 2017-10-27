@@ -32,6 +32,31 @@ class HistoricosFinder extends MY_Model {
         $this->db->order_by( 'Data', 'DESC' );
         return $this;
     }
+
+    /**
+     * ultimoDoCliente
+     *
+     * pega o ultimo historico do cliente em uma proposta
+     *
+     */
+    public function ultimoDoCliente( $cliente, $proposta ) {
+
+        // seta o where
+        $this->where( " CodCliente = $cliente->CodCliente AND CodProposta = $proposta->CodProposta " );
+        $this->db->order_by( 'Data', 'DESC' );
+        return $this;
+    }
+
+    /**
+     * flag
+     *
+     * filtra pelo flag
+     *
+     */
+    public function flag( $flag ) {
+        $this->where( "Flag = '$flag' " );
+        return $this;
+    }
 }
 
 /* end of file */

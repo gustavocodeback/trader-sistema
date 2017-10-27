@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <?php $itens = $view->item( 'historicos' ); ?>
 <?php if ( !$itens || count( $itens ) == 0 ): ?>
-<p>Nenhuma interação com o Lead</p>
+<p>Nenhuma interação com o cliente</p>
 <?php else: ?>
-<ul class="timeline">
+<ul class="timeline text-center">
     
     <?php foreach( $itens as $item ): ?>
     <li <?php echo $item->sistema == 1 ? 'class="timeline-inverted"' : ''; ?>>
         <div class="timeline-badge danger">
-            <i class="glyphicon glyphicon-pencil"></i>
+            <!-- <i class="glyphicon glyphicon-pencil"></i> -->
         </div>
         <div class="timeline-panel">
             <div class="timeline-heading">

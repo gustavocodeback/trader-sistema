@@ -107,7 +107,9 @@ $config['Historico'] = [
     'segmento' => 'CodSegmento',
     'sistema'  => 'Sistema',
     'texto'    => 'Texto',
-    'data'     => 'Data'
+    'data'     => 'Data',
+    'flag'     => 'Flag',
+    'proposta' => 'CodProposta'
 ];
 
 // Tabela de Parametro

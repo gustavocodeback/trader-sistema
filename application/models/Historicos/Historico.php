@@ -24,8 +24,13 @@ class Historico extends HistoricosFinder {
     
     // data
     public $data;
- 
 
+    // flag de ação
+    public $flag;
+
+    // proposta da ação
+    public $proposta;
+ 
    /**
     * __construct
     *

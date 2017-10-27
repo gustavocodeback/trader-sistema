@@ -663,7 +663,7 @@ class Api extends MY_Controller {
     * obtem varias propostas
     *
     */
-    public function obter_propostas( $indice ) {
+    public function obter_propostas( $indice = 0 ) {
 
         // verifica se o usuario ta logado
         $this->request->logged();
@@ -674,48 +674,49 @@ class Api extends MY_Controller {
         // carrega o model
         $this->load->model( [   'PropostasClientes/PropostaCliente', 
                                 'Segmentos/Segmento',
+                                'Funcionarios/Funcionario',
                                 'Propostas/Proposta' ] );
 
+        // obtem o funcionario
+        $func = $this->Funcionario->clean()->key( $cliente->funcionario )->get( true );
+        if ( !$func ) return $this->response->reject( 'Nenhum funcionário encontrado para este cliente' );
+
         // obtem o seguimento
-        $segmento = $this->Segmento->clean()->key( $cliente->atributoSeg )->get( true );
+        $segmento = $this->Segmento->clean()->key( $func->segmento )->get( true );
         if ( !$segmento ) return $this->response->reject( 'O cliente não possuí um segmento.' );
 
         // busca as propostas disparadas pro cliente
         $disparos = $this->PropostaCliente->clean()->segmento( $segmento->CodSegmento )->orderByDataNew()->paginate( $indice, 5, true );
         $disparos = $disparos ? $disparos : [];
 
-        // obtem os ids das propostas
-        $ids = array_map( function( $value ){
-            return $value->proposta;
-        }, $disparos );
-
-        // obtem as propostas disparadas
-        $propostas = $this->Propostaclean()->in( $ids )->get();
-
         // busca as propostas
         $propostas = [];
-        
-        foreach ($propostasClientes as $propostaCliente) {
+
+        // percorre os disparos
+        foreach( $disparos as $disparo ) {
 
             // pega a proposta
-            $proposta = $this->Proposta->clean()->key( $propostaCliente->proposta )->get( true );
+            $proposta = $this->Proposta->clean()->key( $disparo->proposta )->get( true );
             if ( !$proposta ) continue;
 
-            $vencida = strtotime( $propostaCliente->dataVencimento ) > time() ? true : false;
+            // seta os dados da proposta
+            $vencida = strtotime( $disparo->dataVencimento ) > time() ? true : false;
+            $resposta = $cliente->respondeu( $proposta );
+            $status = $cliente->visualizou( $proposta ) ? 'V' : $disparo->status;
+            $status = $resposta ? 'R' : $status;
+
             $propostas[] = [
-                'codPropostaCliente'    => $propostaCliente->CodPropostaCliente,
+                'codPropostaCliente'    => $disparo->CodPropostaCliente,
                 'codProposta'           => $proposta->CodProposta,
                 'nome'                  => $proposta->nome,
                 'descricao'             => $proposta->descricao,
                 'vencida'               => $vencida,
-                'dataVencimento'        => $propostaCliente->dataVencimento,
-                'dataResposta'          => $propostaCliente->dataResposta ? $propostaCliente->dataResposta : false,
-                'status'                => $propostaCliente->status
+                'dataVencimento'        => $disparo->dataVencimento,
+                'dataResposta'          => $resposta ? $resposta->data : false,
+                'status'                => $status
             ];
-            if( $propostaCliente->status == 'D' ) $propostaCliente->set( 'status', 'V' )->save();
-            elseif( $propostaCliente->status == 'V' && $vencida ) $propostaCliente->set( 'status', 'E' )->save();
         }
-        
+
         // envia as lojas
         return $this->response->resolve( $propostas );
     }
@@ -734,33 +735,47 @@ class Api extends MY_Controller {
         // carrega o model
         $this->load->model( [ 'Propostas/Proposta' ] );
         $proposta = $this->Proposta->clean()->key( $CodProposta )->get( true );
-        if ( !$proposta ) {
-            return $this->response->reject( 'Proposta não existe' );
-        }
+        if ( !$proposta ) return $this->response->reject( 'Proposta não existe' );
+        
+        // indica que o cliente visualizou a proposta
+        $this->request->cliente->visualizouProposta( $proposta );
+
+        // seta os dados da proposta
         $proposta = [
             'cod'       => $proposta->CodProposta,
             'nome'      => $proposta->nome,
             'proposta'  => $proposta->proposta
         ];
-
         
         // envia as lojas
         return $this->response->resolve( $proposta );
     }
 
     /**
-    * proposta_respondida
-    *
-    * resetar a senha
-    *
-    */
+     * proposta_respondida
+     *
+     * seta uma proposta como respondida
+     *
+     */
     public function proposta_respondida() {
-        $this->request->logged();        
-        $this->load->model( [ 'PropostasClientes/PropostaCliente' ] );
+
+        // verifica se o usuario esta logado
+        $this->request->logged();
+
+        // carrega as models
+        $this->load->model( [ 'Propostas/Proposta',
+                              'PropostasClientes/PropostaCliente' ] );
+        
+        // obtem a proposta
         $propostaCliente = $this->PropostaCliente->clean()->key( $this->input->post( 'propostaCliente' ) )->get( true );
-        $propostaCliente->set( 'dataResposta', date( 'Y-m-d H:i:s', time() ) )
-                        ->set( 'status', 'R' )
-                        ->save();
+        if ( !$propostaCliente ) return $this->response->reject( 'A proposta não existe mais' );
+
+        // obtem a proposta
+        $proposta = $this->Proposta->clean()->key( $propostaCliente->proposta )->get( true );
+        if ( !$proposta ) return $this->response->reject( 'A proposta não existe mais' );
+
+        // seta o historico do cliente
+        $this->request->cliente->respondeuProposta( $proposta );
 
         // envia as lojas
         return $this->response->resolve( 'Sucesso' );

@@ -184,37 +184,121 @@ class Cliente extends ClientesFinder {
         return $this;
     }
 
-    public function changeAvatar( $newFoto ) {
-
-        // // verifica se existe uma foto
-        // if ( file_exists( 'uploads/'.$this->foto ) ) {
-
-        //     // separa o base64
-        //     $exploded = explode(',', $newFoto, 2);
-
-        //     // decodifica
-        //     $decoded = base64_decode($exploded[1]);
-
-        //     // atualiza a imagem
-        //     file_put_contents( $_SERVER['DOCUMENT_ROOT'] .'/uploads/' .$this->foto, $decoded );
-        //     return $this;
-        // } else {
-
-            // cria um id para a foto
-            $this->foto = md5( uniqid( time() * rand() ) ) .'.png';
-            
-            // separa o base64
-            $exploded = explode(',', $newFoto, 2);
-
-            // decodifica
-            $decoded = base64_decode($exploded[1]);
-
-            // atualiza a imagem
-            file_put_contents( $_SERVER['DOCUMENT_ROOT'] ."/uploads/" .$this->foto, $decoded );
-            return $this;
-        // }
+   /**
+    * respondeuProposta
+    *
+    * quando o cliente responder a uma proposta
+    * 
+    */
+    public function respondeuProposta( $proposta ) {
+        $this->__gravarHistorico( 'Responder a proposta', 'O cliente respondeu a proposta '.$proposta->nome, 'R', $proposta );        
     }
 
+   /**
+    * visualizouProposta
+    *
+    * quando o cliente visualizar a uma proposta
+    * 
+    */
+    public function visualizouProposta( $proposta ) {
+        $this->__gravarHistorico( 'Responder a proposta', 'O cliente visualizou a proposta '.$proposta->nome, 'V', $proposta );        
+    }
+
+   /**
+    * __gravarHistorico
+    *
+    * grava o histórico
+    * 
+    */
+    private function __gravarHistorico( $titulo, $texto, $flag, $proposta ) {
+
+        // carrega a model de histórico
+        $this->load->model( 'Historicos/Historico' );
+
+        // cria uma entidade
+        $entide = $this->Historico->getEntity();
+
+        // seta os atributos
+        $entide->set( 'titulo', $titulo )
+                ->set( 'texto', $texto )
+                ->set( 'sistema', 0 )
+                ->set( 'proposta', $proposta->CodProposta )
+                ->set( 'flag', $flag )
+                ->set( 'cliente', $this->CodCliente );
+
+        // salva o historico
+        return $entide->save();
+    }
+
+    /**
+     * changeAvatar
+     *
+     * muda a foto do avatar
+     * 
+     */
+    public function changeAvatar( $newFoto ) {
+
+        // cria um id para a foto
+        $this->foto = md5( uniqid( time() * rand() ) ) .'.png';
+        
+        // separa o base64
+        $exploded = explode(',', $newFoto, 2);
+
+        // decodifica
+        $decoded = base64_decode($exploded[1]);
+
+        // atualiza a imagem
+        file_put_contents( $_SERVER['DOCUMENT_ROOT'] ."/uploads/" .$this->foto, $decoded );
+        return $this;
+    }
+
+    /**
+     * visualizou
+     *
+     * verifica se o cliente visualizou uma proposta
+     * 
+     */
+    public function visualizou( $proposta ) {
+        return $this->__obterPorStatus( $proposta, 'V' );        
+    }
+
+    /**
+     * respondeu
+     *
+     * verifica se o cliente respondeu uma proposta
+     * 
+     */
+    public function respondeu( $proposta ) {
+        return $this->__obterPorStatus( $proposta, 'R' );
+    }
+
+    /**
+     * __obterPorStatus
+     *
+     * obtem historico por proposta
+     * 
+     */
+    private function __obterPorStatus( $proposta, $status ) {
+
+        // carrega a model de histórico
+        $this->load->model( 'Historicos/Historico' );
+
+        // obtem a proposta
+        $hist = $this->Historico->clean()
+                    ->ultimoDoCliente( $this, $proposta )
+                    ->flag( $status )
+                    ->get( true );
+        
+        // volta o item
+        return $hist;
+    }
+
+    /**
+     * avatar
+     *
+     * pega a foto do avatar
+     * 
+     */
     public function avatar() {
 
         // verifica se existe uma foto

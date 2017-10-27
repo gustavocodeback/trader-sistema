@@ -55,7 +55,7 @@ class Segmento extends SegmentosFinder {
         if ( $result ) {
 
             // salva o historico
-            $this->salvarHistorico( 'Proposta enviada', 'Cliente recebeu a proposta '.$proposta->nome );
+            $this->salvarHistorico( 'Proposta enviada', $proposta, 'Cliente recebeu a proposta '.$proposta->nome );
 
             // volta o resultado
             return $result;
@@ -68,7 +68,7 @@ class Segmento extends SegmentosFinder {
     * salva o histórico
     *
     */
-    public function salvarHistorico( $titulo, $texto = null ) {
+    public function salvarHistorico( $titulo, $proposta, $texto = null ) {
 
         // carrega a model de histórico
         $this->load->model( 'Historicos/Historico' );
@@ -80,6 +80,7 @@ class Segmento extends SegmentosFinder {
         $entide->set( 'titulo', $titulo )
                ->set( 'texto', $texto )
                ->set( 'sistema', 1 )
+               ->set( 'proposta', $proposta->CodProposta )
                ->set( 'segmento', $this->CodSegmento );
 
         // salva o historico
