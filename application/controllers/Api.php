@@ -387,6 +387,39 @@ class Api extends MY_Controller {
         // envia as lojas
         return $this->response->resolve( $tickets );
     }
+
+    /**
+    * avaliar_ticket
+    *
+    * faz a avaliação do ticket
+    *
+    */
+    public function avaliar_ticket() {
+        
+        // verifica se o usuaro esta logado
+        $this->request->logged();
+
+        // carrega a model de tickets
+        $this->load->model( 'Tickets/Ticket' );
+
+        // pegar o id do ticket e a nota
+        $idTicket  = $this->input->post( 'ticketId' );
+        $avaliacao = $this->input->post( 'avaliacao' );
+
+        // busca o ticket
+        $ticket = $this->Ticket->clean()->key( $idTicket )->get( true );
+        if ( !$ticket ) return $this->response->reject( 'Ticket não existe' );
+
+        // seta a avaliação
+        $ticket->set( 'avaliacao', $avaliacao );
+
+        // verifica se salvou e envia o response
+        if( $ticket->save() ) {
+            return $this->response->resolve( 'sucesso' );
+        } else {
+            return $this->response->reject( 'erro' );
+        }
+    }
     
    /**
     * obter_posts
