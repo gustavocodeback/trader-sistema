@@ -84,6 +84,17 @@ class PropostasClientesFinder extends MY_Model {
     }
 
     /**
+    * buscaDisparoPorPropostaId
+    *
+    * busca o disparo pelo id da proposta
+    *
+    */
+    public function buscaDisparoPorPropostaId( $idproposta ) {
+        $this->where( " CodProposta = '$idproposta' " );
+        return $this;
+    }
+
+    /**
      * segmento
      *
      * filtra pelo codigo do segmento
