@@ -295,6 +295,22 @@ class Propostas extends MY_Controller {
         // carrega a instancia
         $proposta = $this->Proposta->key( $key )->get( true );
 
+        // inicia o array de disparos
+        $propostasClientes = [];
+
+        // busca os disparos feitos com a proposta
+        $propostasClientes = $this->PropostaCliente->buscaDisparoPorPropostaId( $key )->get();
+
+        // verifica se retornou algum disparo
+        if ( $propostasClientes ) {
+
+            // seta mensagem de proposta ja disparada
+            $this->view->set( 'erro', "Não é possivel apagar esta proposta, pois ela já foi disparada." );
+
+            // seta o titulo da pag
+            return $this->index();
+        }
+
         // exclui
         $proposta->delete();
 

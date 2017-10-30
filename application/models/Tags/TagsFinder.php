@@ -13,7 +13,7 @@ class TagsFinder extends MY_Model {
 
     // labels
     public $labels = [
-        'descricao'   => 'Descricao',
+        'descricao'   => 'Descrição',
     ];
 
    /**
@@ -34,7 +34,13 @@ class TagsFinder extends MY_Model {
     */
     public function grid() {
         $this->db->from( $this->table )
-        ->select( 'CodTag as Código, descricao, CodTag as Ações' );
+        ->select( 'CodTag as Código, descricao as Descrição, CodTag as Ações' );
+        return $this;
+    }
+
+    public function tag( $nomeTag ) {
+        // pesquisa o email
+        $this->where( " descricao = '$nomeTag' " );
         return $this;
     }
 }

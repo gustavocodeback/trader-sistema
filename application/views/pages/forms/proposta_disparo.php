@@ -21,7 +21,6 @@
                         <?php option( $item->CodSegmento, $item->nome, $view->item( 'segmento' ), 'CodSegmento' ); ?>
                     <?php endforeach; ?>
                 <?php endif; ?>
-                <?php option( 0, 'Todos' ); ?>
             <?php endselect( 'Segmento' ); ?><!-- seta os segmentos -->
             
             <?php if ( $view->item( 'propostas' ) ):?>

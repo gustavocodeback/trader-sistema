@@ -330,7 +330,7 @@ class Clientes extends MY_Controller {
         if ( $cliente->save() ) {
 
             // envia a mensagem para o cliente
-            $this->enviar_mensagem( $cliente );
+            if ( !$this->input->post( 'cod' ) ) $this->enviar_mensagem( $cliente );
 
             // redireciona 
             redirect( site_url( 'clientes/index' ) );
@@ -431,6 +431,7 @@ class Clientes extends MY_Controller {
 
         // pega as entidades relacionaveis
         $linha['CodFuncionario'] = $this->verificaEntidade( 'Funcionarios/Funcionario', 'email', $linha['FUNCIONARIO'], 'Funcionario', 'Clientes', $num, 'CodFuncionario', 'I' );
+        $linha['CodTag']         = $this->verificaEntidade( 'Tags/Tag', 'tag', $linha['TAG'], 'Tag', 'Clientes', $num, 'CodTag', 'I' );
 
         // verifica se existe os campos
         if ( !in_cell( $linha['CodFuncionario'] ) ||
@@ -484,6 +485,13 @@ class Clientes extends MY_Controller {
                     ->set( 'tel', $linha['TELEFONE'] )
                     ->set( 'funcionario', $linha['CodFuncionario'] )
                     ->set( 'email', $linha['EMAIL'] );
+            
+            // verifica se tem tag
+            if ( $linha['CodTag'] ) {
+                $cliente->set( 'tag', $linha['CodTag'] );
+            } else {
+                $cliente->set( 'tag', '' );
+            }
 
             if ( !in_cell( $linha['ATRIBUTO'] ) ) $cliente->set( 'atributoSeg', '' );
             elseif ( $linha['ATRIBUTO'] == 'TRADER' ) $cliente->set( 'atributoSeg', 'T' );

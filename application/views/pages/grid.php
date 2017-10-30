@@ -53,8 +53,15 @@
                         <div class="col-md-12"><hr></div>
                     </div>
                 </div>
-                <?php endif; ?> 
-                
+                <?php endif; ?>
+
+                <?php if ( $view->item( 'erro' ) ): ?>
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <?php echo $view->item( 'erro' ); ?>
+                    </div><!-- Mensagem de erro de exclusão -->
+                <?php endif; ?>
+
                 <div class="row fade-in">
                     <div class="col-md-12">
                         <?php $view->component( 'table' ); ?>            
