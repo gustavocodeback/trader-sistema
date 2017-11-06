@@ -32,7 +32,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'Email não consta no sistema' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'login/forgot_password' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'login/forgot_password' );
             return;
         }
         $user->set( 'tokenEmail', md5( uniqid( time() * rand() ) ) );
@@ -45,7 +45,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'success', 'Formulário enviado com sucesso' );
 
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'login/forgot_password' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'login/forgot_password' );
             return;
         } else {
 
@@ -53,7 +53,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'Erro ao recuperar a senha' );
 
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'login/forgot_password' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'login/forgot_password' );
             return;
         }
     }
@@ -82,7 +82,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'funcionario', $user->CodFuncionario );
 
             // carrega a view de email confirmado
-            $this->view->setTitle( 'Equipe Trader - Resetar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Resetar Senha' )->render( 'nova_senha' );
             return;
         } die( 'Erro ao validar o e-mail' );
     }
@@ -108,7 +108,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'Usuario não consta no sistema' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }
 
@@ -118,7 +118,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'E-mail incorreto' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }
 
@@ -129,7 +129,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'As senhas sao diferentes' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         } else {
 
@@ -140,7 +140,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'success', 'Senha alterada com sucesso.' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }        
         return;
@@ -175,7 +175,7 @@ class Recovery extends MY_Controller {
         ->to( $email )
 
         // seta o corpo
-        ->subject( 'Recuperacao de Senha Equipe Trader' )
+        ->subject( 'Recuperacao de Senha Force Investor' )
         ->message( $template->corpo )
         ->set_mailtype( 'html' );
         
@@ -212,7 +212,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'cliente', $user->CodCliente );
 
             // carrega a view de email confirmado
-            $this->view->setTitle( 'Equipe Trader - Resetar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Resetar Senha' )->render( 'nova_senha' );
             return;
         } die( 'Erro ao validar o e-mail' );
     }
@@ -238,7 +238,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'Usuario não consta no sistema' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }
 
@@ -248,7 +248,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'E-mail incorreto' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }
 
@@ -259,7 +259,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'errors', 'As senhas sao diferentes' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         } else {
 
@@ -270,7 +270,7 @@ class Recovery extends MY_Controller {
             $this->view->set( 'success', 'Senha alterada com sucesso.' );
             
             // carrega a view de adicionar
-            $this->view->setTitle( 'Equipe Trader - Recuperar Senha' )->render( 'nova_senha' );
+            $this->view->setTitle( 'Force Investor - Recuperar Senha' )->render( 'nova_senha' );
             return;
         }        
         return;

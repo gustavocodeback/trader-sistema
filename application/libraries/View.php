@@ -34,7 +34,7 @@ class View {
 
     // prefixo no titulo
 
-    public $titlePrefix = 'Equipe Trader - ';
+    public $titlePrefix = 'Force Investor - ';
 
    /**
     * __construct

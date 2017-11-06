@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="text-center logo-content">
                         <img    src="<?php echo site_url( 'images/logo_equipe_trader.png' ); ?>" 
-                                alt="Logo Equipe Trader" class="logo">
+                                alt="Logo Force Investor" class="logo">
                         <img    src="<?php echo site_url( 'images/logo_xp.png' ); ?>" 
                                 alt="Logo XP" class="logo-2">
                     </div><!-- logo -->

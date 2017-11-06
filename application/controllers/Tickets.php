@@ -74,6 +74,11 @@ class Tickets extends MY_Controller {
 		    echo date( 'd/m/Y á\s H:i:s', strtotime( $row[$key] ) );
 		})
 
+        // seta as funcoes nas colunas
+		->onApply( 'Avaliação', function( $row, $key ) {
+		    echo $row[$key] ? $row[$key] .'  de 5' : 'Ainda não avaliado';
+		})
+
 		// seta as funcoes nas colunas
 		->onApply( 'Status', function( $row, $key ) {
 		    if ( $row['Status'] == 'A' ) echo 'Aberto';

@@ -48,7 +48,7 @@ class TicketsFinder extends MY_Model {
     */
     public function grid( $CodCliente ) {
         $this->db->from( $this->table.' t' )
-        ->select( 'CodTicket as Andamento, t.Nome, DataAbertura as Data Abertura, Status, Descricao' )
+        ->select( 'CodTicket as Andamento, t.Nome, DataAbertura as Data Abertura, Status, Descricao, Avaliacao as Avaliação' )
         ->where( " CodCliente = $CodCliente " );
         return $this;
     }

@@ -544,7 +544,7 @@ class Api extends MY_Controller {
         ->to( $email )
 
         // seta o corpo
-        ->subject( 'Recuperacao de Senha Equipe Trader' )
+        ->subject( 'Recuperacao de Senha Force Investor' )
         ->message( $template->corpo )
         ->set_mailtype( 'html' );
         
